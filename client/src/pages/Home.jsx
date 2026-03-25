@@ -328,7 +328,7 @@ const Home = () => {
             starColor="#ff6b6b"
           />
           <GameCard
-            title="וורדל עברית"
+            title="וורדעל עברית"
             subtitle="שפה עברית"
             image="/hebrew-wordle.svg"
             description="נחש את המילה הסודית בעברית! יש לך 6 ניסיונות. מילים בנות 4-6 אותיות."

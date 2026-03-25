@@ -435,7 +435,7 @@ const HebrewWordle = () => {
       <div style={styles.container}>
         {/* Header */}
         <div style={{ textAlign: 'center' }}>
-          <h1 style={styles.title}>🔤 וורדל עברית</h1>
+          <h1 style={styles.title}>🔤 וורדעל עברית</h1>
           <p style={styles.subtitle}>נחש את המילה הסודית!</p>
         </div>
 

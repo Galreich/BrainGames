@@ -16,8 +16,8 @@ const Header = () => {
 
   const navLinks = [
     { path: '/', label: '🏠 בית' },
-    { path: '/hebrew-wordle', label: '🔤 וורדל עברית' },
-    { path: '/english-wordle', label: '🔡 וורדל אנגלית' },
+    { path: '/hebrew-wordle', label: '🔤 וורדעל עברית' },
+    { path: '/english-wordle', label: '🔡 וורדעל אנגלית' },
     { path: '/math', label: '🔢 הרפתקת המספרים' },
   ];
 
