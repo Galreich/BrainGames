@@ -83,11 +83,7 @@ cd server
 npm install
 ```
 
-Create a `.env` file (copy from `.env.example`):
-
-```bash
-cp .env.example .env
-```
+Create a `.env` file:
 
 Edit `.env` with your actual values:
 
