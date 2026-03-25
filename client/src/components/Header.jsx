@@ -23,38 +23,40 @@ const Header = () => {
 
   const styles = {
     header: {
-      background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
+      background: 'linear-gradient(90deg, #0f0c29 0%, #302b63 50%, #24243e 100%)',
       padding: '0',
-      boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
+      boxShadow: '0 2px 24px rgba(0,0,0,0.4), 0 1px 0 rgba(255,255,255,0.05) inset',
       position: 'sticky',
       top: 0,
       zIndex: 1000,
+      borderBottom: '1px solid rgba(255,255,255,0.08)',
     },
     container: {
-      maxWidth: '1200px',
+      maxWidth: '1400px',
       margin: '0 auto',
-      padding: '12px 20px',
+      padding: '0 24px',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
-      flexWrap: 'wrap',
-      gap: '10px',
+      flexWrap: 'nowrap',
+      height: '56px',
     },
     logo: {
       display: 'flex',
       alignItems: 'center',
       gap: '10px',
       textDecoration: 'none',
+      flexShrink: 0,
     },
     logoEmoji: {
-      fontSize: '2rem',
-      animation: 'bounce 2s infinite',
+      fontSize: '1.7rem',
     },
     logoText: {
       color: '#fff',
-      fontSize: '1.6rem',
+      fontSize: '1.35rem',
       fontWeight: '900',
-      background: 'linear-gradient(90deg, #f9ca24, #f0932b, #eb4d4b)',
+      letterSpacing: '-0.5px',
+      background: 'linear-gradient(135deg, #f7971e, #ffd200)',
       WebkitBackgroundClip: 'text',
       WebkitTextFillColor: 'transparent',
       backgroundClip: 'text',
@@ -62,91 +64,88 @@ const Header = () => {
     nav: {
       display: 'flex',
       alignItems: 'center',
-      gap: '8px',
-      flexWrap: 'wrap',
+      gap: '2px',
+      flexWrap: 'nowrap',
     },
     navLink: (isActive) => ({
-      color: isActive ? '#f9ca24' : 'rgba(255,255,255,0.85)',
+      color: isActive ? '#ffd200' : 'rgba(255,255,255,0.7)',
       textDecoration: 'none',
-      padding: '8px 14px',
-      borderRadius: '20px',
+      padding: '6px 14px',
+      borderRadius: '8px',
       fontWeight: '700',
       fontSize: '0.9rem',
-      background: isActive ? 'rgba(249,202,36,0.2)' : 'transparent',
-      border: isActive ? '2px solid rgba(249,202,36,0.4)' : '2px solid transparent',
+      background: isActive ? 'rgba(255,210,0,0.12)' : 'transparent',
+      borderBottom: isActive ? '2px solid #ffd200' : '2px solid transparent',
       transition: 'all 0.2s',
       whiteSpace: 'nowrap',
     }),
     rightSection: {
       display: 'flex',
       alignItems: 'center',
-      gap: '12px',
-    },
-    starsTotal: {
-      background: 'rgba(255,255,255,0.1)',
-      borderRadius: '20px',
-      padding: '6px 14px',
-      color: '#f9ca24',
-      fontWeight: '800',
-      fontSize: '1rem',
-      display: 'flex',
-      alignItems: 'center',
-      gap: '6px',
+      gap: '10px',
+      flexShrink: 0,
     },
     userInfo: {
-      color: '#fff',
-      fontWeight: '700',
-      fontSize: '0.9rem',
-      background: 'rgba(255,255,255,0.1)',
-      borderRadius: '20px',
-      padding: '6px 14px',
+      color: 'rgba(255,255,255,0.9)',
+      fontWeight: '600',
+      fontSize: '0.82rem',
+      whiteSpace: 'nowrap',
     },
     loginBtn: {
-      background: 'linear-gradient(135deg, #f9ca24, #f0932b)',
+      background: 'linear-gradient(135deg, #ffd200, #f7971e)',
       color: '#1a1a2e',
-      border: 'none',
-      borderRadius: '20px',
-      padding: '8px 18px',
-      fontWeight: '800',
-      fontSize: '0.9rem',
+      border: '1px solid rgba(255,255,255,0.2)',
+      borderRadius: '8px',
+      padding: '6px 14px',
+      fontWeight: '600',
+      fontSize: '0.8rem',
       cursor: 'pointer',
       transition: 'all 0.2s',
+      boxShadow: '0 2px 8px rgba(255,210,0,0.3)',
     },
     logoutBtn: {
-      background: 'rgba(255,255,255,0.15)',
-      color: '#fff',
-      border: '2px solid rgba(255,255,255,0.3)',
-      borderRadius: '20px',
-      padding: '7px 16px',
-      fontWeight: '700',
-      fontSize: '0.85rem',
+      background: 'transparent',
+      color: 'rgba(255,255,255,0.7)',
+      border: '1px solid rgba(255,255,255,0.2)',
+      borderRadius: '8px',
+      padding: '6px 14px',
+      fontWeight: '600',
+      fontSize: '0.8rem',
       cursor: 'pointer',
       transition: 'all 0.2s',
     },
     suggestionBtn: {
       background: 'linear-gradient(135deg, #a29bfe, #6c5ce7)',
       color: '#fff',
-      border: '2px solid rgba(255,255,255,0.3)',
-      borderRadius: '20px',
-      padding: '7px 16px',
+      border: 'none',
+      borderRadius: '8px',
+      padding: '6px 14px',
       fontWeight: '700',
-      fontSize: '0.85rem',
+      fontSize: '0.8rem',
       cursor: 'pointer',
       transition: 'all 0.2s',
+      boxShadow: '0 2px 8px rgba(108,92,231,0.3)',
+    },
+    divider: {
+      width: '1px',
+      height: '24px',
+      background: 'rgba(255,255,255,0.15)',
+      flexShrink: 0,
     },
     progressBar: {
       display: 'flex',
-      gap: '8px',
+      gap: '10px',
       alignItems: 'center',
-      padding: '6px 12px',
-      background: 'rgba(255,255,255,0.08)',
-      borderRadius: '12px',
+      padding: '4px 10px',
+      background: 'rgba(255,255,255,0.06)',
+      borderRadius: '8px',
+      border: '1px solid rgba(255,255,255,0.08)',
     },
     progressItem: {
       display: 'flex',
       alignItems: 'center',
       gap: '3px',
-      fontSize: '0.75rem',
+      fontSize: '0.78rem',
       color: '#fff',
     },
   };
@@ -156,11 +155,29 @@ const Header = () => {
     {showSuggestion && <SuggestionModal onClose={() => setShowSuggestion(false)} />}
     <header style={styles.header}>
       <div style={styles.container}>
-        {/* Logo */}
-        <Link to="/" style={styles.logo}>
-          <span style={styles.logoEmoji}>🧠</span>
-          <span style={styles.logoText}>BrainGames</span>
-        </Link>
+        {/* Logo + Stars */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+          <Link to="/" style={styles.logo}>
+            <span style={styles.logoEmoji}>🧠</span>
+            {!user && <span style={styles.logoText}>BrainGames</span>}
+          </Link>
+          {user && (
+            <div style={styles.progressBar}>
+              <div style={styles.progressItem}>
+                <span>⭐</span>
+                <span style={{ color: '#ff6b6b', fontWeight: '700' }}>{user.red_stars || 0}</span>
+              </div>
+              <div style={styles.progressItem}>
+                <span>⭐🔵</span>
+                <span style={{ color: '#74b9ff', fontWeight: '700' }}>{user.blue_stars || 0}</span>
+              </div>
+              <div style={styles.progressItem}>
+                <span>⭐</span>
+                <span style={{ color: '#55efc4', fontWeight: '700' }}>{user.green_stars || 0}</span>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Navigation */}
         <nav style={styles.nav}>
@@ -175,26 +192,10 @@ const Header = () => {
           ))}
         </nav>
 
+        <div style={styles.divider} />
+
         {/* Right Section */}
         <div style={styles.rightSection}>
-          {/* Stars Display */}
-          {user && (
-            <div style={styles.progressBar}>
-              <div style={styles.progressItem}>
-                <span style={{ color: '#ff6b6b' }}>⭐</span>
-                <span style={{ color: '#ff6b6b', fontWeight: '800' }}>{user.red_stars || 0}</span>
-              </div>
-              <div style={styles.progressItem}>
-                <span style={{ color: '#74b9ff' }}>⭐</span>
-                <span style={{ color: '#74b9ff', fontWeight: '800' }}>{user.blue_stars || 0}</span>
-              </div>
-              <div style={styles.progressItem}>
-                <span style={{ color: '#55efc4' }}>⭐</span>
-                <span style={{ color: '#55efc4', fontWeight: '800' }}>{user.green_stars || 0}</span>
-              </div>
-            </div>
-          )}
-
           {user ? (
             <>
               <span style={styles.userInfo}>👤 {user.username}</span>

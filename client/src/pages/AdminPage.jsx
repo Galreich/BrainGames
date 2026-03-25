@@ -71,7 +71,6 @@ const AdminPage = () => {
       background: 'rgba(255,255,255,0.08)',
       padding: '12px 16px',
       textAlign: 'right',
-      fontWeight: '800',
       fontSize: '0.9rem',
       color: 'rgba(255,255,255,0.8)',
     },

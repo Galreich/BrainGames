@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProgress } from '../context/ProgressContext';
 import { useAuth } from '../context/AuthContext';
-import StarDisplay from '../components/StarDisplay';
 
 const TOTAL_STATIONS = 10;
 
@@ -80,7 +79,6 @@ const MathGame = () => {
   const [question, setQuestion] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [answerStatus, setAnswerStatus] = useState(null); // 'correct', 'wrong'
-  const [starsEarned, setStarsEarned] = useState(0);
   const [totalStars, setTotalStars] = useState(0);
   const [mistakes, setMistakes] = useState(0);
   const [elapsed, setElapsed] = useState(0);
@@ -103,7 +101,6 @@ const MathGame = () => {
   const startGame = () => {
     setGameState('playing');
     setStation(1);
-    setStarsEarned(0);
     setTotalStars(0);
     setMistakes(0);
     setElapsed(0);
@@ -151,7 +148,6 @@ const MathGame = () => {
         const nextStation = station + 1;
         if (nextStation > TOTAL_STATIONS) {
           // Game complete!
-          setStarsEarned(1);
           setGameState('gameover');
           saveProgress('math', 1);
           if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'math', subject: 'math', stars: 1, score: station }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
@@ -460,7 +456,6 @@ const MathGame = () => {
             <p style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '24px', lineHeight: '1.7', direction: 'rtl', fontSize: '1rem' }}>
               🌟 עזור לאסטרונאוט לעבור דרך 10 תחנות בחלל!<br />
               🔢 פתור חשבונות כדי להתקדם<br />
-              ⭐ אסוף כוכבים על תשובות נכונות
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '28px', direction: 'rtl', flexWrap: 'wrap' }}>
               {[
@@ -537,7 +532,7 @@ const MathGame = () => {
                   </div>
                 ))}
               </div>
-              <div style={styles.rocketEmoji}>🚀</div>
+              {/* <div style={styles.rocketEmoji}>🚀</div> */}
             </div>
 
             {/* Progress Bar */}
@@ -586,29 +581,12 @@ const MathGame = () => {
         {gameState === 'gameover' && (
           <div style={styles.gameOver}>
             <div style={{ fontSize: '4rem', marginBottom: '16px' }}>
-              {starsEarned === 3 ? '🏆' : starsEarned === 2 ? '🥈' : '🥉'}
+              🏆
             </div>
             <div style={styles.gameOverTitle}>
-              {starsEarned === 3 ? 'מדהים! אלוף חלל! 🚀' :
-               starsEarned === 2 ? 'כל הכבוד! עשית מצוין! ⭐' :
-               'סיימת את המסלול! 🎉'}
+              מדהים! אלוף חלל! 🚀
             </div>
-
-            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '20px' }}>
-              <StarDisplay count={starsEarned} color="#ff6b6b" size="2.5rem" animated />
-            </div>
-
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', direction: 'rtl', marginBottom: '16px' }}>
-              <div style={{
-                background: 'rgba(255,255,255,0.1)',
-                borderRadius: '16px',
-                padding: '14px 20px',
-                textAlign: 'center',
-                color: '#fff',
-              }}>
-                <div style={{ fontSize: '1.6rem', fontWeight: '900' }}>{totalStars}</div>
-                <div style={{ fontSize: '0.85rem', opacity: 0.7 }}>כוכבים</div>
-              </div>
               <div style={{
                 background: 'rgba(255,255,255,0.1)',
                 borderRadius: '16px',

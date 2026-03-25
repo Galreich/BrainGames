@@ -116,7 +116,6 @@ const GameCard = ({ title, subtitle, emoji, description, path, theme, stars, gam
         <h2 style={{
           color: '#fff',
           fontSize: '1.6rem',
-          fontWeight: '900',
           marginBottom: '6px',
           textShadow: '0 2px 4px rgba(0,0,0,0.2)',
         }}>
@@ -168,7 +167,6 @@ const GameCard = ({ title, subtitle, emoji, description, path, theme, stars, gam
           borderRadius: '50px',
           padding: '12px 30px',
           fontSize: '1.1rem',
-          fontWeight: '900',
           cursor: 'pointer',
           width: '100%',
           transition: 'all 0.2s',

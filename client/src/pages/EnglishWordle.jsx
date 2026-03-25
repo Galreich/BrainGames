@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useProgress } from '../context/ProgressContext';
 import { useAuth } from '../context/AuthContext';
-import StarDisplay from '../components/StarDisplay';
 import { useNavigate } from 'react-router-dom';
 
 // QWERTY keyboard layout
@@ -480,9 +479,6 @@ const EnglishWordle = () => {
                 <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '12px' }}>
                   You guessed it in {currentRow} {currentRow === 1 ? 'try' : 'tries'}!
                 </p>
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '8px' }}>
-                  <StarDisplay count={starsEarned} color="#55efc4" size="2rem" animated />
-                </div>
                 <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem' }}>
                   The word was: <strong style={{ color: '#55efc4' }}>{targetWord}</strong>
                 </p>

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useProgress } from '../context/ProgressContext';
 import { useAuth } from '../context/AuthContext';
-import StarDisplay from '../components/StarDisplay';
 import { useNavigate } from 'react-router-dom';
 
 // Hebrew keyboard layout
@@ -492,9 +491,6 @@ const HebrewWordle = () => {
                 <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '12px' }}>
                   ניחשת נכון תוך {currentRow} ניסיונות!
                 </p>
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '8px' }}>
-                  <StarDisplay count={starsEarned} color="#74b9ff" size="2rem" animated />
-                </div>
                 <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem' }}>
                   המילה הייתה: <strong style={{ color: '#74b9ff' }}>{targetWord}</strong>
                 </p>
