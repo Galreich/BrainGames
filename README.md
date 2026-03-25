@@ -93,7 +93,7 @@ Edit `.env` with your actual values:
 
 ```env
 PORT=5000
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/braingames
+DATABASE_URL=postgresql://username:password@localhost:5432/braingames
 JWT_SECRET=your_super_secret_key_here_make_it_long_and_random
 NODE_ENV=development
 ```
