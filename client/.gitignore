@@ -29,3 +29,5 @@ desktop.ini
 
 # Coverage / testing
 coverage/
+
+.history/
