@@ -164,15 +164,15 @@ const Header = () => {
           {user && (
             <div style={styles.progressBar}>
               <div style={styles.progressItem}>
-                <span>⭐</span>
+                <span>🔴</span>
                 <span style={{ color: '#ff6b6b', fontWeight: '700' }}>{user.red_stars || 0}</span>
               </div>
               <div style={styles.progressItem}>
-                <span>⭐🔵</span>
+                <span>🔵</span>
                 <span style={{ color: '#74b9ff', fontWeight: '700' }}>{user.blue_stars || 0}</span>
               </div>
               <div style={styles.progressItem}>
-                <span>⭐</span>
+                <span>🟢</span>
                 <span style={{ color: '#55efc4', fontWeight: '700' }}>{user.green_stars || 0}</span>
               </div>
             </div>

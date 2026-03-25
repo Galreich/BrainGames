@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <!-- Book -->
+  <rect x="40" y="50" width="120" height="110" rx="6" fill="#f5f5f5" stroke="#ddd" stroke-width="2"/>
+  <rect x="40" y="50" width="60" height="110" rx="6 0 0 6" fill="#e8e8e8"/>
+  <line x1="100" y1="50" x2="100" y2="160" stroke="#ccc" stroke-width="2"/>
+  <!-- Hebrew letters -->
+  <text x="65" y="95" font-size="28" fill="#0984e3" font-weight="bold" text-anchor="middle">א</text>
+  <text x="135" y="95" font-size="28" fill="#0984e3" font-weight="bold" text-anchor="middle">ב</text>
+  <text x="65" y="135" font-size="28" fill="#74b9ff" font-weight="bold" text-anchor="middle">ג</text>
+  <text x="135" y="135" font-size="28" fill="#74b9ff" font-weight="bold" text-anchor="middle">ד</text>
+  <!-- Pencil -->
+  <g transform="translate(145, 25) rotate(35)">
+    <rect x="0" y="0" width="10" height="55" rx="2" fill="#ffd200"/>
+    <rect x="0" y="0" width="10" height="12" rx="2" fill="#ff6b6b"/>
+    <polygon points="0,55 10,55 5,68" fill="#ffe0b2"/>
+    <polygon points="3,63 7,63 5,68" fill="#333"/>
+  </g>
+  <!-- Floating letter blocks -->
+  <rect x="10" y="15" width="32" height="32" rx="6" fill="#74b9ff" opacity="0.8"/>
+  <text x="26" y="38" font-size="20" fill="#fff" font-weight="bold" text-anchor="middle">מ</text>
+  <rect x="155" y="5" width="30" height="30" rx="6" fill="#0984e3" opacity="0.7"/>
+  <text x="170" y="26" font-size="18" fill="#fff" font-weight="bold" text-anchor="middle">ש</text>
+  <!-- Sparkles -->
+  <text x="5" y="110" font-size="16" opacity="0.6">✨</text>
+  <text x="175" y="145" font-size="14" opacity="0.5">✨</text>
+</svg>

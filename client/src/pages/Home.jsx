@@ -35,7 +35,7 @@ const Confetti = () => {
   );
 };
 
-const GameCard = ({ title, subtitle, emoji, description, path, theme, stars, gamesPlayed, starColor }) => {
+const GameCard = ({ title, subtitle, image, description, path, theme, stars, gamesPlayed, starColor }) => {
   const navigate = useNavigate();
   const [hovered, setHovered] = useState(false);
 
@@ -105,12 +105,22 @@ const GameCard = ({ title, subtitle, emoji, description, path, theme, stars, gam
 
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{
-          fontSize: '4rem',
           marginBottom: '12px',
-          display: 'block',
-          animation: hovered ? 'bounce 0.6s infinite' : 'none',
+          display: 'flex',
+          justifyContent: 'center',
         }}>
-          {emoji}
+          <img
+            src={image}
+            alt={title}
+            style={{
+              width: '100px',
+              height: '100px',
+              objectFit: 'contain',
+              filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.2))',
+              transition: 'transform 0.3s',
+              transform: hovered ? 'scale(1.1)' : 'scale(1)',
+            }}
+          />
         </div>
 
         <h2 style={{
@@ -221,7 +231,6 @@ const Home = () => {
     heroTitle: {
       color: '#fff',
       fontSize: '3rem',
-      fontWeight: '900',
       textShadow: '0 4px 20px rgba(0,0,0,0.3)',
       marginBottom: '12px',
       lineHeight: '1.2',
@@ -275,7 +284,7 @@ const Home = () => {
         {/* Welcome Banner */}
         {user && showWelcome && (
           <div style={styles.welcomeBanner}>
-            <span style={{ fontSize: '1.3rem', fontWeight: '800', color: '#1a1a2e' }}>
+            <span style={{ fontSize: '1.3rem', color: '#1a1a2e' }}>
               ברוך הבא, {user.username}! 🎉 בוא נשחק!
             </span>
           </div>
@@ -310,8 +319,8 @@ const Home = () => {
           <GameCard
             title="הרפתקת המספרים"
             subtitle="חשבון"
-            emoji="🚀"
-            description="עזור לאסטרונאוט לעוף בחלל! פתור תחשיבים ועבור דרך 10 תחנות."
+            image="/math-game.svg"
+            description="עזור לאסטרונאוט לעוף בחלל! פתור תרגילים ועבור דרך 10 תחנות."
             path="/math"
             theme="math"
             stars={summary.math?.stars || 0}
@@ -321,7 +330,7 @@ const Home = () => {
           <GameCard
             title="וורדל עברית"
             subtitle="שפה עברית"
-            emoji="🔤"
+            image="/hebrew-wordle.svg"
             description="נחש את המילה הסודית בעברית! יש לך 6 ניסיונות. מילים בנות 4-6 אותיות."
             path="/hebrew-wordle"
             theme="hebrew"
@@ -332,7 +341,7 @@ const Home = () => {
           <GameCard
             title="Wordle English"
             subtitle="English Language"
-            emoji="🔡"
+            image="/english-wordle.svg"
             description="Guess the secret English word! You have 6 attempts. Words with 4-6 letters."
             path="/english-wordle"
             theme="english"
