@@ -293,7 +293,7 @@ const Home = () => {
         {/* Hero Section */}
         <div style={styles.hero}>
           <h1 style={styles.heroTitle}>
-            🧠 ברוך הבא ל-BrainGames!
+             ברוך הבא ל-BrainGames!
           </h1>
           <p style={styles.heroSubtitle}>
             למד, שחק ותאסוף כוכבים! 🌟

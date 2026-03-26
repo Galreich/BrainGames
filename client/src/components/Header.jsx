@@ -50,6 +50,8 @@ const Header = () => {
     },
     logoEmoji: {
       fontSize: '1.7rem',
+      display: 'inline-block',
+      animation: 'bounce 2s infinite',
     },
     logoText: {
       color: '#fff',
