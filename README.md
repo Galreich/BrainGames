@@ -144,7 +144,7 @@ The React app runs on http://localhost:3000 and proxies API calls to http://loca
 - 🟢 **Green stars** - English Wordle
 
 Stars are earned based on:
-- **Wordle:** 3 stars (1-2 guesses), 2 stars (3-4 guesses), 1 star (5-6 guesses)
+- **Wordle:** 1 star for guessing the word (within 6 attempts)
 - **Math:** 1 star if at least half the questions (5/10) are answered correctly, 0 stars otherwise
 
 ## Authentication
