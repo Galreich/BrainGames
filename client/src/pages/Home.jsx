@@ -329,7 +329,7 @@ const Home = () => {
           />
           <GameCard
             title="וורדעל עברית"
-            subtitle="שפה עברית"
+            subtitle="לשון"
             image="/hebrew-wordle.svg"
             description="נחש את המילה הסודית בעברית! יש לך 6 ניסיונות. מילים בנות 4-6 אותיות."
             path="/hebrew-wordle"
@@ -339,10 +339,10 @@ const Home = () => {
             starColor="#74b9ff"
           />
           <GameCard
-            title="Wordle English"
-            subtitle="English Language"
+            title="English Wordle"
+            subtitle="אנגלית"
             image="/english-wordle.svg"
-            description="Guess the secret English word! You have 6 attempts. Words with 4-6 letters."
+            description="נחש את המילה הסודית באנגלית! יש לך 6 ניסיונות. מילים בנות 4-6 אותיות."
             path="/english-wordle"
             theme="english"
             stars={summary.english?.stars || 0}
