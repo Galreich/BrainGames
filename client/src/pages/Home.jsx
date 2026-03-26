@@ -250,7 +250,7 @@ const Home = () => {
       borderRadius: '50px',
       padding: '12px 28px',
       color: '#fff',
-      fontWeight: '800',
+      fontWeight: 'bold',
       fontSize: '1.2rem',
       border: '2px solid rgba(255,255,255,0.3)',
     },
