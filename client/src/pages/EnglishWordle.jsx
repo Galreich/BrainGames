@@ -423,7 +423,7 @@ const EnglishWordle = () => {
       <div style={styles.container}>
         {/* Header */}
         <div style={{ textAlign: 'center' }}>
-          <h1 style={styles.title}>🔡 Wordle English</h1>
+          <h1 style={styles.title}>Wordle English</h1>
           <p style={styles.subtitle}>Guess the secret word!</p>
         </div>
 
@@ -477,7 +477,7 @@ const EnglishWordle = () => {
               <>
                 <div style={styles.gameOverTitle}>🎉 Amazing!</div>
                 <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '12px' }}>
-                  You guessed it in {currentRow} {currentRow === 1 ? 'try' : 'tries'}!
+                  You guessed it in {currentRow + 1} {currentRow + 1 === 1 ? 'try' : 'tries'}!
                 </p>
                 <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem' }}>
                   The word was: <strong style={{ color: '#55efc4' }}>{targetWord}</strong>

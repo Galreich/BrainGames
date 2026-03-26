@@ -37,8 +37,13 @@ const Login = () => {
         setSuccess('התחברת בהצלחה! מעביר אותך...');
         setTimeout(() => navigate('/'), 1000);
       } else {
-        if (password.length < 4) {
-          setError('סיסמה חייבת להיות לפחות 4 תווים');
+        if (password.length < 6) {
+          setError('סיסמה חייבת להיות לפחות 6 תווים');
+          setLoading(false);
+          return;
+        }
+        if (!/[a-zA-Zא-ת]/.test(password) || !/[0-9]/.test(password)) {
+          setError('סיסמה חייבת להכיל לפחות אות אחת ומספר אחד');
           setLoading(false);
           return;
         }
@@ -253,7 +258,7 @@ const Login = () => {
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder={isLogin ? 'הכנס סיסמה...' : 'בחר סיסמה (לפחות 4 תווים)...'}
+              placeholder={isLogin ? 'הכנס סיסמה...' : 'בחר סיסמה (לפחות 6 תווים, אות + מספר)...'}
               style={styles.input(!!error && !password)}
               autoComplete={isLogin ? 'current-password' : 'new-password'}
               disabled={loading}

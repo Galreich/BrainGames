@@ -265,11 +265,17 @@ const HebrewWordle = () => {
     }
   }, [gameStatus, currentGuess, wordLength, submitGuess]);
 
-  // Physical keyboard support
+  // Physical keyboard support (Hebrew layout keys)
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Backspace') handleKeyPress('⌫');
       else if (e.key === 'Enter') handleKeyPress('אישור');
+      else {
+        const hebrewLetters = 'אבגדהוזחטיכלמנסעפצקרשתףךןםץ';
+        if (hebrewLetters.includes(e.key)) {
+          handleKeyPress(e.key);
+        }
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
@@ -298,7 +304,6 @@ const HebrewWordle = () => {
     title: {
       color: '#fff',
       fontSize: '2rem',
-      fontWeight: '900',
       textAlign: 'center',
       textShadow: '0 2px 10px rgba(0,0,0,0.3)',
     },
@@ -320,7 +325,6 @@ const HebrewWordle = () => {
       border: 'none',
       background: active ? '#74b9ff' : 'transparent',
       color: active ? '#1e3799' : '#fff',
-      fontWeight: '800',
       fontSize: '1rem',
       cursor: 'pointer',
       transition: 'all 0.2s',
@@ -375,7 +379,6 @@ const HebrewWordle = () => {
       border: 'none',
       background: getKeyColor(status),
       color: status && status !== 'default' ? '#fff' : '#333',
-      fontWeight: '800',
       fontSize: isSpecial ? '0.75rem' : '1rem',
       cursor: 'pointer',
       transition: 'all 0.2s',
@@ -403,7 +406,6 @@ const HebrewWordle = () => {
       borderRadius: '50px',
       padding: '14px 36px',
       fontSize: '1.2rem',
-      fontWeight: '900',
       cursor: 'pointer',
       marginTop: '16px',
       boxShadow: '0 6px 20px rgba(9,132,227,0.4)',
@@ -435,7 +437,7 @@ const HebrewWordle = () => {
       <div style={styles.container}>
         {/* Header */}
         <div style={{ textAlign: 'center' }}>
-          <h1 style={styles.title}>🔤 וורדעל עברית</h1>
+          <h1 style={styles.title}> וורדעל עברית</h1>
           <p style={styles.subtitle}>נחש את המילה הסודית!</p>
         </div>
 
@@ -489,7 +491,7 @@ const HebrewWordle = () => {
               <>
                 <div style={styles.gameOverTitle}>🎉 כל הכבוד!</div>
                 <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '12px' }}>
-                  ניחשת נכון תוך {currentRow} ניסיונות!
+                  ניחשת נכון תוך {currentRow + 1} ניסיונות!
                 </p>
                 <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem' }}>
                   המילה הייתה: <strong style={{ color: '#74b9ff' }}>{targetWord}</strong>

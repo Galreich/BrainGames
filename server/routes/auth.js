@@ -17,8 +17,12 @@ router.post('/register', async (req, res) => {
     return res.status(400).json({ error: 'שם משתמש חייב להיות בין 2 ל-50 תווים' });
   }
 
-  if (password.length < 4) {
-    return res.status(400).json({ error: 'סיסמה חייבת להיות לפחות 4 תווים' });
+  if (password.length < 6) {
+    return res.status(400).json({ error: 'סיסמה חייבת להיות לפחות 6 תווים' });
+  }
+
+  if (!/[a-zA-Zא-ת]/.test(password) || !/[0-9]/.test(password)) {
+    return res.status(400).json({ error: 'סיסמה חייבת להכיל לפחות אות אחת ומספר אחד' });
   }
 
   try {

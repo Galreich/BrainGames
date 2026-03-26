@@ -79,7 +79,7 @@ const MathGame = () => {
   const [question, setQuestion] = useState(null);
   const [selectedAnswer, setSelectedAnswer] = useState(null);
   const [answerStatus, setAnswerStatus] = useState(null); // 'correct', 'wrong'
-  const [totalStars, setTotalStars] = useState(0);
+  const [totalAnswers, settotalAnswers] = useState(0);
   const [mistakes, setMistakes] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [message, setMessage] = useState('');
@@ -101,7 +101,7 @@ const MathGame = () => {
   const startGame = () => {
     setGameState('playing');
     setStation(1);
-    setTotalStars(0);
+    settotalAnswers(0);
     setMistakes(0);
     setElapsed(0);
     nextQuestion(1);
@@ -138,7 +138,7 @@ const MathGame = () => {
         addStarBurst();
         addStarBurst();
       }
-      setTotalStars((prev) => prev + starsForQuestion);
+      settotalAnswers((prev) => prev + starsForQuestion);
       showMessage('נכון! 🎉');
 
       setAnimatingRocket(true);
@@ -148,9 +148,11 @@ const MathGame = () => {
         const nextStation = station + 1;
         if (nextStation > TOTAL_STATIONS) {
           // Game complete!
+          const finalCorrect = totalAnswers + starsForQuestion;
+          const earned = finalCorrect >= Math.ceil(TOTAL_STATIONS / 2) ? 1 : 0;
           setGameState('gameover');
-          saveProgress('math', 1);
-          if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'math', subject: 'math', stars: 1, score: station }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
+          saveProgress('math', earned);
+          if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'math', subject: 'math', stars: earned, score: finalCorrect }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
         } else {
           setStation(nextStation);
           setMistakes(0);
@@ -159,14 +161,24 @@ const MathGame = () => {
       }, 1200);
     } else {
       setAnswerStatus('wrong');
-      setMistakes((prev) => prev + 1);
-      showMessage('נסה שוב! 💪');
+      showMessage('טעות! ממשיכים הלאה 💪');
       setTimeout(() => {
+        const nextStation = station + 1;
+        if (nextStation > TOTAL_STATIONS) {
+          const earned = totalAnswers >= Math.ceil(TOTAL_STATIONS / 2) ? 1 : 0;
+          setGameState('gameover');
+          saveProgress('math', earned);
+          if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'math', subject: 'math', stars: earned, score: totalAnswers }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
+        } else {
+          setStation(nextStation);
+          setMistakes(0);
+          nextQuestion(nextStation);
+        }
         setSelectedAnswer(null);
         setAnswerStatus(null);
-      }, 800);
+      }, 1200);
     }
-  }, [answerStatus, gameState, question, station, totalStars, elapsed, mistakes, nextQuestion, saveProgress]);
+  }, [answerStatus, gameState, question, station, totalAnswers, elapsed, mistakes, nextQuestion, saveProgress]);
 
 
   const formatTime = (seconds) => {
@@ -205,7 +217,6 @@ const MathGame = () => {
     title: {
       color: '#fff',
       fontSize: '2rem',
-      fontWeight: '900',
       textAlign: 'center',
       textShadow: '0 2px 10px rgba(0,0,0,0.5)',
       direction: 'rtl',
@@ -226,7 +237,6 @@ const MathGame = () => {
       borderRadius: '50px',
       padding: '18px 50px',
       fontSize: '1.4rem',
-      fontWeight: '900',
       cursor: 'pointer',
       boxShadow: '0 8px 25px rgba(238,90,36,0.5)',
       transition: 'all 0.3s',
@@ -396,8 +406,8 @@ const MathGame = () => {
     },
     gameOverTitle: {
       color: '#fff',
-      fontSize: '2.2rem',
-      fontWeight: '900',
+      fontSize: '2rem',
+      fontWeight: 'bold',
       marginBottom: '16px',
       direction: 'rtl',
     },
@@ -408,7 +418,6 @@ const MathGame = () => {
       borderRadius: '50px',
       padding: '16px 44px',
       fontSize: '1.3rem',
-      fontWeight: '900',
       cursor: 'pointer',
       marginTop: '20px',
       boxShadow: '0 8px 25px rgba(238,90,36,0.4)',
@@ -450,12 +459,12 @@ const MathGame = () => {
         {gameState === 'menu' && (
           <div style={styles.menuCard}>
             <div style={{ fontSize: '5rem', marginBottom: '16px' }}>🚀</div>
-            <h2 style={{ color: '#fff', fontSize: '1.6rem', fontWeight: '900', marginBottom: '12px', direction: 'rtl' }}>
+            <h2 style={{ color: '#fff', fontSize: '1.6rem', marginBottom: '12px', direction: 'rtl' }}>
               הרפתקת המספרים בחלל!
             </h2>
             <p style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '24px', lineHeight: '1.7', direction: 'rtl', fontSize: '1rem' }}>
               🌟 עזור לאסטרונאוט לעבור דרך 10 תחנות בחלל!<br />
-              🔢 פתור חשבונות כדי להתקדם<br />
+              🔢 פתור תרגילים כדי להתקדם<br />
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', marginBottom: '28px', direction: 'rtl', flexWrap: 'wrap' }}>
               {[
@@ -497,7 +506,7 @@ const MathGame = () => {
                 🚀 תחנה {station}/{TOTAL_STATIONS}
               </div>
               <div style={styles.infoBadge('249, 202, 36')}>
-                ⭐ {totalStars} כוכבים
+                ⭐ {totalAnswers} תשובות נכונות
               </div>
               <div style={styles.infoBadge('116, 185, 255')}>
                 ⏱️ {formatTime(elapsed)}
@@ -581,10 +590,10 @@ const MathGame = () => {
         {gameState === 'gameover' && (
           <div style={styles.gameOver}>
             <div style={{ fontSize: '4rem', marginBottom: '16px' }}>
-              🏆
+              {totalAnswers >= Math.ceil(TOTAL_STATIONS / 2) ? '🏆' : '🚀'}
             </div>
             <div style={styles.gameOverTitle}>
-              מדהים! אלוף חלל! 🚀
+              {totalAnswers >= Math.ceil(TOTAL_STATIONS / 2) ? 'מדהים! אלוף חלל! 🚀' : 'לא הצלחת לעזור לאסטרונאוט... 😢'}
             </div>
             <div style={{ display: 'flex', gap: '16px', justifyContent: 'center', flexWrap: 'wrap', direction: 'rtl', marginBottom: '16px' }}>
               <div style={{
@@ -604,8 +613,8 @@ const MathGame = () => {
                 textAlign: 'center',
                 color: '#fff',
               }}>
-                <div style={{ fontSize: '1.6rem', fontWeight: '900' }}>{TOTAL_STATIONS}</div>
-                <div style={{ fontSize: '0.85rem', opacity: 0.7 }}>תחנות</div>
+                <div style={{ fontSize: '1.6rem', fontWeight: '900' }}>{totalAnswers}</div>
+                <div style={{ fontSize: '0.85rem', opacity: 0.7 }}>תשובות נכונות</div>
               </div>
             </div>
             

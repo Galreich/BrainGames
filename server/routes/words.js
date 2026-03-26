@@ -19,6 +19,7 @@ router.get('/hebrew', (req, res) => {
 
   // Return a random word
   const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
+  console.log(`Selected Hebrew word: ${randomWord} (length: ${length})`);
 
   res.json({
     word: randomWord,
@@ -42,6 +43,7 @@ router.get('/english', (req, res) => {
 
   // Return a random word
   const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
+  console.log(`Selected English word: ${randomWord} (length: ${length})`);
 
   res.json({
     word: randomWord,
