@@ -110,54 +110,29 @@
   white-space: nowrap;
 }
 
-.login-btn {
-  background: linear-gradient(135deg, #ffd200, #f7971e);
-  color: #1a1a2e;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  padding: 6px 14px;
-  ;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(255, 210, 0, 0.3);
-}
-.login-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(255, 210, 0, 0.4);
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
-.logout-btn {
-  background: transparent;
+.nav-btn {
   color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  padding: 6px 14px;
-  ;
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.logout-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
-
-.suggestion-btn {
-  background: linear-gradient(135deg, #a29bfe, #6c5ce7);
-  color: #fff;
+  background: transparent;
   border: none;
+  border-bottom: 2px solid transparent;
   border-radius: 8px;
   padding: 6px 14px;
-  ;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
+  font-family: inherit;
   cursor: pointer;
+  white-space: nowrap;
   transition: all 0.2s;
-  box-shadow: 0 2px 8px rgba(108, 92, 231, 0.3);
 }
-.suggestion-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(108, 92, 231, 0.4);
+.nav-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .header-divider {
