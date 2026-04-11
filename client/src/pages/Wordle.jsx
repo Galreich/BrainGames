@@ -192,7 +192,6 @@ const Wordle = ({ language }) => {
             showMessage(`${t('Well_done_You_won')} ${Emojis.Party}`, 5000);
           else showMessage(`${t('The_word_was', { word: targetWord })}`, 6000);
 
-          saveProgress(language, stars);
           if (token) {
             fetch('/api/game-records', {
               method: 'POST',
@@ -202,19 +201,19 @@ const Wordle = ({ language }) => {
               },
               body: JSON.stringify({
                 game: `${language}-wordle`,
-                subject: language,
                 stars,
                 score: won ? currentRow + 1 : MAX_ATTEMPTS,
               }),
             })
               .then((r) => r.json())
-              .then((d) =>
+              .then((d) => {
                 updateUser({
                   red_stars: d.red_stars,
                   blue_stars: d.blue_stars,
                   green_stars: d.green_stars,
-                }),
-              )
+                });
+                saveProgress();
+              })
               .catch(() => {});
           }
         },
