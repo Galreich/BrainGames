@@ -12,7 +12,7 @@
 }
 .admin-title {
   font-size: 2rem;
-  font-weight: 900;
+  font-weight: bold;
   margin-bottom: 8px;
   background: linear-gradient(90deg, #f9ca24, #f0932b);
   -webkit-background-clip: text;
@@ -54,7 +54,7 @@
   padding: 3px 10px;
   border-radius: 12px;
   font-size: 0.8rem;
-  font-weight: 700;
+  ;
   background: rgba(162, 155, 254, 0.2);
   color: #a29bfe;
 }
@@ -90,9 +90,6 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-.admin-fw-700 {
-  font-weight: 700;
-}
 .admin-desc-col {
   color: rgba(255, 255, 255, 0.75);
   max-width: 300px;

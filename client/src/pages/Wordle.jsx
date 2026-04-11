@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useProgress, useAuth } from '../context';
 import { Tile } from '../components';
 import { useNavigate } from 'react-router-dom';
@@ -18,18 +18,22 @@ const Wordle = ({ language }) => {
 
   const isHebrew = language === 'hebrew';
 
-  const KEYBOARD_ROWS = isHebrew
-    ? [
-        t('Keyboard_Row_1_HE', { returnObjects: true }),
-        t('Keyboard_Row_2_HE', { returnObjects: true }),
-        t('Keyboard_Row_3_HE', { returnObjects: true }),
-        t('Keyboard_Row_4_HE', { returnObjects: true }),
-      ]
-    : [
-        t('Keyboard_Row_1_EN', { returnObjects: true }),
-        t('Keyboard_Row_2_EN', { returnObjects: true }),
-        t('Keyboard_Row_3_EN', { returnObjects: true }),
-      ];
+  const KEYBOARD_ROWS = useMemo(
+    () =>
+      isHebrew
+        ? [
+            t('Keyboard_Row_1_HE', { returnObjects: true }),
+            t('Keyboard_Row_2_HE', { returnObjects: true }),
+            t('Keyboard_Row_3_HE', { returnObjects: true }),
+            t('Keyboard_Row_4_HE', { returnObjects: true }),
+          ]
+        : [
+            t('Keyboard_Row_1_EN', { returnObjects: true }),
+            t('Keyboard_Row_2_EN', { returnObjects: true }),
+            t('Keyboard_Row_3_EN', { returnObjects: true }),
+          ],
+    [t, isHebrew],
+  );
 
   const [wordLength, setWordLength] = useState(5);
   const [targetWord, setTargetWord] = useState('');
@@ -46,10 +50,10 @@ const Wordle = ({ language }) => {
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const showMessage = (msg, duration = 2500) => {
+  const showMessage = useCallback((msg, duration = 2500) => {
     setMessage(msg);
     setTimeout(() => setMessage(''), duration);
-  };
+  }, []);
 
   const fetchWord = useCallback(
     async (len) => {

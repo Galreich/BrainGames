@@ -43,8 +43,8 @@ router.get('/english', (req: Request, res: Response) => {
 });
 
 // GET /api/words/hebrew/validate?word=שלום
-router.get('/hebrew/validate', (req, res) => {
-  const { word } = req.query;
+router.get('/hebrew/validate', (req: Request, res: Response) => {
+  const word = req.query.word as string | undefined;
   if (!word) return res.status(400).json({ error: 'Word_required' });
 
   const length = word.length;
@@ -55,8 +55,8 @@ router.get('/hebrew/validate', (req, res) => {
 });
 
 // GET /api/words/english/validate?word=happy
-router.get('/english/validate', (req, res) => {
-  const { word } = req.query;
+router.get('/english/validate', (req: Request, res: Response) => {
+  const word = req.query.word as string | undefined;
   if (!word) return res.status(400).json({ error: 'Word_required' });
 
   const length = word.length;
