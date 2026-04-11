@@ -30,7 +30,7 @@ export const heTranslations = {
   English_Wordle: 'וורדעל אנגלית',
   English_Wordle_Description:
     'נחש את המילה הסודית באנגלית! יש לך 6 ניסיונות. מילים בנות 4-6 אותיות.',
-  English_Wordle_Title: 'Wordle English',
+  English_Wordle_Title: 'English Wordle',
   Enter_Symbol_HE: 'אישור',
   Enter_password: 'הכנס סיסמה...',
   Enter_username: 'הכנס שם משתמש...',
