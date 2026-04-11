@@ -33,7 +33,7 @@ const Header = () => {
       path: '/english-wordle',
       label: `${Emojis.LettersEN} ${t('English_Wordle')}`,
     },
-    { path: '/math', label: `${Emojis.Numbers} ${t('Math_Adventure')}` },
+    { path: '/math', label: `${Emojis.Numbers} ${t('Math_Title')}` },
   ];
 
   return (

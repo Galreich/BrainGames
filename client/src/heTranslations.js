@@ -175,7 +175,6 @@ export const heTranslations = {
   Login_to_your_account: 'התחבר לחשבון שלך',
   Logout: 'יציאה',
   Math: 'חשבון',
-  Math_Adventure: 'הרפתקת המספרים',
   Math_Color: 'חשבון',
   Math_Game_Description:
     'עזור לאסטרונאוט לעוף בחלל! פתור תרגילים ועבור דרך 10 תחנות.',

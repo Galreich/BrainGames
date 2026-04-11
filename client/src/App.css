@@ -2,6 +2,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  user-select: none;
+  cursor: default;
 }
 
 .app-main {
@@ -29,4 +31,56 @@
   border-radius: 8px;
   white-space: pre-wrap;
   color: #fab1a0;
+}
+
+/* Restore text selection and cursor for input fields */
+input,
+textarea,
+select {
+  user-select: text;
+  cursor: text;
+}
+
+/* Header / Navbar Overrides */
+.app-header .logo-text {
+  color: #ffffff !important;
+  background: none !important;
+  -webkit-text-fill-color: initial !important;
+  -webkit-background-clip: border-box !important;
+}
+
+.app-header .login-btn,
+.app-header .suggestion-btn,
+.app-header .logout-btn,
+.app-header .nav-link {
+  color: #ffffff !important;
+  background: transparent !important;
+  -webkit-text-fill-color: initial !important;
+  border-bottom: none !important;
+  transition:
+    background-color 0.2s ease,
+    border-radius 0.2s ease !important;
+}
+
+.app-header .login-btn {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+.app-header .login-btn:hover,
+.app-header .suggestion-btn:hover,
+.app-header .logout-btn:hover,
+.app-header .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border-radius: 8px;
+  box-shadow: none !important;
+}
+
+.app-header .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.25) !important;
+  border-radius: 8px;
+  font-weight: bold;
+  border-bottom: none !important;
 }
