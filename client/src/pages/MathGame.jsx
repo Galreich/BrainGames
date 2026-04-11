@@ -151,8 +151,7 @@ const MathGame = () => {
           const finalCorrect = totalAnswers + starsForQuestion;
           const earned = finalCorrect >= Math.ceil(TOTAL_STATIONS / 2) ? 1 : 0;
           setGameState('gameover');
-          saveProgress('math', earned);
-          if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'math', subject: 'math', stars: earned, score: finalCorrect }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
+          if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'math-puzzle', stars: earned, score: finalCorrect }) }).then(r => r.json()).then(d => { updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars }); saveProgress(); }).catch(() => {});
         } else {
           setStation(nextStation);
           setMistakes(0);
@@ -167,8 +166,7 @@ const MathGame = () => {
         if (nextStation > TOTAL_STATIONS) {
           const earned = totalAnswers >= Math.ceil(TOTAL_STATIONS / 2) ? 1 : 0;
           setGameState('gameover');
-          saveProgress('math', earned);
-          if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'math', subject: 'math', stars: earned, score: totalAnswers }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
+          if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'math-puzzle', stars: earned, score: totalAnswers }) }).then(r => r.json()).then(d => { updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars }); saveProgress(); }).catch(() => {});
         } else {
           setStation(nextStation);
           setMistakes(0);

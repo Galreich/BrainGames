@@ -4,15 +4,14 @@ import { useAuth } from './AuthContext';
 const ProgressContext = createContext(null);
 
 const defaultProgress = {
-  math: { stars: 0, gamesPlayed: 0 },
-  hebrew: { stars: 0, gamesPlayed: 0 },
-  english: { stars: 0, gamesPlayed: 0 },
+  'math-puzzle': { stars: 0, gamesPlayed: 0 },
+  'hebrew-wordle': { stars: 0, gamesPlayed: 0 },
+  'english-wordle': { stars: 0, gamesPlayed: 0 },
 };
 
 export const ProgressProvider = ({ children }) => {
   const { user, token } = useAuth();
   const [progress, setProgress] = useState(() => {
-    // Load local progress from localStorage
     const saved = localStorage.getItem('braingames_progress_local');
     if (saved) {
       try {
@@ -25,7 +24,6 @@ export const ProgressProvider = ({ children }) => {
   });
   const [loading, setLoading] = useState(false);
 
-  // Load progress from server when user logs in
   useEffect(() => {
     if (user && token) {
       loadProgressFromServer();
@@ -51,36 +49,12 @@ export const ProgressProvider = ({ children }) => {
     }
   };
 
-  const saveProgress = useCallback(async (subject, starsEarned) => {
-    // Update local state immediately
-    setProgress((prev) => {
-      const updated = {
-        ...prev,
-        [subject]: {
-          stars: (prev[subject]?.stars || 0) + starsEarned,
-          gamesPlayed: (prev[subject]?.gamesPlayed || 0) + 1,
-        },
-      };
-      localStorage.setItem('braingames_progress_local', JSON.stringify(updated));
-      return updated;
-    });
-
-    // Save to server if logged in
+  // Called after a game record is saved — reloads from DB so gamesPlayed is accurate
+  const saveProgress = useCallback(async () => {
     if (user && token) {
-      try {
-        await fetch('/api/progress/save', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ subject, stars: starsEarned, gamesPlayed: 1 }),
-        });
-      } catch (err) {
-        console.error('Failed to save progress to server:', err);
-      }
+      await loadProgressFromServer();
     }
-  }, [user, token]);
+  }, [user, token]); // eslint-disable-line
 
   const getTotalStars = useCallback(() => {
     return Object.values(progress).reduce((total, p) => total + (p?.stars || 0), 0);

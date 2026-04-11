@@ -226,15 +226,13 @@ const EnglishWordle = () => {
       setTimeout(() => {
         setGameStatus('won');
         showMessage('Amazing! You won! 🎉', 5000);
-        saveProgress('english', stars);
-        if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'english-wordle', subject: 'english', stars, score: currentRow + 1 }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
+        if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'english-wordle', stars, score: currentRow + 1 }) }).then(r => r.json()).then(d => { updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars }); saveProgress(); }).catch(() => {});
       }, wordLength * 300 + 400);
     } else if (nextRow >= MAX_ATTEMPTS) {
       setTimeout(() => {
         setGameStatus('lost');
         showMessage(`The word was: ${targetWord}`, 6000);
-        saveProgress('english', 0);
-        if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'english-wordle', subject: 'english', stars: 0, score: MAX_ATTEMPTS }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
+        if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'english-wordle', stars: 0, score: MAX_ATTEMPTS }) }).then(r => r.json()).then(d => { updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars }); saveProgress(); }).catch(() => {});
       }, wordLength * 300 + 400);
     } else {
       setCurrentRow(nextRow);

@@ -8,9 +8,10 @@ const router = express.Router();
 router.get('/suggestions', authenticateToken, requireAdmin, async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT id, username, subject, title, description, image_data, created_at
-       FROM suggestions
-       ORDER BY created_at DESC`
+      `SELECT s.id, u.username, s.subject, s.title, s.description, s.image_data, s.created_at
+       FROM suggestions s
+       JOIN users u ON u.id = s.user_id
+       ORDER BY s.created_at DESC`
     );
     res.json({ suggestions: result.rows });
   } catch (err) {

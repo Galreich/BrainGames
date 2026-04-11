@@ -4,37 +4,51 @@ import { authenticateToken } from './auth.js';
 
 const router = express.Router();
 
-// POST /api/game-records — save a game result and refresh total_stars
-router.post('/', authenticateToken, async (req, res) => {
-  const { game, subject, stars, score } = req.body;
-  const { userId, username } = req.user;
+const colMap = {
+  'math-puzzle': 'red_stars',
+  'hebrew-wordle': 'blue_stars',
+  'english-wordle': 'green_stars',
+};
 
-  if (!game || !subject || stars === undefined) {
-    return res.status(400).json({ error: 'game, subject ו-stars נדרשים' });
+// POST /api/game-records — save a game result and refresh star counts
+router.post('/', authenticateToken, async (req, res) => {
+  const { game, stars, score } = req.body;
+  const { userId } = req.user;
+
+  if (!game || stars === undefined) {
+    return res.status(400).json({ error: 'game ו-stars נדרשים' });
   }
-  if (!['math', 'hebrew', 'english'].includes(subject)) {
-    return res.status(400).json({ error: 'subject לא תקין' });
+  if (!colMap[game]) {
+    return res.status(400).json({ error: 'game לא תקין' });
   }
   if (typeof stars !== 'number' || stars < 0 || stars > 3) {
     return res.status(400).json({ error: 'stars חייב להיות בין 0 ל-3' });
   }
 
   try {
+    // Look up game_id
+    const gameRow = await pool.query('SELECT id FROM games WHERE name = $1', [game]);
+    if (gameRow.rows.length === 0) {
+      return res.status(404).json({ error: 'משחק לא נמצא' });
+    }
+    const gameId = gameRow.rows[0].id;
+
     // Insert record
     await pool.query(
-      `INSERT INTO game_records (user_id, username, game, subject, stars, score)
-       VALUES ($1, $2, $3, $4, $5, $6)`,
-      [userId, username, game, subject, stars, score ?? null]
+      `INSERT INTO game_records (user_id, game_id, stars, score)
+       VALUES ($1, $2, $3, $4)`,
+      [userId, gameId, stars, score ?? null]
     );
 
-    // Recalculate per-subject stars for user
-    const colMap = { math: 'red_stars', hebrew: 'blue_stars', english: 'green_stars' };
-    const col = colMap[subject];
+    // Recalculate stars for this game in the user row
+    const col = colMap[game];
     await pool.query(
       `UPDATE users SET ${col} = (
-         SELECT COALESCE(SUM(stars), 0) FROM game_records WHERE user_id = $1 AND subject = $2
+         SELECT COALESCE(SUM(gr.stars), 0)
+         FROM game_records gr
+         WHERE gr.user_id = $1 AND gr.game_id = $2
        ) WHERE id = $1`,
-      [userId, subject]
+      [userId, gameId]
     );
 
     // Return updated star counts
@@ -55,20 +69,25 @@ router.post('/', authenticateToken, async (req, res) => {
   }
 });
 
-// GET /api/game-records/summary — per-subject stars & count for logged-in user
+// GET /api/game-records/summary — per-game stars & count for logged-in user
 router.get('/summary', authenticateToken, async (req, res) => {
   const { userId } = req.user;
   const { rows } = await pool.query(
-    `SELECT subject,
-            COALESCE(SUM(stars), 0)::int AS stars,
+    `SELECT g.name,
+            COALESCE(SUM(gr.stars), 0)::int AS stars,
             COUNT(*)::int AS games_played
-     FROM game_records
-     WHERE user_id = $1
-     GROUP BY subject`,
+     FROM game_records gr
+     JOIN games g ON g.id = gr.game_id
+     WHERE gr.user_id = $1
+     GROUP BY g.name`,
     [userId]
   );
-  const summary = { math: { stars: 0, games_played: 0 }, hebrew: { stars: 0, games_played: 0 }, english: { stars: 0, games_played: 0 } };
-  rows.forEach(r => { summary[r.subject] = { stars: r.stars, games_played: r.games_played }; });
+  const summary = {
+    'math-puzzle': { stars: 0, games_played: 0 },
+    'hebrew-wordle': { stars: 0, games_played: 0 },
+    'english-wordle': { stars: 0, games_played: 0 },
+  };
+  rows.forEach(r => { summary[r.name] = { stars: r.stars, games_played: r.games_played }; });
   res.json(summary);
 });
 

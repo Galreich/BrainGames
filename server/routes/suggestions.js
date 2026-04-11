@@ -7,7 +7,7 @@ const router = express.Router();
 // POST /api/suggestions - submit a new suggestion (requires auth)
 router.post('/', authenticateToken, async (req, res) => {
   const { title, description, subject, imageData } = req.body;
-  const { userId, username } = req.user;
+  const { userId } = req.user;
 
   if (!title || !title.trim()) {
     return res.status(400).json({ error: 'כותרת ההצעה נדרשת' });
@@ -24,10 +24,10 @@ router.post('/', authenticateToken, async (req, res) => {
 
   try {
     const result = await pool.query(
-      `INSERT INTO suggestions (user_id, username, title, description, subject, image_data)
-       VALUES ($1, $2, $3, $4, $5, $6)
+      `INSERT INTO suggestions (user_id, title, description, subject, image_data)
+       VALUES ($1, $2, $3, $4, $5)
        RETURNING id, title, created_at`,
-      [userId, username, title.trim(), description.trim(), subject || null, imageData || null]
+      [userId, title.trim(), description.trim(), subject || null, imageData || null]
     );
 
     res.status(201).json({
@@ -40,12 +40,14 @@ router.post('/', authenticateToken, async (req, res) => {
   }
 });
 
-// GET /api/suggestions - list all suggestions (requires auth, admin-like)
+// GET /api/suggestions - list all suggestions (requires auth)
 router.get('/', authenticateToken, async (req, res) => {
   try {
     const result = await pool.query(
-      `SELECT id, username, title, description, subject, created_at
-       FROM suggestions ORDER BY created_at DESC LIMIT 50`
+      `SELECT s.id, u.username, s.title, s.description, s.subject, s.created_at
+       FROM suggestions s
+       JOIN users u ON u.id = s.user_id
+       ORDER BY s.created_at DESC LIMIT 50`
     );
     res.json({ suggestions: result.rows });
   } catch (err) {

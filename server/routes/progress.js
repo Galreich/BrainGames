@@ -14,28 +14,29 @@ router.get('/:userId', authenticateToken, async (req, res) => {
 
   try {
     const result = await pool.query(
-      `SELECT subject,
-              COALESCE(SUM(stars), 0)  AS stars,
-              COUNT(*)                 AS games_played,
-              MAX(played_at)           AS updated_at
-       FROM game_records
-       WHERE user_id = $1
-       GROUP BY subject`,
+      `SELECT g.name,
+              COALESCE(SUM(gr.stars), 0) AS stars,
+              COUNT(*)                   AS games_played,
+              MAX(gr.played_at)          AS updated_at
+       FROM game_records gr
+       JOIN games g ON g.id = gr.game_id
+       WHERE gr.user_id = $1
+       GROUP BY g.name`,
       [userId]
     );
 
     const progress = {};
     result.rows.forEach((row) => {
-      progress[row.subject] = {
+      progress[row.name] = {
         stars: parseInt(row.stars),
         gamesPlayed: parseInt(row.games_played),
         updatedAt: row.updated_at,
       };
     });
 
-    ['math', 'hebrew', 'english'].forEach((subject) => {
-      if (!progress[subject]) {
-        progress[subject] = { stars: 0, gamesPlayed: 0, updatedAt: null };
+    ['math-puzzle', 'hebrew-wordle', 'english-wordle'].forEach((name) => {
+      if (!progress[name]) {
+        progress[name] = { stars: 0, gamesPlayed: 0, updatedAt: null };
       }
     });
 

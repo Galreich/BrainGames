@@ -192,7 +192,7 @@ const GameCard = ({ title, subtitle, image, description, path, theme, stars, gam
 const Home = () => {
   const { user, token } = useAuth();
   const [showWelcome, setShowWelcome] = useState(true);
-  const [summary, setSummary] = useState({ math: { stars: 0, games_played: 0 }, hebrew: { stars: 0, games_played: 0 }, english: { stars: 0, games_played: 0 } });
+  const [summary, setSummary] = useState({ 'math-puzzle': { stars: 0, games_played: 0 }, 'hebrew-wordle': { stars: 0, games_played: 0 }, 'english-wordle': { stars: 0, games_played: 0 } });
 
   useEffect(() => {
     const timer = setTimeout(() => setShowWelcome(false), 4000);
@@ -323,8 +323,8 @@ const Home = () => {
             description="עזור לאסטרונאוט לעוף בחלל! פתור תרגילים ועבור דרך 10 תחנות."
             path="/math"
             theme="math"
-            stars={summary.math?.stars || 0}
-            gamesPlayed={summary.math?.games_played || 0}
+            stars={summary['math-puzzle']?.stars || 0}
+            gamesPlayed={summary['math-puzzle']?.games_played || 0}
             starColor="#ff6b6b"
           />
           <GameCard
@@ -334,8 +334,8 @@ const Home = () => {
             description="נחש את המילה הסודית בעברית! יש לך 6 ניסיונות. מילים בנות 4-6 אותיות."
             path="/hebrew-wordle"
             theme="hebrew"
-            stars={summary.hebrew?.stars || 0}
-            gamesPlayed={summary.hebrew?.games_played || 0}
+            stars={summary['hebrew-wordle']?.stars || 0}
+            gamesPlayed={summary['hebrew-wordle']?.games_played || 0}
             starColor="#74b9ff"
           />
           <GameCard
@@ -345,8 +345,8 @@ const Home = () => {
             description="נחש את המילה הסודית באנגלית! יש לך 6 ניסיונות. מילים בנות 4-6 אותיות."
             path="/english-wordle"
             theme="english"
-            stars={summary.english?.stars || 0}
-            gamesPlayed={summary.english?.games_played || 0}
+            stars={summary['english-wordle']?.stars || 0}
+            gamesPlayed={summary['english-wordle']?.games_played || 0}
             starColor="#55efc4"
           />
         </div>

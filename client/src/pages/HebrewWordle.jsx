@@ -233,15 +233,13 @@ const HebrewWordle = () => {
       setTimeout(() => {
         setGameStatus('won');
         showMessage('כל הכבוד! ניצחת! 🎉', 5000);
-        saveProgress('hebrew', stars);
-        if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'hebrew-wordle', subject: 'hebrew', stars, score: currentRow + 1 }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
+        if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'hebrew-wordle', stars, score: currentRow + 1 }) }).then(r => r.json()).then(d => { updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars }); saveProgress(); }).catch(() => {});
       }, wordLength * 300 + 400);
     } else if (nextRow >= MAX_ATTEMPTS) {
       setTimeout(() => {
         setGameStatus('lost');
         showMessage(`המילה הייתה: ${targetWord}`, 6000);
-        saveProgress('hebrew', 0);
-        if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'hebrew-wordle', subject: 'hebrew', stars: 0, score: MAX_ATTEMPTS }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
+        if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'hebrew-wordle', stars: 0, score: MAX_ATTEMPTS }) }).then(r => r.json()).then(d => { updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars }); saveProgress(); }).catch(() => {});
       }, wordLength * 300 + 400);
     } else {
       setCurrentRow(nextRow);

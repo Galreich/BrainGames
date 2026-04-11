@@ -32,11 +32,18 @@ const initDB = async () => {
     `);
 
     await pool.query(`
+      CREATE TABLE IF NOT EXISTS games (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(50) UNIQUE NOT NULL,
+        subject VARCHAR(20) NOT NULL
+      );
+    `);
+
+    await pool.query(`
       CREATE TABLE IF NOT EXISTS game_records (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-        game VARCHAR(50) NOT NULL,
-        subject VARCHAR(20) NOT NULL,
+        game_id INTEGER REFERENCES games(id) ON DELETE CASCADE,
         stars INTEGER NOT NULL DEFAULT 0,
         score INTEGER,
         played_at TIMESTAMP DEFAULT NOW()
@@ -47,7 +54,6 @@ const initDB = async () => {
       CREATE TABLE IF NOT EXISTS suggestions (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-        username VARCHAR(50) NOT NULL,
         title VARCHAR(100) NOT NULL,
         description TEXT NOT NULL,
         subject VARCHAR(20),
@@ -68,6 +74,17 @@ const initDB = async () => {
         ['admin', passwordHash]
       );
       console.log(`Admin user created (password: ${adminPassword})`);
+    }
+
+    const existingGames = await pool.query('SELECT id FROM games WHERE name IN ($1, $2, $3)', ['hebrew-wordle', 'english-wordle', 'math-puzzle']);
+    if (existingGames.rows.length < 3) {
+      await pool.query(`
+        INSERT INTO games (name, subject) VALUES
+        ('hebrew-wordle', 'language'),
+        ('english-wordle', 'language'),
+        ('math-puzzle', 'math');
+      `);
+      console.log('Default games inserted into database');
     }
   } catch (err) {
     console.error('Error initializing database tables:', err.message);
