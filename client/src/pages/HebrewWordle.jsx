@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useProgress } from '../context/ProgressContext';
-import { useAuth } from '../context/AuthContext';
+import { useProgress, useAuth } from '../context';
+import { Tile } from '../components';
 import { useNavigate } from 'react-router-dom';
 import './HebrewWordleStyle.css';
 

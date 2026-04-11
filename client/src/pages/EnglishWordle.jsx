@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useProgress } from '../context/ProgressContext';
-import { useAuth } from '../context/AuthContext';
+import { useProgress, useAuth } from '../context';
+import { Tile } from '../components';
 import { useNavigate } from 'react-router-dom';
 import './EnglishWordleStyle.css';
 
@@ -21,31 +21,6 @@ const FALLBACK_WORDS = {
 };
 
 const MAX_ATTEMPTS = 6;
-
-const Tile = ({ letter, status, isRevealing, revealIndex }) => {
-  const [revealed, setRevealed] = useState(false);
-
-  useEffect(() => {
-    if (isRevealing) {
-      // Animation is handled by CSS, but we need to set state for colors
-      const timer = setTimeout(() => setRevealed(true), revealIndex * 300 + 300);
-      return () => clearTimeout(timer);
-    } else if (status && status !== 'empty') {
-      setRevealed(true);
-    } else {
-      setRevealed(false);
-    }
-  }, [isRevealing, status, revealIndex, setRevealed]);
-
-  const classes = [
-    'tile',
-    status && (isRevealing || revealed) ? status : '',
-    letter && !status ? 'has-letter' : '',
-    isRevealing ? 'is-revealing' : ''
-  ].filter(Boolean).join(' ');
-
-  return <div className={classes} style={{'--reveal-index': revealIndex}}>{letter}</div>;
-};
 
 const EnglishWordle = () => {
   const navigate = useNavigate();

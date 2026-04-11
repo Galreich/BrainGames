@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context';
+import './SuggestionModalStyle.css';
 
 const SUBJECTS = [
   { value: '', label: 'כללי (לא קשור לנושא ספציפי)' },
@@ -70,95 +71,49 @@ const SuggestionModal = ({ onClose }) => {
   };
 
   return (
-    <div
-      style={{
-        position: 'fixed', inset: 0,
-        background: 'rgba(0,0,0,0.65)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        zIndex: 2000,
-        padding: '20px',
-        backdropFilter: 'blur(4px)',
-        boxSizing: 'border-box',
-      }}
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
-    >
-      <div style={{
-        background: 'linear-gradient(145deg, #1a1a2e, #16213e)',
-        borderRadius: '24px',
-        padding: '32px',
-        width: '100%',
-        maxWidth: '560px',
-        maxHeight: '90vh',
-        overflowY: 'auto',
-        border: '1px solid rgba(255,255,255,0.12)',
-        boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
-        direction: 'rtl',
-        position: 'relative',
-      }}>
+    <div className="suggestion-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
+      <div className="suggestion-modal">
         {/* Close button */}
-        <button
-          onClick={onClose}
-          style={{
-            position: 'absolute', top: '16px', left: '16px',
-            background: 'rgba(255,255,255,0.1)', border: 'none',
-            borderRadius: '50%', width: '36px', height: '36px',
-            color: '#fff', fontSize: '1.2rem', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-          }}
-        >✕</button>
+        <button onClick={onClose} className="suggestion-close-btn">✕</button>
 
         {status === 'success' ? (
-          <div style={{ textAlign: 'center', padding: '20px 0' }}>
-            <div style={{ fontSize: '4rem', marginBottom: '16px' }}>🎉</div>
-            <h2 style={{ color: '#fff', fontSize: '1.6rem', fontWeight: '900', marginBottom: '10px' }}>
+          <div className="suggestion-success-container">
+            <div className="suggestion-success-icon">🎉</div>
+            <h2 className="suggestion-success-title">
               תודה רבה!
             </h2>
-            <p style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '24px', lineHeight: 1.6 }}>
+            <p className="suggestion-success-text">
               ההצעה שלך נשלחה בהצלחה.<br />אנחנו ניקח אותה בחשבון!
             </p>
-            <button
-              onClick={onClose}
-              style={{
-                background: 'linear-gradient(135deg, #f9ca24, #f0932b)',
-                color: '#1a1a2e', border: 'none', borderRadius: '50px',
-                padding: '12px 32px', fontSize: '1rem', fontWeight: '900', cursor: 'pointer',
-              }}
-            >
+            <button onClick={onClose} className="suggestion-success-btn">
               סגור
             </button>
           </div>
         ) : (
           <>
-            <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>💡</div>
-              <h2 style={{ color: '#fff', fontSize: '1.5rem', fontWeight: '900', margin: 0 }}>
+            <div className="suggestion-header">
+              <div className="suggestion-icon">💡</div>
+              <h2 className="suggestion-title">
                 הצע משחק חדש
               </h2>
-              <p style={{ color: 'rgba(255,255,255,0.6)', marginTop: '6px', fontSize: '0.9rem' }}>
+              <p className="suggestion-subtitle">
                 יש לך רעיון? נשמח לשמוע!
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <form onSubmit={handleSubmit} className="suggestion-form">
               {/* Subject */}
               <div>
-                <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', fontWeight: '700', display: 'block', marginBottom: '6px' }}>
+                <label className="suggestion-label">
                   נושא
                 </label>
                 <select
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  style={{
-                    width: '100%', padding: '12px 14px',
-                    background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '12px', color: '#fff', fontSize: '1rem',
-                    outline: 'none', cursor: 'pointer',
-                    direction: 'rtl',
-                    fontFamily: 'inherit'
-                  }}
+                  className="suggestion-select"
                 >
                   {SUBJECTS.map((s) => (
-                    <option key={s.value} value={s.value} style={{ background: '#1a1a2e'}}>
+                    <option key={s.value} value={s.value}>
                       {s.label}
                     </option>
                   ))}
@@ -167,7 +122,7 @@ const SuggestionModal = ({ onClose }) => {
 
               {/* Title */}
               <div>
-                <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', fontWeight: '700', display: 'block', marginBottom: '6px' }}>
+                <label className="suggestion-label">
                   כותרת המשחק <span style={{ color: '#ff7675' }}>*</span>
                 </label>
                 <input
@@ -176,22 +131,16 @@ const SuggestionModal = ({ onClose }) => {
                   onChange={(e) => setTitle(e.target.value)}
                   maxLength={100}
                   placeholder="הכנס פה הצעה למשחק"
-                  style={{
-                    width: '100%', padding: '12px 14px', boxSizing: 'border-box',
-                    background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '12px', color: '#fff', fontSize: '1rem',
-                    outline: 'none', direction: 'rtl',
-                    fontFamily: 'inherit', lineHeight: 1.5,
-                  }}
+                  className="suggestion-input"
                 />
-                <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', marginTop: '4px', textAlign: 'left' }}>
+                <div className="suggestion-char-count">
                   {title.length}/100
                 </div>
               </div>
 
               {/* Description */}
               <div>
-                <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', fontWeight: '700', display: 'block', marginBottom: '6px' }}>
+                <label className="suggestion-label">
                   תיאור <span style={{ color: '#ff7675' }}>*</span>
                 </label>
                 <textarea
@@ -200,60 +149,40 @@ const SuggestionModal = ({ onClose }) => {
                   maxLength={1000}
                   rows={4}
                   placeholder="תאר את המשחק שאתה מציע - איך הוא עובד, מה לומדים, למה הוא כיפי..."
-                  style={{
-                    width: '100%', padding: '12px 14px', boxSizing: 'border-box',
-                    background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.2)',
-                    borderRadius: '12px', color: '#fff', fontSize: '1rem',
-                    outline: 'none', resize: 'vertical', direction: 'rtl',
-                    fontFamily: 'inherit', lineHeight: 1.5,
-                  }}
+                  className="suggestion-textarea"
                 />
-                <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.75rem', marginTop: '4px', textAlign: 'left' }}>
+                <div className="suggestion-char-count">
                   {description.length}/1000
                 </div>
               </div>
 
               {/* Image upload */}
               <div>
-                <label style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem', fontWeight: '700', display: 'block', marginBottom: '6px' }}>
+                <label className="suggestion-label">
                   תמונה (אופציונלי)
                 </label>
-                <label style={{
-                  display: 'flex', alignItems: 'center', gap: '10px',
-                  padding: '12px 14px', cursor: 'pointer',
-                  background: 'rgba(255,255,255,0.06)', border: '1px dashed rgba(255,255,255,0.25)',
-                  borderRadius: '12px', color: 'rgba(255,255,255,0.7)', fontSize: '0.9rem',
-                }}>
-                  <span style={{ fontSize: '1.4rem' }}>🖼️</span>
+                <label className="suggestion-file-label">
+                  <span className="suggestion-file-icon">🖼️</span>
                   <span>{imageData ? 'תמונה נבחרה ✓' : 'לחץ לבחירת תמונה (עד 2MB)'}</span>
                   <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
                 </label>
                 {imageData && (
-                  <div style={{ marginTop: '8px', position: 'relative', display: 'inline-block' }}>
-                    <img src={imageData} alt="תצוגה מקדימה" style={{ maxHeight: '120px', maxWidth: '100%', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.15)' }} />
+                  <div className="suggestion-image-preview-container">
+                    <img src={imageData} alt="תצוגה מקדימה" className="suggestion-image-preview" />
                     <button
                       type="button"
                       onClick={() => setImageData(null)}
-                      style={{
-                        position: 'absolute', top: '-8px', right: '-8px',
-                        background: '#ff7675', border: 'none', borderRadius: '50%',
-                        width: '22px', height: '22px', color: '#fff', fontSize: '0.75rem',
-                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}
+                      className="suggestion-image-remove-btn"
                     >✕</button>
                   </div>
                 )}
                 {imageError && (
-                  <div style={{ color: '#ff7675', fontSize: '0.8rem', marginTop: '4px' }}>{imageError}</div>
+                  <div className="suggestion-image-error">{imageError}</div>
                 )}
               </div>
 
               {errorMsg && (
-                <div style={{
-                  background: 'rgba(255,118,118,0.15)', border: '1px solid rgba(255,118,118,0.4)',
-                  borderRadius: '10px', padding: '10px 14px', color: '#ff7675',
-                  fontSize: '0.9rem', textAlign: 'center',
-                }}>
+                <div className="suggestion-error-msg">
                   {errorMsg}
                 </div>
               )}
@@ -261,17 +190,7 @@ const SuggestionModal = ({ onClose }) => {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                style={{
-                  background: status === 'loading'
-                    ? 'rgba(255,255,255,0.2)'
-                    : 'linear-gradient(135deg, #f9ca24, #f0932b)',
-                  color: status === 'loading' ? 'rgba(255,255,255,0.6)' : '#1a1a2e',
-                  border: 'none', borderRadius: '50px',
-                  padding: '14px', fontSize: '1.1rem', fontWeight: '900',
-                  cursor: status === 'loading' ? 'not-allowed' : 'pointer',
-                  transition: 'all 0.2s',
-                  marginTop: '4px',
-                }}
+                className={`suggestion-submit-btn ${status === 'loading' ? 'loading' : ''}`}
               >
                 {status === 'loading' ? '⏳ שולח...' : '📨 שלח הצעה'}
               </button>

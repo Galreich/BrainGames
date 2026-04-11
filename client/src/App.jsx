@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext';
-import { ProgressProvider } from './context/ProgressContext';
-import Header from './components/Header';
+import { AuthProvider, ProgressProvider } from './context';
+import { Header } from './components';
 import {
   Home,
   HebrewWordle,

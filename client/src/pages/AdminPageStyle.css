@@ -1,0 +1,39 @@
+.admin-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  padding: 40px 20px;
+  color: #fff;
+  direction: rtl;
+}
+
+.admin-container { max-width: 1100px; margin: 0 auto; }
+.admin-title { font-size: 2rem; font-weight: 900; margin-bottom: 8px; background: linear-gradient(90deg, #f9ca24, #f0932b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.admin-subtitle { color: rgba(255,255,255,0.6); margin-bottom: 32px; font-size: 0.95rem; }
+
+.admin-table { width: 100%; max-width: 1000px; margin: 0 auto; border-collapse: separate; border-spacing: 0 8px; }
+.admin-th { background: rgba(255,255,255,0.08); padding: 12px 16px; text-align: right; font-size: 0.9rem; color: rgba(255,255,255,0.8); }
+.admin-tr { background: rgba(255,255,255,0.05); }
+.admin-td { padding: 14px 16px; font-size: 0.9rem; vertical-align: top; border-bottom: 1px solid rgba(255,255,255,0.06); }
+
+.admin-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: rgba(162,155,254,0.2);
+  color: #a29bfe;
+}
+.admin-badge.math { background: rgba(249,202,36,0.2); color: #f9ca24; }
+.admin-badge.hebrew { background: rgba(116,185,255,0.2); color: #74b9ff; }
+.admin-badge.english { background: rgba(85,239,196,0.2); color: #55efc4; }
+
+.admin-empty { text-align: center; padding: 60px; color: rgba(255,255,255,0.4); font-size: 1.1rem; }
+.admin-error-box { color: #ff7675; background: rgba(255,118,117,0.1); border: 1px solid rgba(255,118,117,0.3); border-radius: 12px; padding: 20px; text-align: center; }
+.admin-loading { text-align: center; color: rgba(255,255,255,0.5); }
+
+.admin-fw-700 { font-weight: 700; }
+.admin-desc-col { color: rgba(255,255,255,0.75); max-width: 300px; }
+.admin-date-col { color: rgba(255,255,255,0.5); white-space: nowrap; font-size: 0.8rem; }
+.admin-image-preview { max-height: 80px; max-width: 120px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.15); cursor: pointer; }
+.admin-no-image { color: rgba(255,255,255,0.25); font-size: 0.8rem; }

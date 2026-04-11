@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useAuth } from './AuthContext';
+import { useAuth } from './AuthContext'; // Direct import to avoid circular dependency
 
 const ProgressContext = createContext(null);
 

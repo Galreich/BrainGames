@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useProgress } from '../context/ProgressContext';
-import { useAuth } from '../context/AuthContext';
+import { useProgress, useAuth } from '../context';
+import { StarBurst, BackgroundStar } from '../components';
 import './MathGameStyle.css';
 
 const TOTAL_STATIONS = 10;
@@ -55,25 +55,6 @@ const generateQuestion = (station) => {
     text: `${a} ${op} ${b} = ?`,
     a, b, op, answer, options,
   };
-};
-
-const StarBurst = ({ x, y, id }) => {
-  const style = {
-    '--burst-x': `${x}px`,
-    '--burst-y': `${y}px`,
-  };
-  return <div className="star-burst" style={style}>⭐</div>;
-};
-
-const BackgroundStar = ({ index }) => {
-  const style = {
-    '--star-width': `${2 + Math.random() * 3}px`,
-    '--star-left': `${(index * 7.3) % 100}%`,
-    '--star-top': `${(index * 11.7) % 100}%`,
-    '--star-opacity': 0.4 + (index % 5) * 0.1,
-    '--animation-duration': `${1 + (index % 3)}s`,
-  };
-  return <div className="background-star" style={style} />;
 };
 
 const formatTime = (seconds) => {

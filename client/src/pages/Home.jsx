@@ -1,57 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import StarDisplay from '../components/StarDisplay';
+import { useAuth } from '../context';
+import { Confetti, GameCard } from '../components';
 import './HomeStyle.css';
-
-const Confetti = () => {
-  const pieces = Array.from({ length: 20 }, (_, i) => {
-    const style = {
-      '--left': `${Math.random() * 100}%`,
-      '--delay': `${Math.random() * 3}s`,
-      '--duration': `${2 + Math.random() * 3}s`,
-      '--color': ['#f9ca24', '#eb4d4b', '#6c5ce7', '#00b894', '#0984e3', '#fd79a8'][Math.floor(Math.random() * 6)],
-      '--size': `${8 + Math.random() * 12}px`,
-      '--border-radius': Math.random() > 0.5 ? '50%' : '2px',
-    };
-    return <div key={i} className="confetti-piece" style={style} />;
-  });
-
-  return (
-    <div className="confetti-container">
-      {pieces}
-    </div>
-  );
-};
-
-const GameCard = ({ title, subtitle, image, description, path, theme, stars, gamesPlayed, starColor }) => {
-  const navigate = useNavigate();
-
-  return (
-    <div className="game-card" data-theme={theme} onClick={() => navigate(path)}>
-      {/* Background decoration */}
-      <div className="card-deco-1" />
-      <div className="card-deco-2" />
-
-      <div className="card-content">
-        <div className="card-image-container">
-          <img src={image} alt={title} className="card-image" />
-        </div>
-
-        <h2 className="card-title">{title}</h2>
-        <p className="card-subtitle">{subtitle}</p>
-        <p className="card-description">{description}</p>
-
-        {/* Stars and stats */}
-        <div className="card-stats">
-          <span className="games-played">{gamesPlayed} משחקים</span>
-        </div>
-
-        <button className="card-play-btn">שחק עכשיו! 🎮</button>
-      </div>
-    </div>
-  );
-};
 
 const Home = () => {
   const { user, token } = useAuth();
