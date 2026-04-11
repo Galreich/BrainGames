@@ -18,9 +18,9 @@ const SuggestionModal = ({ onClose }: SuggestionModalProps) => {
 
   const SUBJECTS = [
     { value: '', label: t('General_Subject') },
-    { value: 'math', label: `${Emojis.RedCircle} ${t('Math_Color')}` },
-    { value: 'hebrew', label: `${Emojis.BlueCircle} ${t('Hebrew_Color')}` },
-    { value: 'english', label: `${Emojis.GreenCircle} ${t('English_Color')}` },
+    { value: 'math', label: `${Emojis.RedCircle} ${t('Math')}` },
+    { value: 'hebrew', label: `${Emojis.BlueCircle} ${t('Hebrew')}` },
+    { value: 'english', label: `${Emojis.GreenCircle} ${t('English')}` },
   ];
 
   const [imageData, setImageData] = useState<string | null>(null);

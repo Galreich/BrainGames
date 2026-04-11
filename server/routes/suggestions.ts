@@ -77,7 +77,7 @@ router.get('/', authenticateToken, async (_req: Request, res: Response) => {
     res.json({ suggestions: result.rows });
   } catch (err) {
     console.error('Get suggestions error:', err);
-    res.status(500).json({ error: 'Error_loading_suggestions_server' });
+    res.status(500).json({ error: 'Error_loading_suggestions' });
   }
 });
 

@@ -26,8 +26,8 @@ const AdminPage = () => {
 
   const SUBJECT_LABELS: Record<string, string> = {
     math: t('Math_Subject'),
-    hebrew: t('Hebrew_Subject'),
-    english: t('English_Subject'),
+    hebrew: t('Hebrew'),
+    english: t('English'),
     other: t('Other_Subject'),
   };
 
@@ -90,7 +90,7 @@ const AdminPage = () => {
                 <th className='admin-th'>{t('Table_Title')}</th>
                 <th className='admin-th'>{t('Table_Image')}</th>
                 <th className='admin-th'>{t('Table_Date')}</th>
-                <th className='admin-th'>{t('Table_Description')}</th>
+                <th className='admin-th'>{t('Description')}</th>
               </tr>
             </thead>
             <tbody>
@@ -131,7 +131,7 @@ const AdminPage = () => {
                   <td
                     className='admin-td admin-desc-col'
                     onClick={() => setPopupDesc(s.description)}
-                    title={t('Table_Description')}
+                    title={t('Description')}
                   >
                     <div className='admin-desc-icon'>{Emojis.Document}</div>
                   </td>
@@ -155,7 +155,7 @@ const AdminPage = () => {
             >
               {Emojis.Cross}
             </button>
-            <h3 className='admin-popup-title'>{t('Table_Description')}</h3>
+            <h3 className='admin-popup-title'>{t('Description')}</h3>
             <p className='admin-popup-text'>{popupDesc}</p>
           </div>
         </div>

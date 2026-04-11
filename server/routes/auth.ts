@@ -6,8 +6,14 @@ import type { AuthUser } from '../types/express';
 
 const router = express.Router();
 
-interface UserIdRow { id: number; }
-interface NewUserRow { id: number; username: string; created_at: Date; }
+interface UserIdRow {
+  id: number;
+}
+interface NewUserRow {
+  id: number;
+  username: string;
+  created_at: Date;
+}
 interface FullUserRow {
   id: number;
   username: string;
@@ -28,7 +34,10 @@ interface MeRow {
 
 // POST /api/auth/register
 router.post('/register', async (req: Request, res: Response) => {
-  const { username, password } = req.body as { username: string; password: string };
+  const { username, password } = req.body as {
+    username: string;
+    password: string;
+  };
 
   if (!username || !password) {
     return res.status(400).json({ error: 'Username_and_password_required' });
@@ -37,10 +46,10 @@ router.post('/register', async (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Username_length_error' });
   }
   if (password.length < 6) {
-    return res.status(400).json({ error: 'Password_min_length_error' });
+    return res.status(400).json({ error: 'Password_min_length' });
   }
   if (!/[a-zA-Zא-ת]/.test(password) || !/[0-9]/.test(password)) {
-    return res.status(400).json({ error: 'Password_requirements_error' });
+    return res.status(400).json({ error: 'Password_requirements' });
   }
 
   try {
@@ -60,7 +69,11 @@ router.post('/register', async (req: Request, res: Response) => {
 
     const user = result.rows[0];
     const token = jwt.sign(
-      { userId: user.id, username: user.username, is_admin: false } satisfies AuthUser,
+      {
+        userId: user.id,
+        username: user.username,
+        is_admin: false,
+      } satisfies AuthUser,
       process.env.JWT_SECRET || 'fallback_secret',
       { expiresIn: '7d' },
     );
@@ -68,7 +81,14 @@ router.post('/register', async (req: Request, res: Response) => {
     res.status(201).json({
       message: 'Register_success',
       token,
-      user: { id: user.id, username: user.username, is_admin: false, red_stars: 0, blue_stars: 0, green_stars: 0 },
+      user: {
+        id: user.id,
+        username: user.username,
+        is_admin: false,
+        red_stars: 0,
+        blue_stars: 0,
+        green_stars: 0,
+      },
     });
   } catch (err) {
     console.error('Register error:', err);
@@ -78,14 +98,20 @@ router.post('/register', async (req: Request, res: Response) => {
 
 // POST /api/auth/login
 router.post('/login', async (req: Request, res: Response) => {
-  const { username, password } = req.body as { username: string; password: string };
+  const { username, password } = req.body as {
+    username: string;
+    password: string;
+  };
 
   if (!username || !password) {
     return res.status(400).json({ error: 'Username_and_password_required' });
   }
 
   try {
-    const result = await pool.query<FullUserRow>('SELECT * FROM users WHERE username = $1', [username]);
+    const result = await pool.query<FullUserRow>(
+      'SELECT * FROM users WHERE username = $1',
+      [username],
+    );
 
     if (result.rows.length === 0) {
       return res.status(401).json({ error: 'Invalid_credentials' });
@@ -99,7 +125,11 @@ router.post('/login', async (req: Request, res: Response) => {
     }
 
     const token = jwt.sign(
-      { userId: user.id, username: user.username, is_admin: user.is_admin === true } satisfies AuthUser,
+      {
+        userId: user.id,
+        username: user.username,
+        is_admin: user.is_admin === true,
+      } satisfies AuthUser,
       process.env.JWT_SECRET || 'fallback_secret',
       { expiresIn: '7d' },
     );
@@ -107,7 +137,14 @@ router.post('/login', async (req: Request, res: Response) => {
     res.json({
       message: 'Login_success',
       token,
-      user: { id: user.id, username: user.username, is_admin: user.is_admin === true, red_stars: user.red_stars || 0, blue_stars: user.blue_stars || 0, green_stars: user.green_stars || 0 },
+      user: {
+        id: user.id,
+        username: user.username,
+        is_admin: user.is_admin === true,
+        red_stars: user.red_stars || 0,
+        blue_stars: user.blue_stars || 0,
+        green_stars: user.green_stars || 0,
+      },
     });
   } catch (err) {
     console.error('Login error:', err);
@@ -116,7 +153,11 @@ router.post('/login', async (req: Request, res: Response) => {
 });
 
 // Middleware to verify JWT
-export const authenticateToken = (req: Request, res: Response, next: NextFunction): void => {
+export const authenticateToken = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -125,17 +166,25 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
     return;
   }
 
-  jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret', (err, decoded) => {
-    if (err) {
-      res.status(403).json({ error: 'Invalid_token' });
-      return;
-    }
-    req.user = decoded as AuthUser;
-    next();
-  });
+  jwt.verify(
+    token,
+    process.env.JWT_SECRET || 'fallback_secret',
+    (err, decoded) => {
+      if (err) {
+        res.status(403).json({ error: 'Invalid_token' });
+        return;
+      }
+      req.user = decoded as AuthUser;
+      next();
+    },
+  );
 };
 
-export const requireAdmin = (req: Request, res: Response, next: NextFunction): void => {
+export const requireAdmin = (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void => {
   if (!req.user || req.user.is_admin !== true) {
     res.status(403).json({ error: 'Admin_only' });
     return;

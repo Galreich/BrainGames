@@ -88,7 +88,7 @@ const Login = () => {
               setSuccess('');
             }}
           >
-            {t('Login_Tab')}
+            {t('Login')}
           </button>
           <button
             className={`login-tab ${!isLogin ? 'active' : ''}`}

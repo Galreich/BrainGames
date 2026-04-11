@@ -48,7 +48,9 @@ const Wordle = ({ language }: WordleProps) => {
   const [currentGuess, setCurrentGuess] = useState('');
   const [currentRow, setCurrentRow] = useState(0);
   const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'won', 'lost'
-  const [keyboardStatus, setKeyboardStatus] = useState<{ [key: string]: string }>({});
+  const [keyboardStatus, setKeyboardStatus] = useState<{
+    [key: string]: string;
+  }>({});
   const [revealingRow, setRevealingRow] = useState(-1);
   const [shakingRow, setShakingRow] = useState(-1);
   const [message, setMessage] = useState('');
