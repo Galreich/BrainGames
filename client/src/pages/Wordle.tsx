@@ -307,7 +307,7 @@ const Wordle = ({ language }: WordleProps) => {
       <div className='wordle-container'>
         <div className='wordle-header'>
           <h1 className='wordle-title'>
-            {isHebrew ? t('Hebrew_Wordle_Title') : t('English_Wordle_Title')}
+            {isHebrew ? t('Hebrew_Wordle') : t('English_Wordle_Title')}
           </h1>
           <p className='wordle-subtitle'>{t('Guess_the_secret_word')}</p>
         </div>
