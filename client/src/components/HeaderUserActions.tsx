@@ -22,7 +22,7 @@ const HeaderUserActions = ({
   if (!user) {
     return (
       <div className='header-actions'>
-        <button className='nav-btn' onClick={onLoginClick}>
+        <button className='nav-link' onClick={onLoginClick}>
           {t('Login')}
         </button>
       </div>
@@ -39,10 +39,10 @@ const HeaderUserActions = ({
           {Emojis.Gear} {t('Admin')}
         </Link>
       )}
-      <button className='nav-btn' onClick={onShowSuggestion}>
+      <button className='nav-link' onClick={onShowSuggestion}>
         {Emojis.Bulb} {t('Suggest_a_Game')}
       </button>
-      <button className='nav-btn' onClick={onLogout}>
+      <button className='nav-link' onClick={onLogout}>
         {t('Logout')}
       </button>
     </div>
