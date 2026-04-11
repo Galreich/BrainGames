@@ -2,14 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider, ProgressProvider } from './context';
 import { Header } from './components';
-import {
-  Home,
-  HebrewWordle,
-  EnglishWordle,
-  MathGame,
-  Login,
-  AdminPage,
-} from './pages';
+import { Home, Wordle, MathGame, Login, AdminPage } from './pages';
 
 import './App.css';
 import i18n from './i18n';
@@ -53,8 +46,14 @@ const App = () => {
               <main className='app-main'>
                 <Routes>
                   <Route path='/' element={<Home />} />
-                  <Route path='/hebrew-wordle' element={<HebrewWordle />} />
-                  <Route path='/english-wordle' element={<EnglishWordle />} />
+                  <Route
+                    path='/hebrew-wordle'
+                    element={<Wordle language='hebrew' />}
+                  />
+                  <Route
+                    path='/english-wordle'
+                    element={<Wordle language='english' />}
+                  />
                   <Route path='/math' element={<MathGame />} />
                   <Route path='/login' element={<Login />} />
                   <Route path='/admin' element={<AdminPage />} />

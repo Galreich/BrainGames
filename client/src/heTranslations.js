@@ -25,7 +25,7 @@ export const heTranslations = {
   English: 'אנגלית',
   English_Wordle_Description:
     'נחש את המילה הסודית באנגלית! יש לך 6 ניסיונות. מילים בנות 4-6 אותיות.',
-  Footer_Text: 'BrainGames - משחקי מוח לתלמידי בית ספר יסודי',
+  Footer_Text: 'BrainGames - משחקי חשיבה לתלמידי בית ספר יסודי',
   Games_Played: '{{count}} משחקים',
   Play_Now: 'שחק עכשיו!',
   Math_Title: 'הרפתקת המספרים',
@@ -104,7 +104,7 @@ export const heTranslations = {
   Why_register: 'למה להירשם?',
   Save_your_progress: 'שמור את ההתקדמות שלך',
   Track_your_stars: 'עקוב אחר הכוכבים שאספת',
-  Continue_where_you_left_off: 'המשך ממקום שעצרת',
+  Continue_where_you_left_off: 'המשך מהנקודה בה עצרת',
   Error_Auth: '{{error}}',
   Success_Auth: '{{success}}',
   Math_Subject: 'מתמטיקה',
