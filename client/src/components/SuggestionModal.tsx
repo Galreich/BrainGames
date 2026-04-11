@@ -20,12 +20,14 @@ const SuggestionModal = ({ onClose }: SuggestionModalProps) => {
     { value: '', label: t('General_Subject') },
     { value: 'math', label: `${Emojis.RedCircle} ${t('Math_Color')}` },
     { value: 'hebrew', label: `${Emojis.BlueCircle} ${t('Hebrew_Color')}` },
-    { value: 'english', label: `${Emojis.YellowCircle} ${t('English_Color')}` },
+    { value: 'english', label: `${Emojis.GreenCircle} ${t('English_Color')}` },
   ];
 
   const [imageData, setImageData] = useState<string | null>(null);
   const [imageError, setImageError] = useState('');
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [status, setStatus] = useState<
+    'idle' | 'loading' | 'success' | 'error'
+  >('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {

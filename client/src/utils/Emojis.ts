@@ -20,7 +20,7 @@ export const Emojis = {
   Unlock: '🔓',
   RedCircle: '🔴',
   BlueCircle: '🔵',
-  YellowCircle: '🟡',
+  GreenCircle: '🟢',
   House: '🏠',
   LettersHE: '🔤',
   LettersEN: '🔡',
