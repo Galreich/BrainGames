@@ -1,10 +1,29 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const AuthContext = createContext(null);
+export type AuthUser = {
+  id: number;
+  username: string;
+  is_admin: boolean;
+  red_stars: number;
+  blue_stars: number;
+  green_stars: number;
+};
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
+type AuthContextType = {
+  user: AuthUser | null;
+  token: string | null;
+  loading: boolean;
+  login: (username: string, password: string) => Promise<{ token: string; user: AuthUser }>;
+  register: (username: string, password: string) => Promise<{ token: string; user: AuthUser }>;
+  logout: () => void;
+  updateUser: (fields: Partial<AuthUser>) => void;
+};
+
+const AuthContext = createContext<AuthContextType | null>(null);
+
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -36,7 +55,7 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
   }, []);
 
-  const login = async (username, password) => {
+  const login = async (username: string, password: string) => {
     const response = await fetch('/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -57,7 +76,7 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  const register = async (username, password) => {
+  const register = async (username: string, password: string) => {
     const response = await fetch('/api/auth/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -78,9 +97,10 @@ export const AuthProvider = ({ children }) => {
     return data;
   };
 
-  const updateUser = (fields) => {
+  const updateUser = (fields: Partial<AuthUser>) => {
     setUser((prev) => {
-      const updated = { ...prev, ...fields };
+      if (!prev) return null;
+      const updated: AuthUser = { ...prev, ...fields };
       localStorage.setItem('braingames_user', JSON.stringify(updated));
       return updated;
     });
@@ -102,7 +122,7 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => {
+export const useAuth = (): AuthContextType => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within AuthProvider');

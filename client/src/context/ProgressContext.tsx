@@ -5,19 +5,35 @@ import React, {
   useEffect,
   useCallback,
 } from 'react';
-import { useAuth } from './AuthContext'; // Direct import to avoid circular dependency
+import { useAuth } from './AuthContext';
 
-const ProgressContext = createContext(null);
+type GameProgress = { stars: number; gamesPlayed: number };
 
-const defaultProgress = {
+type ProgressMap = {
+  'math-puzzle': GameProgress;
+  'hebrew-wordle': GameProgress;
+  'english-wordle': GameProgress;
+};
+
+type ProgressContextType = {
+  progress: ProgressMap;
+  loading: boolean;
+  saveProgress: () => Promise<void>;
+  getTotalStars: () => number;
+  loadProgressFromServer: () => Promise<void>;
+};
+
+const defaultProgress: ProgressMap = {
   'math-puzzle': { stars: 0, gamesPlayed: 0 },
   'hebrew-wordle': { stars: 0, gamesPlayed: 0 },
   'english-wordle': { stars: 0, gamesPlayed: 0 },
 };
 
-export const ProgressProvider = ({ children }) => {
+const ProgressContext = createContext<ProgressContextType | null>(null);
+
+export const ProgressProvider = ({ children }: { children: React.ReactNode }) => {
   const { user, token } = useAuth();
-  const [progress, setProgress] = useState(() => {
+  const [progress, setProgress] = useState<ProgressMap>(() => {
     const saved = localStorage.getItem('braingames_progress_local');
     if (saved) {
       try {
@@ -33,6 +49,9 @@ export const ProgressProvider = ({ children }) => {
   useEffect(() => {
     if (user && token) {
       loadProgressFromServer();
+    } else {
+      setProgress(defaultProgress);
+      localStorage.removeItem('braingames_progress_local');
     }
   }, [user, token]); // eslint-disable-line
 
@@ -58,7 +77,6 @@ export const ProgressProvider = ({ children }) => {
     }
   };
 
-  // Called after a game record is saved — reloads from DB so gamesPlayed is accurate
   const saveProgress = useCallback(async () => {
     if (user && token) {
       await loadProgressFromServer();
@@ -74,20 +92,14 @@ export const ProgressProvider = ({ children }) => {
 
   return (
     <ProgressContext.Provider
-      value={{
-        progress,
-        loading,
-        saveProgress,
-        getTotalStars,
-        loadProgressFromServer,
-      }}
+      value={{ progress, loading, saveProgress, getTotalStars, loadProgressFromServer }}
     >
       {children}
     </ProgressContext.Provider>
   );
 };
 
-export const useProgress = () => {
+export const useProgress = (): ProgressContextType => {
   const context = useContext(ProgressContext);
   if (!context) {
     throw new Error('useProgress must be used within ProgressProvider');

@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
 
 type HeaderUserActionsProps = {
-  user: { username: string; isAdmin: boolean } | null;
+  user: { username: string; is_admin: boolean } | null;
   currentPath: string;
   onLogout: () => void;
   onShowSuggestion: () => void;
@@ -35,7 +35,7 @@ const HeaderUserActions = ({
       <span className='user-info'>
         {Emojis.User} {user.username}
       </span>
-      {user.isAdmin && (
+      {user.is_admin && (
         <Link
           to='/admin'
           className={`nav-link ${currentPath === '/admin' ? 'active' : ''}`}

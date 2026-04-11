@@ -8,12 +8,14 @@ import './App.css';
 import i18n from './i18n';
 import { Emojis } from './utils/Emojis';
 
-class ErrorBoundary extends React.Component {
-  constructor(props) {
+type ErrorBoundaryState = { error: Error | null };
+
+class ErrorBoundary extends React.Component<{ children: React.ReactNode }, ErrorBoundaryState> {
+  constructor(props: { children: React.ReactNode }) {
     super(props);
     this.state = { error: null };
   }
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
     return { error };
   }
   render() {

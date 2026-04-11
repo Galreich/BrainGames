@@ -1,19 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context';
 import './AdminPageStyle.css';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
 
+type Suggestion = {
+  id: number;
+  username: string;
+  subject: string;
+  title: string;
+  description: string;
+  image_data: string | null;
+  created_at: string;
+};
+
 const AdminPage = () => {
   const { user, token } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
-  const [suggestions, setSuggestions] = useState([]);
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  const SUBJECT_LABELS = {
+  const SUBJECT_LABELS: Record<string, string> = {
     math: `${Emojis.Numbers} ${t('Math_Subject')}`,
     hebrew: `${Emojis.LettersHE} ${t('Hebrew_Subject')}`,
     english: `${Emojis.LettersEN} ${t('English_Subject')}`,
@@ -21,7 +31,7 @@ const AdminPage = () => {
   };
 
   useEffect(() => {
-    if (!user || !user.isAdmin) {
+    if (!user || !user.is_admin) {
       navigate('/');
       return;
     }
@@ -34,10 +44,8 @@ const AdminPage = () => {
         if (!res.ok) throw new Error(data.error || 'Error_loading_suggestions');
         setSuggestions(data.suggestions);
       } catch (err) {
-        const errorKey =
-          err.message === 'Failed to fetch'
-            ? 'Network_error'
-            : err.message || 'Error_loading_suggestions';
+        const msg = err instanceof Error ? err.message : 'Error_loading_suggestions';
+        const errorKey = msg === 'Failed to fetch' ? 'Network_error' : msg;
         setError(t(errorKey));
       } finally {
         setLoading(false);
@@ -46,7 +54,7 @@ const AdminPage = () => {
     fetchSuggestions();
   }, [user, token, navigate]);
 
-  if (!user || !user.isAdmin) return null;
+  if (!user || !user.is_admin) return null;
 
   return (
     <div className='admin-page'>
