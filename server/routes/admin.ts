@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import { pool } from '../db.js';
-import { authenticateToken, requireAdmin } from './auth.js';
+import { pool } from '../db';
+import { authenticateToken, requireAdmin } from './auth';
 
 const router = express.Router();
 

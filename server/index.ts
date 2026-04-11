@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
-import { initDB } from './db.js';
+import { initDB } from './db';
 
 import {
   authRoutes,
@@ -10,7 +10,7 @@ import {
   suggestionsRoutes,
   gameRecordsRoutes,
   adminRoutes,
-} from './routes/index.js';
+} from './routes/index';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
