@@ -68,7 +68,7 @@ const initDB = async (): Promise<void> => {
     console.log('Database tables initialized');
 
     // Create admin user if it doesn't exist
-    const existing = await pool.query(
+    const existing = await pool.query<{ id: number }>(
       'SELECT id FROM users WHERE username = $1',
       ['admin'],
     );
@@ -92,6 +92,7 @@ const initDB = async (): Promise<void> => {
     console.log('Default games ensured in database');
   } catch (err) {
     console.error('Error initializing database tables:', (err as Error).message);
+    throw err;
   }
 };
 
