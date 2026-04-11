@@ -1,13 +1,28 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { pool } from '../db.js';
 import { authenticateToken } from './auth.js';
 
 const router = express.Router();
 
+interface SuggestionReturnRow { id: number; title: string; created_at: Date; }
+interface SuggestionListRow {
+  id: number;
+  username: string;
+  title: string;
+  description: string;
+  subject: string | null;
+  created_at: Date;
+}
+
 // POST /api/suggestions - submit a new suggestion (requires auth)
-router.post('/', authenticateToken, async (req, res) => {
-  const { title, description, subject, imageData } = req.body;
-  const { userId } = req.user;
+router.post('/', authenticateToken, async (req: Request, res: Response) => {
+  const { title, description, subject, imageData } = req.body as {
+    title: string;
+    description: string;
+    subject?: string;
+    imageData?: string;
+  };
+  const { userId } = req.user!;
 
   if (!title || !title.trim()) {
     return res.status(400).json({ error: 'כותרת ההצעה נדרשת' });
@@ -23,7 +38,7 @@ router.post('/', authenticateToken, async (req, res) => {
   }
 
   try {
-    const result = await pool.query(
+    const result = await pool.query<SuggestionReturnRow>(
       `INSERT INTO suggestions (user_id, title, description, subject, image_data)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING id, title, created_at`,
@@ -41,9 +56,9 @@ router.post('/', authenticateToken, async (req, res) => {
 });
 
 // GET /api/suggestions - list all suggestions (requires auth)
-router.get('/', authenticateToken, async (req, res) => {
+router.get('/', authenticateToken, async (_req: Request, res: Response) => {
   try {
-    const result = await pool.query(
+    const result = await pool.query<SuggestionListRow>(
       `SELECT s.id, u.username, s.title, s.description, s.subject, s.created_at
        FROM suggestions s
        JOIN users u ON u.id = s.user_id

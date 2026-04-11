@@ -1,12 +1,12 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import hebrewWords from '../data/hebrew-words.js';
 import englishWords from '../data/english-words.js';
 
 const router = express.Router();
 
 // GET /api/words/hebrew?length=5
-router.get('/hebrew', (req, res) => {
-  const length = parseInt(req.query.length) || 5;
+router.get('/hebrew', (req: Request, res: Response) => {
+  const length = parseInt(req.query.length as string) || 5;
 
   if (![4, 5, 6].includes(length)) {
     return res.status(400).json({ error: 'אורך מילה חייב להיות 4, 5, או 6' });
@@ -17,20 +17,15 @@ router.get('/hebrew', (req, res) => {
     return res.status(404).json({ error: 'לא נמצאו מילים באורך זה' });
   }
 
-  // Return a random word
   const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
   console.log(`Selected Hebrew word: ${randomWord} (length: ${length})`);
 
-  res.json({
-    word: randomWord,
-    length,
-    language: 'hebrew',
-  });
+  res.json({ word: randomWord, length, language: 'hebrew' });
 });
 
 // GET /api/words/english?length=5
-router.get('/english', (req, res) => {
-  const length = parseInt(req.query.length) || 5;
+router.get('/english', (req: Request, res: Response) => {
+  const length = parseInt(req.query.length as string) || 5;
 
   if (![4, 5, 6].includes(length)) {
     return res.status(400).json({ error: 'Word length must be 4, 5, or 6' });
@@ -41,20 +36,15 @@ router.get('/english', (req, res) => {
     return res.status(404).json({ error: 'No words found for this length' });
   }
 
-  // Return a random word
   const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
   console.log(`Selected English word: ${randomWord} (length: ${length})`);
 
-  res.json({
-    word: randomWord,
-    length,
-    language: 'english',
-  });
+  res.json({ word: randomWord, length, language: 'english' });
 });
 
 // GET /api/words/hebrew/validate?word=שלום
-router.get('/hebrew/validate', (req, res) => {
-  const { word } = req.query;
+router.get('/hebrew/validate', (req: Request, res: Response) => {
+  const word = req.query.word as string;
   if (!word) return res.status(400).json({ error: 'נדרשת מילה' });
 
   const length = word.length;
@@ -65,8 +55,8 @@ router.get('/hebrew/validate', (req, res) => {
 });
 
 // GET /api/words/english/validate?word=happy
-router.get('/english/validate', (req, res) => {
-  const { word } = req.query;
+router.get('/english/validate', (req: Request, res: Response) => {
+  const word = req.query.word as string;
   if (!word) return res.status(400).json({ error: 'Word is required' });
 
   const length = word.length;

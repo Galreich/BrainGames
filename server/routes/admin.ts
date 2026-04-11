@@ -1,13 +1,23 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { pool } from '../db.js';
 import { authenticateToken, requireAdmin } from './auth.js';
 
 const router = express.Router();
 
+interface AdminSuggestionRow {
+  id: number;
+  username: string;
+  subject: string | null;
+  title: string;
+  description: string;
+  image_data: string | null;
+  created_at: Date;
+}
+
 // GET /api/admin/suggestions — all suggestions, admin only
-router.get('/suggestions', authenticateToken, requireAdmin, async (req, res) => {
+router.get('/suggestions', authenticateToken, requireAdmin, async (_req: Request, res: Response) => {
   try {
-    const result = await pool.query(
+    const result = await pool.query<AdminSuggestionRow>(
       `SELECT s.id, u.username, s.subject, s.title, s.description, s.image_data, s.created_at
        FROM suggestions s
        JOIN users u ON u.id = s.user_id

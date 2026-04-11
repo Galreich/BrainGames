@@ -11,12 +11,12 @@ pool.on('connect', () => {
   console.log('Connected to PostgreSQL database');
 });
 
-pool.on('error', (err) => {
+pool.on('error', (err: Error) => {
   console.error('Unexpected error on idle client', err);
   process.exit(-1);
 });
 
-const initDB = async () => {
+const initDB = async (): Promise<void> => {
   try {
     await pool.query(`
       CREATE TABLE IF NOT EXISTS users (
@@ -87,7 +87,7 @@ const initDB = async () => {
       console.log('Default games inserted into database');
     }
   } catch (err) {
-    console.error('Error initializing database tables:', err.message);
+    console.error('Error initializing database tables:', (err as Error).message);
   }
 };
 

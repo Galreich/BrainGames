@@ -1,19 +1,23 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { pool } from '../db.js';
 import { authenticateToken } from './auth.js';
 
 const router = express.Router();
 
-const colMap = {
+const colMap: Record<string, string> = {
   'math-puzzle': 'red_stars',
   'hebrew-wordle': 'blue_stars',
   'english-wordle': 'green_stars',
 };
 
+interface GameIdRow { id: number; }
+interface StarCountRow { red_stars: number; blue_stars: number; green_stars: number; }
+interface SummaryRow { name: string; stars: number; games_played: number; }
+
 // POST /api/game-records — save a game result and refresh star counts
-router.post('/', authenticateToken, async (req, res) => {
-  const { game, stars, score } = req.body;
-  const { userId } = req.user;
+router.post('/', authenticateToken, async (req: Request, res: Response) => {
+  const { game, stars, score } = req.body as { game: string; stars: number; score?: number };
+  const { userId } = req.user!;
 
   if (!game || stars === undefined) {
     return res.status(400).json({ error: 'game ו-stars נדרשים' });
@@ -27,7 +31,7 @@ router.post('/', authenticateToken, async (req, res) => {
 
   try {
     // Look up game_id
-    const gameRow = await pool.query('SELECT id FROM games WHERE name = $1', [game]);
+    const gameRow = await pool.query<GameIdRow>('SELECT id FROM games WHERE name = $1', [game]);
     if (gameRow.rows.length === 0) {
       return res.status(404).json({ error: 'משחק לא נמצא' });
     }
@@ -52,7 +56,7 @@ router.post('/', authenticateToken, async (req, res) => {
     );
 
     // Return updated star counts
-    const { rows } = await pool.query(
+    const { rows } = await pool.query<StarCountRow>(
       `SELECT red_stars, blue_stars, green_stars FROM users WHERE id = $1`,
       [userId]
     );
@@ -70,9 +74,9 @@ router.post('/', authenticateToken, async (req, res) => {
 });
 
 // GET /api/game-records/summary — per-game stars & count for logged-in user
-router.get('/summary', authenticateToken, async (req, res) => {
-  const { userId } = req.user;
-  const { rows } = await pool.query(
+router.get('/summary', authenticateToken, async (req: Request, res: Response) => {
+  const { userId } = req.user!;
+  const { rows } = await pool.query<SummaryRow>(
     `SELECT g.name,
             COALESCE(SUM(gr.stars), 0)::int AS stars,
             COUNT(*)::int AS games_played
@@ -82,12 +86,12 @@ router.get('/summary', authenticateToken, async (req, res) => {
      GROUP BY g.name`,
     [userId]
   );
-  const summary = {
+  const summary: Record<string, { stars: number; games_played: number }> = {
     'math-puzzle': { stars: 0, games_played: 0 },
     'hebrew-wordle': { stars: 0, games_played: 0 },
     'english-wordle': { stars: 0, games_played: 0 },
   };
-  rows.forEach(r => { summary[r.name] = { stars: r.stars, games_played: r.games_played }; });
+  rows.forEach((r: SummaryRow) => { summary[r.name] = { stars: r.stars, games_played: r.games_played }; });
   res.json(summary);
 });
 

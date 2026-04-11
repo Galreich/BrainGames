@@ -1,19 +1,26 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { pool } from '../db.js';
 import { authenticateToken } from './auth.js';
 
 const router = express.Router();
 
+interface ProgressRow {
+  name: string;
+  stars: string;       // pg returns bigint/numeric as string without explicit cast
+  games_played: string;
+  updated_at: Date | null;
+}
+
 // GET /api/progress/:userId — derived from game_records
-router.get('/:userId', authenticateToken, async (req, res) => {
+router.get('/:userId', authenticateToken, async (req: Request, res: Response) => {
   const { userId } = req.params;
 
-  if (parseInt(userId) !== req.user.userId) {
+  if (parseInt(userId) !== req.user!.userId) {
     return res.status(403).json({ error: 'אין הרשאה לצפות בנתונים אלו' });
   }
 
   try {
-    const result = await pool.query(
+    const result = await pool.query<ProgressRow>(
       `SELECT g.name,
               COALESCE(SUM(gr.stars), 0) AS stars,
               COUNT(*)                   AS games_played,
@@ -25,8 +32,8 @@ router.get('/:userId', authenticateToken, async (req, res) => {
       [userId]
     );
 
-    const progress = {};
-    result.rows.forEach((row) => {
+    const progress: Record<string, { stars: number; gamesPlayed: number; updatedAt: Date | null }> = {};
+    result.rows.forEach((row: ProgressRow) => {
       progress[row.name] = {
         stars: parseInt(row.stars),
         gamesPlayed: parseInt(row.games_played),

@@ -7,7 +7,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const dicPath = join(__dirname, '..', 'node_modules', 'dictionary-he', 'index.dic');
 const dicStr = readFileSync(dicPath, 'utf-8');
 
-const hebrewWords = { 4: [], 5: [], 6: [] };
+const hebrewWords: Record<number, string[]> = { 4: [], 5: [], 6: [] };
 
 for (const line of dicStr.split('\n').slice(1)) {
   const word = line.split('/')[0].trim();
@@ -17,6 +17,6 @@ for (const line of dicStr.split('\n').slice(1)) {
   }
 }
 
-hebrewWords[5].push('להיות')
+hebrewWords[5].push('להיות');
 
 export default hebrewWords;
