@@ -75,7 +75,7 @@ const SuggestionModal = ({ onClose }) => {
       const data = await res.json();
 
       if (!res.ok) {
-        setErrorMsg(data.error || t('Error_sending'));
+        setErrorMsg(t(data.error || 'Error_sending'));
         setStatus('error');
       } else {
         setStatus('success');

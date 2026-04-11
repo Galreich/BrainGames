@@ -43,11 +43,15 @@
 }
 
 .math-game-page {
-  min-height: calc(100vh - 70px);
+  flex: 1;
   background: linear-gradient(135deg, #2d3436 0%, #1a1a2e 100%);
   padding: 20px;
   overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .background-star {
@@ -77,6 +81,7 @@
   margin: 0 auto;
   position: relative;
   z-index: 1;
+  width: 100%;
 }
 
 .game-title {
@@ -171,7 +176,6 @@
   border-radius: 20px;
   padding: 6px 14px;
   color: #fff;
-  ;
   font-size: 0.9rem;
   display: flex;
   align-items: center;

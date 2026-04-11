@@ -1,4 +1,3 @@
-/* Reusing animations from EnglishWordleStyle.css */
 @keyframes shake {
   0%,
   100% {
@@ -52,74 +51,30 @@
   }
   50% {
     transform: rotateX(90deg);
-  } /* Color change happens here */
+  }
   100% {
     transform: rotateX(0deg);
   }
 }
 
-/* General Page Styles */
+.wordle-page {
+  flex: 1;
+  padding: 20px;
+  direction: rtl; /* Titles, menus, and text are RTL in both languages */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+/* Theme Colors */
+.wordle-page.english {
+  background: linear-gradient(135deg, #134e5e 0%, #71b280 100%);
+}
 .wordle-page.hebrew {
   background: linear-gradient(135deg, #1e3799 0%, #0a3d62 100%);
-  direction: rtl;
-}
-
-/* Length Selector Button */
-.hebrew .length-btn.active {
-  background: #74b9ff;
-  color: #1e3799;
-}
-
-/* Board */
-.hebrew .wordle-board {
-  backdrop-filter: blur(10px);
-}
-
-/* Keyboard */
-.hebrew .keyboard-row {
-  gap: 6px;
-}
-
-.hebrew .key {
-  width: 40px;
-  font-size: 1rem;
-  direction: ltr; /* For individual keys */
-}
-
-.hebrew .key.special {
-  padding: 14px 12px;
-  width: auto;
-  min-width: 65px;
-  font-size: 0.75rem;
-}
-
-/* Game Over Panel */
-.hebrew .game-over-panel .correct-word {
-  color: #74b9ff;
-}
-
-.hebrew .new-game-btn {
-  background: linear-gradient(135deg, #74b9ff, #0984e3);
-  box-shadow: 0 6px 20px rgba(9, 132, 227, 0.4);
-}
-.hebrew .new-game-btn:hover {
-  box-shadow: 0 8px 25px rgba(9, 132, 227, 0.5);
-}
-
-/* Instructions */
-.hebrew .instructions-panel {
-  direction: rtl;
-}
-
-/*
-  The following styles are copied from EnglishWordleStyle.css
-  as they are shared between both Wordle games.
-  In a larger project, this could be a shared `Wordle.css` file.
-*/
-
-.wordle-page {
-  min-height: calc(100vh - 56px);
-  padding: 20px;
 }
 
 .wordle-container {
@@ -129,6 +84,7 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  width: 100%;
 }
 
 .wordle-header {
@@ -360,11 +316,26 @@
 
 /* Instruction styles are identical and can be shared */
 .instructions-panel {
+  position: absolute;
+  top: 20px;
+  right: 20px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   padding: 16px;
-  width: 100%;
+  width: 320px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 10;
 }
+@media (max-width: 1050px) {
+  .instructions-panel {
+    position: static;
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto 20px auto;
+  }
+}
+
 .instructions-title {
   color: #fff;
   margin-bottom: 10px;
@@ -400,4 +371,266 @@
   color: rgba(255, 255, 255, 0.85);
   font-size: 0.9rem;
   font-weight: bold;
+}
+
+.wordle-header {
+  text-align: center;
+}
+.wordle-title {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 900;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+.wordle-subtitle {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 1rem;
+}
+
+.length-selector {
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  padding: 6px;
+}
+
+.length-btn {
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.english .length-btn.active {
+  background: #55efc4;
+  color: #134e5e;
+}
+.hebrew .length-btn.active {
+  background: #74b9ff;
+  color: #1e3799;
+}
+
+.wordle-board {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+.english .wordle-board {
+  direction: ltr;
+}
+.hebrew .wordle-board {
+  direction: rtl;
+}
+
+.row {
+  display: flex;
+  gap: 6px;
+}
+.row.shake {
+  animation: shake 0.5s ease;
+}
+
+.wordle-message {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  z-index: 100;
+  animation: fadeIn 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+.english .keyboard {
+  direction: ltr;
+}
+.hebrew .keyboard {
+  direction: rtl;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.key {
+  padding: 14px 0;
+  width: 38px;
+  border-radius: 8px;
+  border: none;
+  background: #e8eaed;
+  color: #333;
+  font-weight: 800;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.key:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+.key.special {
+  width: auto;
+  min-width: 65px;
+  font-size: 0.75rem;
+  padding: 14px 12px;
+}
+.key.correct {
+  background: #6aaa64;
+  color: #fff;
+}
+.key.present {
+  background: #c9b458;
+  color: #fff;
+}
+.key.absent {
+  background: #787c7e;
+  color: #fff;
+}
+
+.game-over-panel {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.game-over-title {
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 900;
+}
+.game-over-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.failed-word {
+  color: #ff7675;
+  font-size: 1.3rem;
+  direction: ltr;
+  display: inline-block;
+}
+.game-over-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.new-game-btn {
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 36px;
+  font-size: 1.2rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.english .new-game-btn {
+  background: linear-gradient(135deg, #55efc4, #00b894);
+  box-shadow: 0 6px 20px rgba(0, 184, 148, 0.4);
+}
+.hebrew .new-game-btn {
+  background: linear-gradient(135deg, #74b9ff, #0984e3);
+  box-shadow: 0 6px 20px rgba(9, 132, 227, 0.4);
+}
+.new-game-btn:hover {
+  transform: translateY(-2px);
+}
+.new-game-btn.secondary {
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: none;
+}
+.new-game-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: none;
+}
+
+.wordle-loading {
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.spinner {
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  font-size: 3rem;
+}
+
+/* Tile styles */
+.tile {
+  width: 56px;
+  height: 56px;
+  border: 2px solid #d3d6da;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 900;
+  background: #fff;
+  color: #333;
+  transition: all 0.1s;
+  user-select: none;
+}
+
+.tile.has-letter {
+  border-color: #999;
+  transform: scale(1.05);
+}
+
+.tile.is-revealing {
+  animation: flip 0.6s ease forwards;
+  animation-delay: calc(var(--reveal-index) * 300ms);
+}
+
+.tile.correct {
+  background-color: #6aaa64;
+  border-color: #6aaa64;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(106, 170, 100, 0.5);
+}
+.tile.present {
+  background-color: #c9b458;
+  border-color: #c9b458;
+  color: #fff;
+}
+.tile.absent {
+  background-color: #787c7e;
+  border-color: #787c7e;
+  color: #fff;
 }

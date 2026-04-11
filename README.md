@@ -1,4 +1,4 @@
-# 🧠 BrainGames - משחקי מוח לתלמידי בית ספר יסודי
+# 🧠 BrainGames - משחקי חשיבה לתלמידי בית ספר יסודי
 
 BrainGames is a full-stack Hebrew/English educational gaming website for elementary school students in Israel.
 
@@ -120,22 +120,22 @@ The React app runs on http://localhost:3000 and proxies API calls to http://loca
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register` | Register new user |
-| POST | `/api/auth/login` | Login user |
-| GET | `/api/auth/me` | Get current user data (auth required) |
-| GET | `/api/progress/:userId` | Get user progress (auth required) |
-| POST | `/api/progress/save` | Save game progress (auth required) |
-| GET | `/api/words/hebrew?length=5` | Get random Hebrew word |
-| GET | `/api/words/english?length=5` | Get random English word |
-| GET | `/api/words/hebrew/validate?word=שלום` | Validate Hebrew word |
-| GET | `/api/words/english/validate?word=happy` | Validate English word |
-| POST | `/api/suggestions` | Submit a game suggestion (auth required) |
-| GET | `/api/game-records/summary` | Get game records summary (auth required) |
-| POST | `/api/game-records` | Save a game record (auth required) |
-| GET | `/api/admin/*` | Admin endpoints (admin required) |
-| GET | `/api/health` | Server health check |
+| Method | Endpoint                                 | Description                              |
+| ------ | ---------------------------------------- | ---------------------------------------- |
+| POST   | `/api/auth/register`                     | Register new user                        |
+| POST   | `/api/auth/login`                        | Login user                               |
+| GET    | `/api/auth/me`                           | Get current user data (auth required)    |
+| GET    | `/api/progress/:userId`                  | Get user progress (auth required)        |
+| POST   | `/api/progress/save`                     | Save game progress (auth required)       |
+| GET    | `/api/words/hebrew?length=5`             | Get random Hebrew word                   |
+| GET    | `/api/words/english?length=5`            | Get random English word                  |
+| GET    | `/api/words/hebrew/validate?word=שלום`   | Validate Hebrew word                     |
+| GET    | `/api/words/english/validate?word=happy` | Validate English word                    |
+| POST   | `/api/suggestions`                       | Submit a game suggestion (auth required) |
+| GET    | `/api/game-records/summary`              | Get game records summary (auth required) |
+| POST   | `/api/game-records`                      | Save a game record (auth required)       |
+| GET    | `/api/admin/*`                           | Admin endpoints (admin required)         |
+| GET    | `/api/health`                            | Server health check                      |
 
 ## Progress System
 
@@ -144,6 +144,7 @@ The React app runs on http://localhost:3000 and proxies API calls to http://loca
 - 🟢 **Green stars** - English Wordle
 
 Stars are earned based on:
+
 - **Wordle:** 1 star for guessing the word (within 6 attempts)
 - **Math:** 1 star if at least half the questions (5/10) are answered correctly, 0 stars otherwise
 

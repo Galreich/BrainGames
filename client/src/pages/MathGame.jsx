@@ -5,6 +5,9 @@ import { StarBurst, BackgroundStar } from '../components';
 import './MathGameStyle.css';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
+import MathGameMenu from './MathGameMenu';
+import MathGamePlaying from './MathGamePlaying';
+import MathGameOver from './MathGameOver';
 
 const TOTAL_STATIONS = 10;
 
@@ -253,167 +256,33 @@ const MathGame = () => {
 
         {/* MENU */}
         {gameState === 'menu' && (
-          <div className='menu-card'>
-            <div className='menu-icon'>{Emojis.Rocket}</div>
-            <h2 className='menu-title'>{t('Math_Subtitle')}</h2>
-            <p className='menu-description'>
-              {Emojis.Star} {t('Math_Instructions_1')}
-              <br />
-              {Emojis.Numbers} {t('Math_Instructions_2')}
-              <br />
-            </p>
-            <div className='difficulty-levels'>
-              {[
-                { emoji: Emojis.Star, text: t('Math_Level_1') },
-                { emoji: Emojis.Star.repeat(2), text: t('Math_Level_2') },
-                { emoji: Emojis.Star.repeat(3), text: t('Math_Level_3') },
-              ].map((item) => (
-                <div key={item.emoji} className='level-item'>
-                  <div className='level-emoji'>{item.emoji}</div>
-                  <div className='level-text'>{item.text}</div>
-                </div>
-              ))}
-            </div>
-            <button className='start-btn' onClick={startGame}>
-              {Emojis.Rocket} {t('Lets_Go')}
-            </button>
-            <div>
-              <button
-                className='play-again-btn secondary'
-                onClick={() => navigate('/')}
-              >
-                {Emojis.House} {t('Back_to_Home')}
-              </button>
-            </div>
-          </div>
+          <MathGameMenu startGame={startGame} navigate={navigate} />
         )}
 
         {/* PLAYING */}
         {gameState === 'playing' && question && (
-          <>
-            {/* Info Row */}
-            <div className='info-row'>
-              <div className='info-badge station'>
-                {Emojis.Rocket}{' '}
-                {t('Station_Count', { station, total: TOTAL_STATIONS })}
-              </div>
-              <div className='info-badge score'>
-                {Emojis.Star}{' '}
-                {t('Correct_Answers_Count', { count: totalAnswers })}
-              </div>
-              <div className='info-badge time'>
-                {Emojis.Stopwatch}{' '}
-                {t('Time_Elapsed', { time: formatTime(elapsed) })}
-              </div>
-            </div>
-
-            {/* Rocket Path */}
-            <div className='rocket-path'>
-              <div className='path-line' />
-              <div className='station-dots'>
-                {Array.from({ length: TOTAL_STATIONS }, (_, i) => (
-                  <div
-                    key={i}
-                    className={`station-dot 
-                      ${i + 1 < station ? 'completed' : ''} 
-                      ${i + 1 === station ? 'current' : ''}
-                      ${i + 1 === TOTAL_STATIONS ? 'finish' : ''}
-                    `}
-                  >
-                    {i + 1 === TOTAL_STATIONS && Emojis.FinishFlag}
-                  </div>
-                ))}
-              </div>
-              {/* <div style={styles.rocketEmoji}>🚀</div> */}
-            </div>
-
-            {/* Progress Bar */}
-            <div className='progress-section'>
-              <div className='progress-labels'>
-                <span>{t('Progress')}</span>
-                <span>{Math.round(progress)}%</span>
-              </div>
-              <div className='progress-bar'>
-                <div
-                  className='progress-fill'
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-            </div>
-
-            {/* Question */}
-            <div className='question-card'>
-              <div className='station-label'>
-                {t('Station_Out_Of', { station, total: TOTAL_STATIONS })}
-              </div>
-              <div className='question-text'>{question.text}</div>
-              <p className='question-subtext'>
-                {station <= 3
-                  ? t('Addition_and_Subtraction_up_to_20')
-                  : station <= 7
-                    ? t('Addition_and_Subtraction_up_to_100')
-                    : t('Multiplication')}
-              </p>
-            </div>
-
-            {/* Options */}
-            <div className='options-grid'>
-              {question.options.map((opt) => (
-                <button
-                  key={opt}
-                  className={`option-btn 
-                    ${selectedAnswer === opt ? 'selected' : ''}
-                    ${selectedAnswer === opt ? answerStatus : ''}
-                    ${answerStatus === 'wrong' && opt === question.answer ? 'show-correct' : ''}
-                  `}
-                  onClick={() => handleAnswer(opt)}
-                  disabled={!!answerStatus}
-                >
-                  {opt}
-                </button>
-              ))}
-            </div>
-          </>
+          <MathGamePlaying
+            station={station}
+            totalStations={TOTAL_STATIONS}
+            totalAnswers={totalAnswers}
+            formattedTime={formatTime(elapsed)}
+            progress={progress}
+            question={question}
+            selectedAnswer={selectedAnswer}
+            answerStatus={answerStatus}
+            handleAnswer={handleAnswer}
+          />
         )}
 
         {/* GAME OVER */}
         {gameState === 'gameover' && (
-          <div className='game-over-card'>
-            <div className='game-over-icon'>
-              {totalAnswers >= Math.ceil(TOTAL_STATIONS / 2)
-                ? Emojis.Trophy
-                : Emojis.Rocket}
-            </div>
-            <div className='game-over-title'>
-              {totalAnswers >= Math.ceil(TOTAL_STATIONS / 2)
-                ? `${t('Amazing_Rocket')} ${Emojis.Rocket}`
-                : `${t('Failed_Astronaut')} ${Emojis.Sad}`}
-            </div>
-            <div className='game-over-stats'>
-              <div className='stat-item'>
-                <div className='stat-value'>{formatTime(elapsed)}</div>
-                <div className='stat-label'>{t('Time')}</div>
-              </div>
-              <div className='stat-item'>
-                <div className='stat-value'>{totalAnswers}</div>
-                <div className='stat-label'>{t('Correct_Answers')}</div>
-              </div>
-            </div>
-
-            <div>
-              <button className='play-again-btn' onClick={startGame}>
-                {Emojis.Rocket} {t('Play_Again')}
-              </button>
-            </div>
-            <div>
-              <button
-                className='play-again-btn secondary'
-                onClick={() => navigate('/')}
-              >
-                {Emojis.House} {t('Back_to_Home')}
-              </button>
-            </div>
-          </div>
+          <MathGameOver
+            totalAnswers={totalAnswers}
+            totalStations={TOTAL_STATIONS}
+            formattedTime={formatTime(elapsed)}
+            startGame={startGame}
+            navigate={navigate}
+          />
         )}
       </div>
     </div>

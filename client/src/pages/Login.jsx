@@ -58,7 +58,11 @@ const Login = () => {
         setTimeout(() => navigate('/'), 1000);
       }
     } catch (err) {
-      setError(err.message || t('Error_try_again'));
+      const errorKey =
+        err.message === 'Failed to fetch'
+          ? 'Network_error'
+          : err.message || 'Error_try_again';
+      setError(t(errorKey));
     } finally {
       setLoading(false);
     }
@@ -163,22 +167,22 @@ const Login = () => {
             className='login-guest-btn'
             onClick={() => navigate('/')}
           >
-            {t('Continue_without_login')} {Emojis.ArrowRight}
+            {t('Continue_without_login')}
           </button>
         </form>
+      </div>
 
-        {/* Tips */}
-        <div className='login-tips'>
-          <div className='login-tips-title'>
-            {Emojis.Bulb} {t('Why_register')}
-          </div>
-          <div className='login-tips-text'>
-            {Emojis.Check} {t('Save_your_progress')}
-            <br />
-            {Emojis.Check} {t('Track_your_stars')}
-            <br />
-            {Emojis.Check} {t('Continue_where_you_left_off')}
-          </div>
+      {/* Tips */}
+      <div className='login-tips'>
+        <div className='login-tips-title'>
+          {Emojis.Bulb} {t('Why_register')}
+        </div>
+        <div className='login-tips-text'>
+          {Emojis.Check} {t('Save_your_progress')}
+          <br />
+          {Emojis.Check} {t('Track_your_stars')}
+          <br />
+          {Emojis.Check} {t('Continue_where_you_left_off')}
         </div>
       </div>
     </div>

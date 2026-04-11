@@ -29,7 +29,6 @@ export const Emojis = {
   Gamepad: '🎮',
   Email: '📨',
   Graduation: '🎓',
-  ArrowRight: '→',
   Flex: '💪',
   Sad: '😢',
   Book: '📖',
