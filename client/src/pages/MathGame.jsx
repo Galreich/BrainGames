@@ -158,7 +158,6 @@ const MathGame = () => {
             const earned =
               finalCorrect >= Math.ceil(TOTAL_STATIONS / 2) ? 1 : 0;
             setGameState('gameover');
-            saveProgress('math', earned);
             if (token)
               fetch('/api/game-records', {
                 method: 'POST',
@@ -167,20 +166,13 @@ const MathGame = () => {
                   Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                  game: 'math',
-                  subject: 'math',
+                  game: 'math-puzzle',
                   stars: earned,
                   score: finalCorrect,
                 }),
               })
-                .then((r) => r.json())
-                .then((d) =>
-                  updateUser({
-                    red_stars: d.red_stars,
-                    blue_stars: d.blue_stars,
-                    green_stars: d.green_stars,
-                  }),
-                )
+                .then((r) => r.ok ? r.json() : null)
+                .then((d) => { if (d) { updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars }); saveProgress(); } })
                 .catch(() => {});
           } else {
             setStation(nextStation);
@@ -197,7 +189,6 @@ const MathGame = () => {
             const earned =
               totalAnswers >= Math.ceil(TOTAL_STATIONS / 2) ? 1 : 0;
             setGameState('gameover');
-            saveProgress('math', earned);
             if (token)
               fetch('/api/game-records', {
                 method: 'POST',
@@ -206,20 +197,13 @@ const MathGame = () => {
                   Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({
-                  game: 'math',
-                  subject: 'math',
+                  game: 'math-puzzle',
                   stars: earned,
                   score: totalAnswers,
                 }),
               })
-                .then((r) => r.json())
-                .then((d) =>
-                  updateUser({
-                    red_stars: d.red_stars,
-                    blue_stars: d.blue_stars,
-                    green_stars: d.green_stars,
-                  }),
-                )
+                .then((r) => r.ok ? r.json() : null)
+                .then((d) => { if (d) { updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars }); saveProgress(); } })
                 .catch(() => {});
           } else {
             setStation(nextStation);
@@ -241,6 +225,8 @@ const MathGame = () => {
       mistakes,
       nextQuestion,
       saveProgress,
+      token,
+      updateUser,
     ],
   );
 

@@ -82,16 +82,14 @@ const initDB = async (): Promise<void> => {
       console.log(`Admin user created (password: ${adminPassword})`);
     }
 
-    const existingGames = await pool.query('SELECT id FROM games WHERE name IN ($1, $2, $3)', ['hebrew-wordle', 'english-wordle', 'math-puzzle']);
-    if (existingGames.rows.length < 3) {
-      await pool.query(`
-        INSERT INTO games (name, subject) VALUES
+    await pool.query(`
+      INSERT INTO games (name, subject) VALUES
         ('hebrew-wordle', 'language'),
         ('english-wordle', 'language'),
-        ('math-puzzle', 'math');
-      `);
-      console.log('Default games inserted into database');
-    }
+        ('math-puzzle', 'math')
+      ON CONFLICT (name) DO NOTHING;
+    `);
+    console.log('Default games ensured in database');
   } catch (err) {
     console.error('Error initializing database tables:', (err as Error).message);
   }

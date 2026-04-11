@@ -110,7 +110,7 @@ export const heTranslations = {
   Continue_where_you_left_off: 'המשך ממקום שעצרת',
   Error_Auth: '{{error}}',
   Success_Auth: '{{success}}',
-  Math_Subject: 'מתמטיקה',
+  Math_Subject: 'חשבון',
   Hebrew_Subject: 'עברית',
   English_Subject: 'אנגלית',
   Other_Subject: 'אחר',
