@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
 import { SuggestionSuccess, SuggestionImageUpload } from '.';
 
-const SuggestionModal = ({ onClose }) => {
+type SuggestionModalProps = {
+  onClose: () => void;
+};
+
+const SuggestionModal = ({ onClose }: SuggestionModalProps) => {
   const { token } = useAuth();
   const { t } = useTranslation();
   const [title, setTitle] = useState('');
@@ -19,22 +23,21 @@ const SuggestionModal = ({ onClose }) => {
     { value: 'english', label: `${Emojis.YellowCircle} ${t('English_Color')}` },
   ];
 
-  const [imageData, setImageData] = useState(null);
+  const [imageData, setImageData] = useState<string | null>(null);
   const [imageError, setImageError] = useState('');
-  const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Close on Escape key
   useEffect(() => {
-    const handleKey = (e) => {
+    const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     setImageError('');
     if (!file) {
       setImageData(null);
@@ -49,11 +52,11 @@ const SuggestionModal = ({ onClose }) => {
       return;
     }
     const reader = new FileReader();
-    reader.onload = (ev) => setImageData(ev.target.result);
+    reader.onload = (ev) => setImageData(ev.target?.result as string);
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) {
       setErrorMsg(t('Error_fill_title_and_description'));

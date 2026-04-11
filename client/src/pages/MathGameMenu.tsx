@@ -1,8 +1,13 @@
-import React from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
 
-const MathGameMenu = ({ startGame, navigate }) => {
+type MathGameMenuProps = {
+  startGame: () => void;
+  navigate: (path: string) => void;
+};
+
+const MathGameMenu = ({ startGame, navigate }: MathGameMenuProps) => {
   const { t } = useTranslation();
 
   return (

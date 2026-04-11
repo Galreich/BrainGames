@@ -1,7 +1,11 @@
-import React from 'react';
+
 import { Emojis } from '../utils/Emojis';
 
-const StarsProgressBar = ({ user }) => {
+type StarsProgressBarProps = {
+  user: { red_stars: number; blue_stars: number; green_stars: number } | null;
+};
+
+const StarsProgressBar = ({ user }: StarsProgressBarProps) => {
   if (!user) return null;
 
   return (

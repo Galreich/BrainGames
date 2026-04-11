@@ -1,7 +1,15 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
+
+type HeaderUserActionsProps = {
+  user: { username: string; isAdmin: boolean } | null;
+  currentPath: string;
+  onLogout: () => void;
+  onShowSuggestion: () => void;
+  onLoginClick: () => void;
+};
 
 const HeaderUserActions = ({
   user,
@@ -9,7 +17,7 @@ const HeaderUserActions = ({
   onLogout,
   onShowSuggestion,
   onLoginClick,
-}) => {
+}: HeaderUserActionsProps) => {
   const { t } = useTranslation();
 
   if (!user) {

@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from 'react';
 
-const Tile = ({ letter, status, isRevealing, revealIndex }) => {
+type TileProps = {
+  letter: string;
+  status: string | null;
+  isRevealing: boolean;
+  revealIndex: number;
+};
+
+const Tile = ({ letter, status, isRevealing, revealIndex }: TileProps) => {
   const [revealed, setRevealed] = useState(false);
 
   useEffect(() => {
@@ -28,7 +35,7 @@ const Tile = ({ letter, status, isRevealing, revealIndex }) => {
     .join(' ');
 
   return (
-    <div className={classes} style={{ '--reveal-index': revealIndex }}>
+    <div className={classes} style={{ '--reveal-index': revealIndex } as Record<string, number | string>}>
       {letter}
     </div>
   );

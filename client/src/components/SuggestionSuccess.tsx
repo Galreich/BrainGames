@@ -1,8 +1,12 @@
-import React from 'react';
+
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
 
-const SuggestionSuccess = ({ onClose }) => {
+type SuggestionSuccessProps = {
+  onClose: () => void;
+};
+
+const SuggestionSuccess = ({ onClose }: SuggestionSuccessProps) => {
   const { t } = useTranslation();
 
   return (

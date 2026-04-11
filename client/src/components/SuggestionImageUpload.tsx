@@ -2,12 +2,19 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
 
+type SuggestionImageUploadProps = {
+  imageData: string | null;
+  imageError: string;
+  onImageChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onRemoveImage: () => void;
+};
+
 const SuggestionImageUpload = ({
   imageData,
   imageError,
   onImageChange,
   onRemoveImage,
-}) => {
+}: SuggestionImageUploadProps) => {
   const { t } = useTranslation();
 
   return (

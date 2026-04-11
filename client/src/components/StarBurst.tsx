@@ -1,8 +1,14 @@
-import React from 'react';
+
 import { Emojis } from '../utils/Emojis';
 
-const StarBurst = ({ x, y, id }) => {
-  const style = {
+type StarBurstProps = {
+  x: number;
+  y: number;
+  id: number;
+};
+
+const StarBurst = ({ x, y, id }: StarBurstProps) => {
+  const style: Record<string, number | string> = {
     '--burst-x': `${x}px`,
     '--burst-y': `${y}px`,
   };
