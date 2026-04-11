@@ -1,9 +1,21 @@
-import React from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
 
-const GameCard = ({ title, subtitle, image, description, path, theme, stars, gamesPlayed, starColor }) => {
+type GameCardProps = {
+  title: string;
+  subtitle: string;
+  image: string;
+  description: string;
+  path: string;
+  theme: string;
+  stars: number;
+  gamesPlayed: number;
+  starColor: string;
+};
+
+const GameCard = ({ title, subtitle, image, description, path, theme, stars, gamesPlayed, starColor }: GameCardProps) => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 

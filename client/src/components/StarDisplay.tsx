@@ -1,5 +1,13 @@
-import React from 'react';
+
 import './StarDisplayStyle.css';
+
+type StarDisplayProps = {
+  count: number;
+  maxStars?: number;
+  color?: string;
+  size?: string;
+  animated?: boolean;
+};
 
 const StarDisplay = ({
   count,
@@ -7,8 +15,8 @@ const StarDisplay = ({
   color = '#f9ca24',
   size = '1.5rem',
   animated = false,
-}) => {
-  const style = { '--star-color': color, '--star-size': size };
+}: StarDisplayProps) => {
+  const style: Record<string, number | string> = { '--star-color': color, '--star-size': size };
 
   return (
     <div className='star-display-container' style={style}>
@@ -16,7 +24,7 @@ const StarDisplay = ({
         <span
           key={i}
           className={`star ${i < count ? 'filled' : ''} ${animated && i < count ? 'animated' : ''}`}
-          style={{ '--star-index': i }}
+          style={{ '--star-index': i } as Record<string, number | string>}
         >
           ★
         </span>

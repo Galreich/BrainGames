@@ -81,7 +81,7 @@ const Home = () => {
             starColor='#ff6b6b'
           />
           <GameCard
-            title={t('Hebrew_Wordle_Title').trim()}
+            title={t('Hebrew_Wordle').trim()}
             subtitle={t('Language')}
             image='/hebrew-wordle.svg'
             description={t('Hebrew_Wordle_Description')}

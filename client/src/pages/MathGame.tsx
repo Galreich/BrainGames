@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useProgress, useAuth } from '../context';
 import { StarBurst, BackgroundStar } from '../components';
@@ -11,8 +11,17 @@ import MathGameOver from './MathGameOver';
 
 const TOTAL_STATIONS = 10;
 
-const generateQuestion = (station) => {
-  let a, b, op, answer;
+type Question = {
+  text: string;
+  a: number;
+  b: number;
+  op: string;
+  answer: number;
+  options: number[];
+};
+
+const generateQuestion = (station: number): Question => {
+  let a: number, b: number, op: string, answer: number;
 
   if (station <= 3) {
     // Addition/subtraction up to 20
@@ -48,9 +57,9 @@ const generateQuestion = (station) => {
   }
 
   // Generate wrong answers
-  const wrongAnswers = new Set();
+  const wrongAnswers = new Set<number>();
   while (wrongAnswers.size < 3) {
-    let wrong = answer + Math.floor(Math.random() * 11) - 5;
+    const wrong: number = answer + Math.floor(Math.random() * 11) - 5;
     if (wrong !== answer && wrong >= 0) wrongAnswers.add(wrong);
   }
 
@@ -58,17 +67,10 @@ const generateQuestion = (station) => {
     () => Math.random() - 0.5,
   );
 
-  return {
-    text: `${a} ${op} ${b} = ?`,
-    a,
-    b,
-    op,
-    answer,
-    options,
-  };
+  return { text: `${a} ${op} ${b} = ?`, a, b, op, answer, options };
 };
 
-const formatTime = (seconds) => {
+const formatTime = (seconds: number) => {
   const m = Math.floor(seconds / 60);
   const s = seconds % 60;
   return `${m}:${s.toString().padStart(2, '0')}`;
@@ -79,25 +81,25 @@ const MathGame = () => {
   const { saveProgress } = useProgress();
   const { token, updateUser } = useAuth();
   const { t } = useTranslation();
-  const [gameState, setGameState] = useState('menu'); // 'menu', 'playing', 'gameover'
+  const [gameState, setGameState] = useState<'menu' | 'playing' | 'gameover'>('menu');
   const [station, setStation] = useState(1);
-  const [question, setQuestion] = useState(null);
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const [answerStatus, setAnswerStatus] = useState(null); // 'correct', 'wrong'
+  const [question, setQuestion] = useState<Question | null>(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [answerStatus, setAnswerStatus] = useState<'correct' | 'wrong' | null>(null);
   const [totalAnswers, settotalAnswers] = useState(0);
   const [mistakes, setMistakes] = useState(0);
   const [elapsed, setElapsed] = useState(0);
   const [message, setMessage] = useState('');
-  const [starBursts, setStarBursts] = useState([]);
+  const [starBursts, setStarBursts] = useState<{ id: number; x: number; y: number }[]>([]);
   const [animatingRocket, setAnimatingRocket] = useState(false);
-  const timerRef = useRef(null);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const showMessage = (msg, duration = 2000) => {
+  const showMessage = (msg: string, duration = 2000) => {
     setMessage(msg);
     setTimeout(() => setMessage(''), duration);
   };
 
-  const nextQuestion = useCallback((currentStation) => {
+  const nextQuestion = useCallback((currentStation: number) => {
     setQuestion(generateQuestion(currentStation));
     setSelectedAnswer(null);
     setAnswerStatus(null);
@@ -118,9 +120,11 @@ const MathGame = () => {
         setElapsed((prev) => prev + 1);
       }, 1000);
     } else {
-      clearInterval(timerRef.current);
+      if (timerRef.current) clearInterval(timerRef.current);
     }
-    return () => clearInterval(timerRef.current);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, [gameState]);
 
   const addStarBurst = () => {
@@ -135,8 +139,8 @@ const MathGame = () => {
   };
 
   const handleAnswer = useCallback(
-    (answer) => {
-      if (answerStatus || gameState !== 'playing') return;
+    (answer: number) => {
+      if (answerStatus || gameState !== 'playing' || !question) return;
 
       setSelectedAnswer(answer);
 
@@ -242,12 +246,12 @@ const MathGame = () => {
       question,
       station,
       totalAnswers,
-      elapsed,
       mistakes,
       nextQuestion,
       saveProgress,
       token,
       updateUser,
+      t,
     ],
   );
 

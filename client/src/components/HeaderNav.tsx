@@ -1,7 +1,12 @@
-import React from 'react';
+
 import { Link } from 'react-router-dom';
 
-const HeaderNav = ({ navLinks, currentPath }) => {
+type HeaderNavProps = {
+  navLinks: { path: string; label: string }[];
+  currentPath: string;
+};
+
+const HeaderNav = ({ navLinks, currentPath }: HeaderNavProps) => {
   return (
     <nav className='header-nav'>
       {navLinks.map((link) => (

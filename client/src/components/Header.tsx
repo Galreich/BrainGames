@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context';
 import {
@@ -54,12 +54,23 @@ const Header = () => {
             <StarsProgressBar user={user} />
           </div>
 
+          {/* Username */}
+          {user && (
+            <span className='user-info'>
+              {Emojis.User} {user.username}
+            </span>
+          )}
+
+          {/* Separator */}
+          <div className='header-divider' />
+
           {/* Navigation */}
           <HeaderNav navLinks={navLinks} currentPath={location.pathname} />
 
+          {/* Separator */}
           <div className='header-divider' />
 
-          {/* Right Section */}
+          {/* Right actions */}
           <HeaderUserActions
             user={user}
             currentPath={location.pathname}

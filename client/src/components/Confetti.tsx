@@ -1,8 +1,8 @@
-import React from 'react';
+
 
 const Confetti = () => {
   const pieces = Array.from({ length: 20 }, (_, i) => {
-    const style = {
+    const style: Record<string, number | string> = {
       '--left': `${Math.random() * 100}%`,
       '--delay': `${Math.random() * 3}s`,
       '--duration': `${2 + Math.random() * 3}s`,

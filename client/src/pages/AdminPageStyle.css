@@ -14,10 +14,7 @@
   font-size: 2rem;
   font-weight: bold;
   margin-bottom: 8px;
-  background: linear-gradient(90deg, #f9ca24, #f0932b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: #ffffff;
 }
 .admin-subtitle {
   color: rgba(255, 255, 255, 0.6);
@@ -35,7 +32,7 @@
 .admin-th {
   background: rgba(255, 255, 255, 0.08);
   padding: 12px 16px;
-  text-align: right;
+  text-align: center;
   font-size: 0.9rem;
   color: rgba(255, 255, 255, 0.8);
 }
@@ -47,6 +44,7 @@
   font-size: 0.9rem;
   vertical-align: top;
   border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  text-align: center;
 }
 
 .admin-badge {
@@ -54,12 +52,14 @@
   padding: 3px 10px;
   border-radius: 12px;
   font-size: 0.8rem;
-  background: rgba(162, 155, 254, 0.2);
-  color: #a29bfe;
+  color: rgba(255, 255, 255, 0.25);
+}
+.admin-badge.general {
+  color: rgba(255, 255, 255, 0.25);
 }
 .admin-badge.math {
-  background: rgba(249, 202, 36, 0.2);
-  color: #f9ca24;
+  background: rgba(255, 107, 107, 0.2);
+  color: #ff6b6b;
 }
 .admin-badge.hebrew {
   background: rgba(116, 185, 255, 0.2);
@@ -90,13 +90,86 @@
 }
 
 .admin-desc-col {
-  color: rgba(255, 255, 255, 0.75);
-  max-width: 300px;
+  cursor: pointer;
+  text-align: center;
+  vertical-align: top;
+}
+.admin-desc-icon {
+  font-size: 1.6rem;
+  display: inline-block;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+  opacity: 0.8;
+}
+.admin-desc-col:hover .admin-desc-icon {
+  opacity: 1;
+  transform: scale(1.15);
 }
 .admin-date-col {
   color: rgba(255, 255, 255, 0.5);
   white-space: nowrap;
   font-size: 0.8rem;
+}
+
+/* Popup Modal Styles */
+.admin-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  z-index: 2000;
+  padding: 40px 20px;
+}
+.admin-popup-content {
+  background: #1a1a2e;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  padding: 30px;
+  max-width: 800px;
+  width: fit-content;
+  min-width: 300px;
+  position: relative;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  margin: auto;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+.admin-popup-title {
+  margin-top: 0;
+  margin-bottom: 16px;
+  color: #fff;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+.admin-popup-text {
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
+  overflow-y: auto;
+  margin: 0;
+}
+.admin-popup-close {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+.admin-popup-close:hover {
+  opacity: 1;
 }
 .admin-image-preview {
   max-height: 80px;

@@ -23,7 +23,7 @@ const Login = () => {
     }
   }, [user, navigate]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError('');
     setSuccess('');
@@ -58,10 +58,8 @@ const Login = () => {
         setTimeout(() => navigate('/'), 1000);
       }
     } catch (err) {
-      const errorKey =
-        err.message === 'Failed to fetch'
-          ? 'Network_error'
-          : err.message || 'Error_try_again';
+      const msg = err instanceof Error ? err.message : 'Error_try_again';
+      const errorKey = msg === 'Failed to fetch' ? 'Network_error' : msg;
       setError(t(errorKey));
     } finally {
       setLoading(false);
@@ -90,7 +88,7 @@ const Login = () => {
               setSuccess('');
             }}
           >
-            {t('Login_Tab')}
+            {t('Login')}
           </button>
           <button
             className={`login-tab ${!isLogin ? 'active' : ''}`}

@@ -1,6 +1,13 @@
 import { readFileSync } from 'fs';
-import wordListPath from 'word-list';
+import { join } from 'path';
 
+const wordListPath = join(
+  __dirname,
+  '..',
+  'node_modules',
+  'word-list',
+  'words.txt',
+);
 const wordArray = readFileSync(wordListPath, 'utf8').split('\n');
 
 const englishWords: Record<number, string[]> = { 4: [], 5: [], 6: [] };

@@ -1,7 +1,7 @@
 export interface AuthUser {
   userId: number;
   username: string;
-  isAdmin: boolean;
+  is_admin: boolean;
 }
 
 declare global {

@@ -1,6 +1,13 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
+
+type MathGameOverProps = {
+  totalAnswers: number;
+  totalStations: number;
+  formattedTime: string;
+  startGame: () => void;
+  navigate: (path: string) => void;
+};
 
 const MathGameOver = ({
   totalAnswers,
@@ -8,7 +15,7 @@ const MathGameOver = ({
   formattedTime,
   startGame,
   navigate,
-}) => {
+}: MathGameOverProps) => {
   const { t } = useTranslation();
 
   return (

@@ -10,7 +10,11 @@ import Instructions from './Instructions';
 const WORD_LENGTHS = [4, 5, 6];
 const MAX_ATTEMPTS = 6;
 
-const Wordle = ({ language }) => {
+type WordleProps = {
+  language: 'hebrew' | 'english';
+};
+
+const Wordle = ({ language }: WordleProps) => {
   const navigate = useNavigate();
   const { saveProgress } = useProgress();
   const { token, updateUser } = useAuth();
@@ -22,15 +26,15 @@ const Wordle = ({ language }) => {
     () =>
       isHebrew
         ? [
-            t('Keyboard_Row_1_HE', { returnObjects: true }),
-            t('Keyboard_Row_2_HE', { returnObjects: true }),
-            t('Keyboard_Row_3_HE', { returnObjects: true }),
-            t('Keyboard_Row_4_HE', { returnObjects: true }),
+            t('Keyboard_Row_1_HE', { returnObjects: true }) as string[],
+            t('Keyboard_Row_2_HE', { returnObjects: true }) as string[],
+            t('Keyboard_Row_3_HE', { returnObjects: true }) as string[],
+            t('Keyboard_Row_4_HE', { returnObjects: true }) as string[],
           ]
         : [
-            t('Keyboard_Row_1_EN', { returnObjects: true }),
-            t('Keyboard_Row_2_EN', { returnObjects: true }),
-            t('Keyboard_Row_3_EN', { returnObjects: true }),
+            t('Keyboard_Row_1_EN', { returnObjects: true }) as string[],
+            t('Keyboard_Row_2_EN', { returnObjects: true }) as string[],
+            t('Keyboard_Row_3_EN', { returnObjects: true }) as string[],
           ],
     [t, isHebrew],
   );
@@ -44,19 +48,21 @@ const Wordle = ({ language }) => {
   const [currentGuess, setCurrentGuess] = useState('');
   const [currentRow, setCurrentRow] = useState(0);
   const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'won', 'lost'
-  const [keyboardStatus, setKeyboardStatus] = useState({});
+  const [keyboardStatus, setKeyboardStatus] = useState<{
+    [key: string]: string;
+  }>({});
   const [revealingRow, setRevealingRow] = useState(-1);
   const [shakingRow, setShakingRow] = useState(-1);
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const showMessage = useCallback((msg, duration = 2500) => {
+  const showMessage = useCallback((msg: string, duration = 2500) => {
     setMessage(msg);
     setTimeout(() => setMessage(''), duration);
   }, []);
 
   const fetchWord = useCallback(
-    async (len) => {
+    async (len: number) => {
       setLoading(true);
       try {
         const response = await fetch(`/api/words/${language}?length=${len}`);
@@ -67,7 +73,7 @@ const Wordle = ({ language }) => {
           const suffix = isHebrew ? 'HE' : 'EN';
           const words = t(`Fallback_Words_${suffix}_${len}`, {
             returnObjects: true,
-          });
+          }) as string[];
           const word = words[Math.floor(Math.random() * words.length)];
           setTargetWord(isHebrew ? word : word.toUpperCase());
         }
@@ -75,7 +81,7 @@ const Wordle = ({ language }) => {
         const suffix = isHebrew ? 'HE' : 'EN';
         const words = t(`Fallback_Words_${suffix}_${len}`, {
           returnObjects: true,
-        });
+        }) as string[];
         const word = words[Math.floor(Math.random() * words.length)];
         setTargetWord(isHebrew ? word : word.toUpperCase());
       } finally {
@@ -86,8 +92,8 @@ const Wordle = ({ language }) => {
   );
 
   const startNewGame = useCallback(
-    async (len) => {
-      const length = len || wordLength;
+    async (len?: number) => {
+      const length = len ?? wordLength;
       setGuesses(Array(MAX_ATTEMPTS).fill(''));
       setGuessResults(Array(MAX_ATTEMPTS).fill(null));
       setCurrentGuess('');
@@ -107,9 +113,10 @@ const Wordle = ({ language }) => {
     startNewGame(wordLength);
   }, [language]); // eslint-disable-line
 
-  const evaluateGuess = (guess, target) => {
+  const evaluateGuess = (guess: string, target: string | null) => {
+    if (!target) return [];
     const result = Array(target.length).fill('absent');
-    const targetArr = target.split('');
+    const targetArr: (string | null)[] = target.split('');
     const guessArr = guess.split('');
 
     guessArr.forEach((letter, i) => {
@@ -243,7 +250,7 @@ const Wordle = ({ language }) => {
   ]);
 
   const handleKeyPress = useCallback(
-    (key) => {
+    (key: string) => {
       if (gameStatus !== 'playing') return;
 
       if (key === Emojis.Backspace || key === 'Backspace' || key === '⌫') {
@@ -268,7 +275,7 @@ const Wordle = ({ language }) => {
   );
 
   useEffect(() => {
-    const handleKeyDown = (e) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Backspace' || e.key === 'Enter') handleKeyPress(e.key);
       else if (isHebrew && t('Hebrew_Letters_String').includes(e.key))
         handleKeyPress(e.key);
@@ -300,7 +307,7 @@ const Wordle = ({ language }) => {
       <div className='wordle-container'>
         <div className='wordle-header'>
           <h1 className='wordle-title'>
-            {isHebrew ? t('Hebrew_Wordle_Title') : t('English_Wordle_Title')}
+            {isHebrew ? t('Hebrew_Wordle') : t('English_Wordle_Title')}
           </h1>
           <p className='wordle-subtitle'>{t('Guess_the_secret_word')}</p>
         </div>

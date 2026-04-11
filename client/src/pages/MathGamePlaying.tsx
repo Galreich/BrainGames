@@ -1,6 +1,23 @@
-import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
+
+type Question = {
+  text: string;
+  answer: number;
+  options: number[];
+};
+
+type MathGamePlayingProps = {
+  station: number;
+  totalStations: number;
+  totalAnswers: number;
+  formattedTime: string;
+  progress: number;
+  question: Question;
+  selectedAnswer: number | null;
+  answerStatus: 'correct' | 'wrong' | null;
+  handleAnswer: (answer: number) => void;
+};
 
 const MathGamePlaying = ({
   station,
@@ -12,7 +29,7 @@ const MathGamePlaying = ({
   selectedAnswer,
   answerStatus,
   handleAnswer,
-}) => {
+}: MathGamePlayingProps) => {
   const { t } = useTranslation();
 
   return (

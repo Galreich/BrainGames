@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
 import { SuggestionSuccess, SuggestionImageUpload } from '.';
 
-const SuggestionModal = ({ onClose }) => {
+type SuggestionModalProps = {
+  onClose: () => void;
+};
+
+const SuggestionModal = ({ onClose }: SuggestionModalProps) => {
   const { token } = useAuth();
   const { t } = useTranslation();
   const [title, setTitle] = useState('');
@@ -14,27 +18,28 @@ const SuggestionModal = ({ onClose }) => {
 
   const SUBJECTS = [
     { value: '', label: t('General_Subject') },
-    { value: 'math', label: `${Emojis.RedCircle} ${t('Math_Color')}` },
-    { value: 'hebrew', label: `${Emojis.BlueCircle} ${t('Hebrew_Color')}` },
-    { value: 'english', label: `${Emojis.YellowCircle} ${t('English_Color')}` },
+    { value: 'math', label: `${Emojis.RedCircle} ${t('Math')}` },
+    { value: 'hebrew', label: `${Emojis.BlueCircle} ${t('Hebrew')}` },
+    { value: 'english', label: `${Emojis.GreenCircle} ${t('English')}` },
   ];
 
-  const [imageData, setImageData] = useState(null);
+  const [imageData, setImageData] = useState<string | null>(null);
   const [imageError, setImageError] = useState('');
-  const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
+  const [status, setStatus] = useState<
+    'idle' | 'loading' | 'success' | 'error'
+  >('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
-  // Close on Escape key
   useEffect(() => {
-    const handleKey = (e) => {
+    const handleKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
     setImageError('');
     if (!file) {
       setImageData(null);
@@ -49,11 +54,11 @@ const SuggestionModal = ({ onClose }) => {
       return;
     }
     const reader = new FileReader();
-    reader.onload = (ev) => setImageData(ev.target.result);
+    reader.onload = (ev) => setImageData(ev.target?.result as string);
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) {
       setErrorMsg(t('Error_fill_title_and_description'));
@@ -79,6 +84,7 @@ const SuggestionModal = ({ onClose }) => {
         setStatus('error');
       } else {
         setStatus('success');
+        window.dispatchEvent(new CustomEvent('suggestionAdded'));
       }
     } catch {
       setErrorMsg(t('Network_error'));
@@ -135,11 +141,11 @@ const SuggestionModal = ({ onClose }) => {
                   type='text'
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  maxLength={100}
+                  maxLength={20}
                   placeholder={t('Game_Title_Placeholder')}
                   className='suggestion-input'
                 />
-                <div className='suggestion-char-count'>{title.length}/100</div>
+                <div className='suggestion-char-count'>{title.length}/20</div>
               </div>
 
               {/* Description */}
