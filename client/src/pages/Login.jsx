@@ -58,7 +58,11 @@ const Login = () => {
         setTimeout(() => navigate('/'), 1000);
       }
     } catch (err) {
-      setError(err.message || t('Error_try_again'));
+      const errorKey =
+        err.message === 'Failed to fetch'
+          ? 'Network_error'
+          : err.message || 'Error_try_again';
+      setError(t(errorKey));
     } finally {
       setLoading(false);
     }

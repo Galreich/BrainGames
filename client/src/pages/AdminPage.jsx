@@ -30,11 +30,15 @@ const AdminPage = () => {
         const res = await fetch('/api/admin/suggestions', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        if (!res.ok) throw new Error(t('Error_loading_suggestions'));
         const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Error_loading_suggestions');
         setSuggestions(data.suggestions);
       } catch (err) {
-        setError(err.message);
+        const errorKey =
+          err.message === 'Failed to fetch'
+            ? 'Network_error'
+            : err.message || 'Error_loading_suggestions';
+        setError(t(errorKey));
       } finally {
         setLoading(false);
       }
