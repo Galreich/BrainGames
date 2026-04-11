@@ -10,6 +10,8 @@ import MathGame from './pages/MathGame';
 import Login from './pages/Login';
 import AdminPage from './pages/AdminPage';
 
+import './App.css';
+
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -21,9 +23,9 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.error) {
       return (
-        <div style={{ padding: '40px', fontFamily: 'monospace', background: '#1a1a2e', color: '#ff7675', minHeight: '100vh' }}>
-          <h1 style={{ color: '#ff7675', marginBottom: '20px' }}>❌ שגיאה בטעינה</h1>
-          <pre style={{ background: '#0f0f1a', padding: '20px', borderRadius: '8px', whiteSpace: 'pre-wrap', color: '#fab1a0' }}>
+        <div className="error-boundary-fallback">
+          <h1>❌ שגיאה בטעינה</h1>
+          <pre>
             {this.state.error.toString()}
             {'\n\n'}
             {this.state.error.stack}
@@ -41,9 +43,9 @@ const App = () => {
       <AuthProvider>
         <ProgressProvider>
           <Router>
-            <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+            <div className="app-container">
               <Header />
-              <main style={{ flex: 1 }}>
+              <main className="app-main">
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/hebrew-wordle" element={<HebrewWordle />} />

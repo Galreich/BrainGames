@@ -1,0 +1,30 @@
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+}
+
+.error-boundary-fallback {
+  padding: 40px;
+  font-family: monospace;
+  background: #1a1a2e;
+  color: #ff7675;
+  min-height: 100vh;
+}
+
+.error-boundary-fallback h1 {
+  color: #ff7675;
+  margin-bottom: 20px;
+}
+
+.error-boundary-fallback pre {
+  background: #0f0f1a;
+  padding: 20px;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  color: #fab1a0;
+}

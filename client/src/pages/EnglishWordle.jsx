@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useProgress } from '../context/ProgressContext';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import './EnglishWordleStyle.css';
 
 // QWERTY keyboard layout
 const KEYBOARD_ROWS = [
@@ -21,58 +22,29 @@ const FALLBACK_WORDS = {
 
 const MAX_ATTEMPTS = 6;
 
-const getTileColor = (status) => {
-  switch (status) {
-    case 'correct': return { bg: '#6aaa64', border: '#6aaa64', color: '#fff' };
-    case 'present': return { bg: '#c9b458', border: '#c9b458', color: '#fff' };
-    case 'absent': return { bg: '#787c7e', border: '#787c7e', color: '#fff' };
-    default: return { bg: '#fff', border: '#d3d6da', color: '#333' };
-  }
-};
-
-const getKeyColor = (status) => {
-  switch (status) {
-    case 'correct': return '#6aaa64';
-    case 'present': return '#c9b458';
-    case 'absent': return '#787c7e';
-    default: return '#e8eaed';
-  }
-};
-
 const Tile = ({ letter, status, isRevealing, revealIndex }) => {
-  const colors = getTileColor(status);
   const [revealed, setRevealed] = useState(false);
 
   useEffect(() => {
     if (isRevealing) {
-      const timer = setTimeout(() => setRevealed(true), revealIndex * 300);
+      // Animation is handled by CSS, but we need to set state for colors
+      const timer = setTimeout(() => setRevealed(true), revealIndex * 300 + 300);
       return () => clearTimeout(timer);
     } else if (status && status !== 'empty') {
       setRevealed(true);
     } else {
       setRevealed(false);
     }
-  }, [isRevealing, status, revealIndex]);
+  }, [isRevealing, status, revealIndex, setRevealed]);
 
-  const tileStyle = {
-    width: '56px',
-    height: '56px',
-    border: `2px solid ${revealed && status ? colors.border : letter ? '#999' : colors.border}`,
-    borderRadius: '8px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    fontSize: '1.6rem',
-    fontWeight: '900',
-    background: revealed && status ? colors.bg : colors.bg,
-    color: revealed && status ? colors.color : colors.color,
-    transition: 'all 0.1s',
-    transform: letter && !status ? 'scale(1.05)' : 'scale(1)',
-    userSelect: 'none',
-    boxShadow: revealed && status === 'correct' ? '0 0 12px rgba(106,170,100,0.5)' : 'none',
-  };
+  const classes = [
+    'tile',
+    status && (isRevealing || revealed) ? status : '',
+    letter && !status ? 'has-letter' : '',
+    isRevealing ? 'is-revealing' : ''
+  ].filter(Boolean).join(' ');
 
-  return <div style={tileStyle}>{letter}</div>;
+  return <div className={classes} style={{'--reveal-index': revealIndex}}>{letter}</div>;
 };
 
 const EnglishWordle = () => {
@@ -272,167 +244,34 @@ const EnglishWordle = () => {
     startNewGame(len);
   };
 
-  const styles = {
-    page: {
-      minHeight: 'calc(100vh - 70px)',
-      background: 'linear-gradient(135deg, #134e5e 0%, #71b280 100%)',
-      padding: '20px',
-      direction: 'ltr',
-    },
-    container: {
-      maxWidth: '500px',
-      margin: '0 auto',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      gap: '20px',
-    },
-    title: {
-      color: '#fff',
-      fontSize: '2rem',
-      fontWeight: '900',
-      textAlign: 'center',
-      textShadow: '0 2px 10px rgba(0,0,0,0.3)',
-    },
-    subtitle: {
-      color: 'rgba(255,255,255,0.75)',
-      fontSize: '1rem',
-      textAlign: 'center',
-    },
-    lengthSelector: {
-      display: 'flex',
-      gap: '10px',
-      background: 'rgba(255,255,255,0.1)',
-      borderRadius: '50px',
-      padding: '6px',
-    },
-    lengthBtn: (active) => ({
-      padding: '8px 20px',
-      borderRadius: '50px',
-      border: 'none',
-      background: active ? '#55efc4' : 'transparent',
-      color: active ? '#134e5e' : '#fff',
-      fontWeight: '800',
-      fontSize: '1rem',
-      cursor: 'pointer',
-      transition: 'all 0.2s',
-    }),
-    board: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '6px',
-      padding: '16px',
-      background: 'rgba(255,255,255,0.08)',
-      borderRadius: '16px',
-    },
-    row: (isShaking) => ({
-      display: 'flex',
-      gap: '6px',
-      animation: isShaking ? 'shake 0.5s ease' : 'none',
-    }),
-    message: {
-      position: 'fixed',
-      top: '100px',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      background: 'rgba(0,0,0,0.85)',
-      color: '#fff',
-      padding: '14px 28px',
-      borderRadius: '50px',
-      fontWeight: '800',
-      fontSize: '1.1rem',
-      zIndex: 100,
-      animation: 'fadeIn 0.3s ease',
-      whiteSpace: 'nowrap',
-      boxShadow: '0 8px 30px rgba(0,0,0,0.4)',
-    },
-    keyboard: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '8px',
-      width: '100%',
-    },
-    keyboardRow: {
-      display: 'flex',
-      gap: '5px',
-      justifyContent: 'center',
-    },
-    key: (status, isSpecial) => ({
-      padding: '14px 0',
-      width: isSpecial ? '65px' : '38px',
-      borderRadius: '8px',
-      border: 'none',
-      background: getKeyColor(status),
-      color: status && status !== 'default' ? '#fff' : '#333',
-      fontWeight: '800',
-      fontSize: isSpecial ? '0.7rem' : '0.95rem',
-      cursor: 'pointer',
-      transition: 'all 0.2s',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.2)',
-    }),
-    gameOver: {
-      background: 'rgba(255,255,255,0.15)',
-      borderRadius: '20px',
-      padding: '24px',
-      textAlign: 'center',
-      backdropFilter: 'blur(10px)',
-      width: '100%',
-    },
-    gameOverTitle: {
-      color: '#fff',
-      fontSize: '1.8rem',
-      fontWeight: '900',
-      marginBottom: '12px',
-    },
-    newGameBtn: {
-      background: 'linear-gradient(135deg, #55efc4, #00b894)',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '50px',
-      padding: '14px 36px',
-      fontSize: '1.2rem',
-      fontWeight: '900',
-      cursor: 'pointer',
-      marginTop: '16px',
-      boxShadow: '0 6px 20px rgba(0,184,148,0.4)',
-      transition: 'all 0.2s',
-    },
-    loading: {
-      color: '#fff',
-      fontSize: '1.5rem',
-      textAlign: 'center',
-      padding: '40px',
-    },
-  };
-
   if (loading) {
     return (
-      <div style={styles.page}>
-        <div style={styles.loading}>
-          <div style={{ animation: 'spin 1s linear infinite', display: 'inline-block', fontSize: '3rem' }}>⏳</div>
-          <div style={{ marginTop: '16px' }}>Loading word...</div>
+      <div className="wordle-page english">
+        <div className="wordle-loading">
+          <div className="spinner">⏳</div>
+          <div>Loading word...</div>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={styles.page}>
-      {message && <div style={styles.message}>{message}</div>}
+    <div className="wordle-page english">
+      {message && <div className="wordle-message">{message}</div>}
 
-      <div style={styles.container}>
+      <div className="wordle-container">
         {/* Header */}
-        <div style={{ textAlign: 'center' }}>
-          <h1 style={styles.title}>Wordle English</h1>
-          <p style={styles.subtitle}>Guess the secret word!</p>
+        <div className="wordle-header">
+          <h1 className="wordle-title">Wordle English</h1>
+          <p className="wordle-subtitle">Guess the secret word!</p>
         </div>
 
         {/* Word Length Selector */}
-        <div style={styles.lengthSelector}>
+        <div className="length-selector">
           {WORD_LENGTHS.map((len) => (
             <button
               key={len}
-              style={styles.lengthBtn(wordLength === len)}
+              className={`length-btn ${wordLength === len ? 'active' : ''}`}
               onClick={() => handleWordLengthChange(len)}
             >
               {len} letters
@@ -441,7 +280,7 @@ const EnglishWordle = () => {
         </div>
 
         {/* Game Board */}
-        <div style={styles.board}>
+        <div className="wordle-board">
           {Array.from({ length: MAX_ATTEMPTS }, (_, rowIdx) => {
             const guess = rowIdx === currentRow ? currentGuess : guesses[rowIdx];
             const result = guessResults[rowIdx];
@@ -449,7 +288,7 @@ const EnglishWordle = () => {
             const isRevealing = revealingRow === rowIdx;
 
             return (
-              <div key={rowIdx} style={styles.row(isShaking)}>
+              <div key={rowIdx} className={`row ${isShaking ? 'shake' : ''}`}>
                 {Array.from({ length: wordLength }, (_, colIdx) => {
                   const letter = guess ? guess[colIdx] || '' : '';
                   const status = result ? result[colIdx] : null;
@@ -472,49 +311,43 @@ const EnglishWordle = () => {
 
         {/* Game Over Panel */}
         {gameStatus !== 'playing' && (
-          <div style={styles.gameOver}>
+          <div className="game-over-panel">
             {gameStatus === 'won' ? (
               <>
-                <div style={styles.gameOverTitle}>🎉 Amazing!</div>
-                <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '12px' }}>
+                <div className="game-over-title">🎉 Amazing!</div>
+                <p className="game-over-text">
                   You guessed it in {currentRow + 1} {currentRow + 1 === 1 ? 'try' : 'tries'}!
                 </p>
-                <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '0.9rem' }}>
-                  The word was: <strong style={{ color: '#55efc4' }}>{targetWord}</strong>
+                <p className="game-over-subtext">
+                  The word was: <strong className="correct-word">{targetWord}</strong>
                 </p>
               </>
             ) : (
               <>
-                <div style={styles.gameOverTitle}>😞 Try Again!</div>
-                <p style={{ color: 'rgba(255,255,255,0.9)', marginBottom: '8px' }}>
-                  The word was: <strong style={{ color: '#ff7675', fontSize: '1.3rem' }}>{targetWord}</strong>
+                <div className="game-over-title">😞 Try Again!</div>
+                <p className="game-over-text">
+                  The word was: <strong className="failed-word">{targetWord}</strong>
                 </p>
               </>
             )}
-            <div>
-              <button style={styles.newGameBtn} onClick={() => startNewGame()}>
-                New Game 🔄
-              </button>
-            </div>
-            <div>
-                <button style={{ ...styles.newGameBtn, background: 'rgba(255,255,255,0.15)', color: '#fff', boxShadow: 'none' }} onClick={() => navigate('/')}>
-                  🏠 Go Home
-                </button>
+            <div className="game-over-buttons">
+              <button className="new-game-btn" onClick={() => startNewGame()}>New Game 🔄</button>
+              <button className="new-game-btn secondary" onClick={() => navigate('/')}>🏠 Go Home</button>
             </div>
           </div>
         )}
 
         {/* Keyboard */}
-        <div style={styles.keyboard}>
+        <div className="keyboard">
           {KEYBOARD_ROWS.map((row, rowIdx) => (
-            <div key={rowIdx} style={styles.keyboardRow}>
+            <div key={rowIdx} className="keyboard-row">
               {row.map((key) => {
                 const isSpecial = key === '⌫' || key === 'ENTER';
                 const status = keyboardStatus[key];
                 return (
                   <button
                     key={key}
-                    style={styles.key(status, isSpecial)}
+                    className={`key ${status || ''} ${isSpecial ? 'special' : ''}`}
                     onClick={() => handleKeyPress(key)}
                     disabled={gameStatus !== 'playing'}
                   >
@@ -528,28 +361,17 @@ const EnglishWordle = () => {
 
         {/* Instructions */}
         {gameStatus === 'playing' && (
-          <div style={{
-            background: 'rgba(255,255,255,0.1)',
-            borderRadius: '16px',
-            padding: '16px',
-            width: '100%',
-          }}>
-            <h3 style={{ color: '#fff', marginBottom: '10px', fontSize: '1rem' }}>How to play:</h3>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+          <div className="instructions-panel">
+            <h3 className="instructions-title">How to play:</h3>
+            <div className="instructions-list">
               {[
-                { color: '#6aaa64', text: 'Letter is in the correct spot' },
-                { color: '#c9b458', text: 'Letter is in the word but wrong spot' },
-                { color: '#787c7e', text: 'Letter is not in the word' },
+                { type: 'correct', text: 'Letter is in the correct spot' },
+                { type: 'present', text: 'Letter is in the word but wrong spot' },
+                { type: 'absent', text: 'Letter is not in the word' },
               ].map((item) => (
-                <div key={item.color} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  <div style={{
-                    width: '28px',
-                    height: '28px',
-                    background: item.color,
-                    borderRadius: '6px',
-                    flexShrink: 0,
-                  }} />
-                  <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.9rem' }}>{item.text}</span>
+                <div key={item.type} className="instruction-item">
+                  <div className={`instruction-tile ${item.type}`} />
+                  <span className="instruction-text">{item.text}</span>
                 </div>
               ))}
             </div>
