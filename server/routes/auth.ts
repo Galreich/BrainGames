@@ -60,7 +60,7 @@ router.post('/register', async (req: Request, res: Response) => {
 
     const user = result.rows[0];
     const token = jwt.sign(
-      { userId: user.id, username: user.username, isAdmin: false } satisfies AuthUser,
+      { userId: user.id, username: user.username, is_admin: false } satisfies AuthUser,
       process.env.JWT_SECRET || 'fallback_secret',
       { expiresIn: '7d' },
     );
@@ -68,7 +68,7 @@ router.post('/register', async (req: Request, res: Response) => {
     res.status(201).json({
       message: 'Register_success',
       token,
-      user: { id: user.id, username: user.username, isAdmin: false, red_stars: 0, blue_stars: 0, green_stars: 0 },
+      user: { id: user.id, username: user.username, is_admin: false, red_stars: 0, blue_stars: 0, green_stars: 0 },
     });
   } catch (err) {
     console.error('Register error:', err);
@@ -99,7 +99,7 @@ router.post('/login', async (req: Request, res: Response) => {
     }
 
     const token = jwt.sign(
-      { userId: user.id, username: user.username, isAdmin: user.is_admin === true } satisfies AuthUser,
+      { userId: user.id, username: user.username, is_admin: user.is_admin === true } satisfies AuthUser,
       process.env.JWT_SECRET || 'fallback_secret',
       { expiresIn: '7d' },
     );
@@ -107,7 +107,7 @@ router.post('/login', async (req: Request, res: Response) => {
     res.json({
       message: 'Login_success',
       token,
-      user: { id: user.id, username: user.username, isAdmin: user.is_admin === true, red_stars: user.red_stars || 0, blue_stars: user.blue_stars || 0, green_stars: user.green_stars || 0 },
+      user: { id: user.id, username: user.username, is_admin: user.is_admin === true, red_stars: user.red_stars || 0, blue_stars: user.blue_stars || 0, green_stars: user.green_stars || 0 },
     });
   } catch (err) {
     console.error('Login error:', err);
@@ -136,7 +136,7 @@ export const authenticateToken = (req: Request, res: Response, next: NextFunctio
 };
 
 export const requireAdmin = (req: Request, res: Response, next: NextFunction): void => {
-  if (!req.user || req.user.isAdmin !== true) {
+  if (!req.user || req.user.is_admin !== true) {
     res.status(403).json({ error: 'Admin_only' });
     return;
   }
@@ -155,7 +155,7 @@ router.get('/me', authenticateToken, async (req: Request, res: Response) => {
     res.json({
       id: u.id,
       username: u.username,
-      isAdmin: u.is_admin === true,
+      is_admin: u.is_admin === true,
       red_stars: u.red_stars || 0,
       blue_stars: u.blue_stars || 0,
       green_stars: u.green_stars || 0,
