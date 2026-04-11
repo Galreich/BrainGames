@@ -1,5 +1,5 @@
 .admin-page {
-  min-height: 100vh;
+  flex: 1;
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   padding: 40px 20px;
   color: #fff;
@@ -54,7 +54,6 @@
   padding: 3px 10px;
   border-radius: 12px;
   font-size: 0.8rem;
-  ;
   background: rgba(162, 155, 254, 0.2);
   color: #a29bfe;
 }

@@ -58,10 +58,15 @@
 }
 
 .wordle-page {
-  min-height: calc(100vh - 56px);
+  flex: 1;
   padding: 20px;
   direction: rtl; /* Titles, menus, and text are RTL in both languages */
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-sizing: border-box;
+  overflow-x: hidden;
 }
 
 /* Theme Colors */
@@ -79,6 +84,7 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
+  width: 100%;
 }
 
 .wordle-header {
@@ -535,7 +541,7 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  margin-margin: 16px;
+  margin-top: 16px;
 }
 
 .new-game-btn {
