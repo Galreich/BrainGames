@@ -1,11 +1,12 @@
-import express from 'express';
-import { hebrewWords, englishWords } from '../data';
+import express, { Request, Response } from 'express';
+import hebrewWords from '../data/hebrew-words.js';
+import englishWords from '../data/english-words.js';
 
 const router = express.Router();
 
 // GET /api/words/hebrew?length=5
-router.get('/hebrew', (req, res) => {
-  const length = parseInt(req.query.length) || 5;
+router.get('/hebrew', (req: Request, res: Response) => {
+  const length = parseInt(req.query.length as string) || 5;
 
   if (![4, 5, 6].includes(length)) {
     return res.status(400).json({ error: 'Word_length_invalid' });
@@ -16,20 +17,15 @@ router.get('/hebrew', (req, res) => {
     return res.status(404).json({ error: 'No_words_found' });
   }
 
-  // Return a random word
   const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
   console.log(`Selected Hebrew word: ${randomWord} (length: ${length})`);
 
-  res.json({
-    word: randomWord,
-    length,
-    language: 'hebrew',
-  });
+  res.json({ word: randomWord, length, language: 'hebrew' });
 });
 
 // GET /api/words/english?length=5
-router.get('/english', (req, res) => {
-  const length = parseInt(req.query.length) || 5;
+router.get('/english', (req: Request, res: Response) => {
+  const length = parseInt(req.query.length as string) || 5;
 
   if (![4, 5, 6].includes(length)) {
     return res.status(400).json({ error: 'Word_length_invalid' });
@@ -40,15 +36,10 @@ router.get('/english', (req, res) => {
     return res.status(404).json({ error: 'No_words_found' });
   }
 
-  // Return a random word
   const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
   console.log(`Selected English word: ${randomWord} (length: ${length})`);
 
-  res.json({
-    word: randomWord,
-    length,
-    language: 'english',
-  });
+  res.json({ word: randomWord, length, language: 'english' });
 });
 
 // GET /api/words/hebrew/validate?word=שלום
