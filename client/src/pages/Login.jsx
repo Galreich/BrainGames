@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
+import { useAuth } from '../context';
+import './LoginStyle.css';
+import { useTranslation } from 'react-i18next';
+import { Emojis } from '../utils/Emojis';
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -11,6 +14,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login, register, user } = useAuth();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   // If already logged in, redirect
   React.useEffect(() => {
@@ -26,7 +30,7 @@ const Login = () => {
     setLoading(true);
 
     if (!username.trim() || !password.trim()) {
-      setError('נא למלא שם משתמש וסיסמה');
+      setError(t('Please_fill_username_and_password'));
       setLoading(false);
       return;
     }
@@ -34,257 +38,146 @@ const Login = () => {
     try {
       if (isLogin) {
         await login(username.trim(), password);
-        setSuccess('התחברת בהצלחה! מעביר אותך...');
+        setSuccess(t('Login_success_redirect'));
         setTimeout(() => navigate('/'), 1000);
       } else {
         if (password.length < 6) {
-          setError('סיסמה חייבת להיות לפחות 6 תווים');
+          setError(t('Password_min_length'));
           setLoading(false);
           return;
         }
-        if (!/[a-zA-Zא-ת]/.test(password) || !/[0-9]/.test(password)) {
-          setError('סיסמה חייבת להכיל לפחות אות אחת ומספר אחד');
+        const regexStr = `[a-zA-Z${t('Hebrew_Letters_Regex')}]`;
+        const regex = new RegExp(regexStr);
+        if (!regex.test(password) || !/[0-9]/.test(password)) {
+          setError(t('Password_requirements'));
           setLoading(false);
           return;
         }
         await register(username.trim(), password);
-        setSuccess('נרשמת בהצלחה! מעביר אותך...');
+        setSuccess(t('Register_success_redirect'));
         setTimeout(() => navigate('/'), 1000);
       }
     } catch (err) {
-      setError(err.message || 'אירעה שגיאה, נסה שוב');
+      setError(err.message || t('Error_try_again'));
     } finally {
       setLoading(false);
     }
   };
 
-  const styles = {
-    page: {
-      minHeight: 'calc(100vh - 70px)',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '20px',
-    },
-    card: {
-      background: 'rgba(255,255,255,0.98)',
-      borderRadius: '28px',
-      padding: '48px 44px',
-      width: '100%',
-      maxWidth: '420px',
-      boxShadow: '0 25px 60px rgba(0,0,0,0.25)',
-      direction: 'rtl',
-      animation: 'fadeIn 0.5s ease',
-    },
-    logoArea: {
-      textAlign: 'center',
-      marginBottom: '32px',
-    },
-    logoEmoji: {
-      fontSize: '3.5rem',
-      display: 'block',
-      marginBottom: '8px',
-    },
-    logoTitle: {
-      color: '#333',
-      fontSize: '1.8rem',
-      fontWeight: '900',
-      marginBottom: '4px',
-    },
-    logoSub: {
-      color: '#888',
-      fontSize: '1rem',
-    },
-    tabs: {
-      display: 'flex',
-      background: '#f0f0f0',
-      borderRadius: '16px',
-      padding: '4px',
-      marginBottom: '28px',
-    },
-    tab: (active) => ({
-      flex: 1,
-      padding: '12px',
-      border: 'none',
-      borderRadius: '12px',
-      background: active ? '#fff' : 'transparent',
-      color: active ? '#764ba2' : '#888',
-      fontSize: '1rem',
-      cursor: 'pointer',
-      boxShadow: active ? '0 2px 10px rgba(0,0,0,0.1)' : 'none',
-      transition: 'all 0.2s',
-    }),
-    formGroup: {
-      marginBottom: '20px',
-    },
-    label: {
-      display: 'block',
-      color: '#555',
-      fontWeight: '700',
-      fontSize: '0.95rem',
-      marginBottom: '8px',
-    },
-    input: (hasError) => ({
-      width: '100%',
-      padding: '14px 16px',
-      border: `2px solid ${hasError ? '#e74c3c' : '#e0e0e0'}`,
-      borderRadius: '14px',
-      fontSize: '0.75rem',
-      outline: 'none',
-      transition: 'border-color 0.2s',
-      direction: 'rtl',
-      background: '#fafafa',
-      fontFamily: 'inherit',
-    }),
-    error: {
-      background: '#ffe8e8',
-      border: '1px solid #ffaaaa',
-      borderRadius: '12px',
-      padding: '12px 16px',
-      color: '#e74c3c',
-      fontWeight: '700',
-      fontSize: '0.95rem',
-      marginBottom: '16px',
-      textAlign: 'center',
-    },
-    success: {
-      background: '#e8ffe8',
-      border: '1px solid #aaffaa',
-      borderRadius: '12px',
-      padding: '12px 16px',
-      color: '#27ae60',
-      fontWeight: '700',
-      fontSize: '0.95rem',
-      marginBottom: '16px',
-      textAlign: 'center',
-    },
-    submitBtn: {
-      width: '100%',
-      padding: '16px',
-      background: 'linear-gradient(135deg, #667eea, #764ba2)',
-      color: '#fff',
-      border: 'none',
-      borderRadius: '14px',
-      fontSize: '1.1rem',
-      cursor: loading ? 'not-allowed' : 'pointer',
-      opacity: loading ? 0.7 : 1,
-      boxShadow: '0 6px 20px rgba(102,126,234,0.4)',
-      transition: 'all 0.2s',
-      marginTop: '8px',
-    },
-    guestBtn: {
-      width: '100%',
-      padding: '14px',
-      background: 'transparent',
-      color: '#888',
-      border: '2px solid #e0e0e0',
-      borderRadius: '14px',
-      fontSize: '1rem',
-      fontWeight: '700',
-      cursor: 'pointer',
-      marginTop: '12px',
-      transition: 'all 0.2s',
-    },
-    tips: {
-      marginTop: '28px',
-      padding: '16px',
-      background: '#f8f4ff',
-      borderRadius: '16px',
-      border: '1px solid #e8d8ff',
-    },
-    tipsTitle: {
-      color: '#764ba2',
-      fontSize: '0.9rem',
-      marginBottom: '8px',
-    },
-    tipsText: {
-      color: '#888',
-      fontSize: '0.85rem',
-      lineHeight: '1.6',
-    },
-  };
-
   return (
-    <div style={styles.page}>
-      <div style={styles.card}>
+    <div className='login-page'>
+      <div className='login-card'>
         {/* Logo */}
-        <div style={styles.logoArea}>
-          <span style={styles.logoEmoji}>🧠</span>
-          <div style={styles.logoTitle}>BrainGames</div>
-          <div style={styles.logoSub}>
-            {isLogin ? 'התחבר לחשבון שלך' : 'צור חשבון חדש'}
+        <div className='login-logo-area'>
+          <span className='login-emoji'>{Emojis.Brain}</span>
+          <div className='login-title'>{t('Braingames_Title')}</div>
+          <div className='login-sub'>
+            {isLogin ? t('Login_to_your_account') : t('Create_a_new_account')}
           </div>
         </div>
 
         {/* Tabs */}
-        <div style={styles.tabs}>
-          <button style={styles.tab(isLogin)} onClick={() => { setIsLogin(true); setError(''); setSuccess(''); }}>
-            התחברות
+        <div className='login-tabs'>
+          <button
+            className={`login-tab ${isLogin ? 'active' : ''}`}
+            onClick={() => {
+              setIsLogin(true);
+              setError('');
+              setSuccess('');
+            }}
+          >
+            {t('Login_Tab')}
           </button>
-          <button style={styles.tab(!isLogin)} onClick={() => { setIsLogin(false); setError(''); setSuccess(''); }}>
-            הרשמה
+          <button
+            className={`login-tab ${!isLogin ? 'active' : ''}`}
+            onClick={() => {
+              setIsLogin(false);
+              setError('');
+              setSuccess('');
+            }}
+          >
+            {t('Register_Tab')}
           </button>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit}>
-          {error && <div style={styles.error}>⚠️ {error}</div>}
-          {success && <div style={styles.success}>✅ {success}</div>}
+          {error && (
+            <div className='login-error'>
+              {Emojis.Warning} {error}
+            </div>
+          )}
+          {success && (
+            <div className='login-success'>
+              {Emojis.Check} {success}
+            </div>
+          )}
 
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="username">
-              👤 שם משתמש
+          <div className='login-form-group'>
+            <label className='login-label' htmlFor='username'>
+              {Emojis.User} {t('Username')}
             </label>
             <input
-              id="username"
-              type="text"
+              id='username'
+              type='text'
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="הכנס שם משתמש..."
-              style={styles.input(!!error && !username)}
-              autoComplete="username"
+              placeholder={t('Enter_username')}
+              className={`login-input ${!!error && !username ? 'error' : ''}`}
+              autoComplete='username'
               maxLength={50}
               disabled={loading}
             />
           </div>
 
-          <div style={styles.formGroup}>
-            <label style={styles.label} htmlFor="password">
-              🔐 סיסמה
+          <div className='login-form-group'>
+            <label className='login-label' htmlFor='password'>
+              {Emojis.Lock} {t('Password')}
             </label>
             <input
-              id="password"
-              type="password"
+              id='password'
+              type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder={isLogin ? 'הכנס סיסמה...' : 'בחר סיסמה (לפחות 6 תווים, אות + מספר)...'}
-              style={styles.input(!!error && !password)}
+              placeholder={isLogin ? t('Enter_password') : t('Choose_password')}
+              className={`login-input ${!!error && !password ? 'error' : ''}`}
               autoComplete={isLogin ? 'current-password' : 'new-password'}
               disabled={loading}
             />
           </div>
 
-          <button type="submit" style={styles.submitBtn} disabled={loading}>
-            {loading ? '⏳ אנא המתן...' : isLogin ? '🔓 התחבר' : '🚀 הרשם'}
+          <button
+            type='submit'
+            className={`login-submit-btn ${loading ? 'loading' : ''}`}
+            disabled={loading}
+          >
+            {loading
+              ? `${Emojis.Hourglass} ${t('Please_wait')}`
+              : isLogin
+                ? `${Emojis.Unlock} ${t('Login_Button')}`
+                : `${Emojis.Rocket} ${t('Register_Button')}`}
           </button>
 
           <button
-            type="button"
-            style={styles.guestBtn}
+            type='button'
+            className='login-guest-btn'
             onClick={() => navigate('/')}
           >
-            המשך ללא התחברות →
+            {t('Continue_without_login')} {Emojis.ArrowRight}
           </button>
         </form>
 
         {/* Tips */}
-        <div style={styles.tips}>
-          <div style={styles.tipsTitle}>💡 למה להירשם?</div>
-          <div style={styles.tipsText}>
-            ✅ שמור את ההתקדמות שלך<br />
-            ✅ עקוב אחר הכוכבים שאספת<br />
-            ✅ המשך ממקום שעצרת
+        <div className='login-tips'>
+          <div className='login-tips-title'>
+            {Emojis.Bulb} {t('Why_register')}
+          </div>
+          <div className='login-tips-text'>
+            {Emojis.Check} {t('Save_your_progress')}
+            <br />
+            {Emojis.Check} {t('Track_your_stars')}
+            <br />
+            {Emojis.Check} {t('Continue_where_you_left_off')}
           </div>
         </div>
       </div>

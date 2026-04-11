@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useAuth } from './AuthContext';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
+import { useAuth } from './AuthContext'; // Direct import to avoid circular dependency
 
 const ProgressContext = createContext(null);
 
@@ -40,7 +46,10 @@ export const ProgressProvider = ({ children }) => {
       if (response.ok) {
         const data = await response.json();
         setProgress(data.progress);
-        localStorage.setItem('braingames_progress_local', JSON.stringify(data.progress));
+        localStorage.setItem(
+          'braingames_progress_local',
+          JSON.stringify(data.progress),
+        );
       }
     } catch (err) {
       console.error('Failed to load progress:', err);
@@ -57,11 +66,22 @@ export const ProgressProvider = ({ children }) => {
   }, [user, token]); // eslint-disable-line
 
   const getTotalStars = useCallback(() => {
-    return Object.values(progress).reduce((total, p) => total + (p?.stars || 0), 0);
+    return Object.values(progress).reduce(
+      (total, p) => total + (p?.stars || 0),
+      0,
+    );
   }, [progress]);
 
   return (
-    <ProgressContext.Provider value={{ progress, loading, saveProgress, getTotalStars, loadProgressFromServer }}>
+    <ProgressContext.Provider
+      value={{
+        progress,
+        loading,
+        saveProgress,
+        getTotalStars,
+        loadProgressFromServer,
+      }}
+    >
       {children}
     </ProgressContext.Provider>
   );

@@ -4,7 +4,10 @@ import 'dotenv/config';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  ssl:
+    process.env.NODE_ENV === 'production'
+      ? { rejectUnauthorized: false }
+      : false,
 });
 
 pool.on('connect', () => {
@@ -65,13 +68,16 @@ const initDB = async (): Promise<void> => {
     console.log('Database tables initialized');
 
     // Create admin user if it doesn't exist
-    const existing = await pool.query('SELECT id FROM users WHERE username = $1', ['admin']);
+    const existing = await pool.query(
+      'SELECT id FROM users WHERE username = $1',
+      ['admin'],
+    );
     if (existing.rows.length === 0) {
       const adminPassword = process.env.ADMIN_PASSWORD || 'admin1234';
       const passwordHash = await bcrypt.hash(adminPassword, 10);
       await pool.query(
         'INSERT INTO users (username, password_hash, is_admin) VALUES ($1, $2, true)',
-        ['admin', passwordHash]
+        ['admin', passwordHash],
       );
       console.log(`Admin user created (password: ${adminPassword})`);
     }

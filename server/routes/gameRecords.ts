@@ -20,20 +20,20 @@ router.post('/', authenticateToken, async (req: Request, res: Response) => {
   const { userId } = req.user!;
 
   if (!game || stars === undefined) {
-    return res.status(400).json({ error: 'game ו-stars נדרשים' });
+    return res.status(400).json({ error: 'Missing_game_records_fields' });
   }
   if (!colMap[game]) {
-    return res.status(400).json({ error: 'game לא תקין' });
+    return res.status(400).json({ error: 'Invalid_game' });
   }
   if (typeof stars !== 'number' || stars < 0 || stars > 3) {
-    return res.status(400).json({ error: 'stars חייב להיות בין 0 ל-3' });
+    return res.status(400).json({ error: 'Invalid_stars' });
   }
 
   try {
     // Look up game_id
     const gameRow = await pool.query<GameIdRow>('SELECT id FROM games WHERE name = $1', [game]);
     if (gameRow.rows.length === 0) {
-      return res.status(404).json({ error: 'משחק לא נמצא' });
+      return res.status(404).json({ error: 'Game_not_found' });
     }
     const gameId = gameRow.rows[0].id;
 
@@ -62,14 +62,14 @@ router.post('/', authenticateToken, async (req: Request, res: Response) => {
     );
 
     res.status(201).json({
-      message: 'תוצאה נשמרה',
+      message: 'Record_saved',
       red_stars: rows[0].red_stars,
       blue_stars: rows[0].blue_stars,
       green_stars: rows[0].green_stars,
     });
   } catch (err) {
     console.error('Game record error:', err);
-    res.status(500).json({ error: 'שגיאה בשמירת התוצאה' });
+    res.status(500).json({ error: 'Error_saving_record' });
   }
 });
 

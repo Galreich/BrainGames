@@ -9,12 +9,12 @@ router.get('/hebrew', (req: Request, res: Response) => {
   const length = parseInt(req.query.length as string) || 5;
 
   if (![4, 5, 6].includes(length)) {
-    return res.status(400).json({ error: 'אורך מילה חייב להיות 4, 5, או 6' });
+    return res.status(400).json({ error: 'Word_length_invalid' });
   }
 
   const wordList = hebrewWords[length];
   if (!wordList || wordList.length === 0) {
-    return res.status(404).json({ error: 'לא נמצאו מילים באורך זה' });
+    return res.status(404).json({ error: 'No_words_found' });
   }
 
   const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
@@ -28,12 +28,12 @@ router.get('/english', (req: Request, res: Response) => {
   const length = parseInt(req.query.length as string) || 5;
 
   if (![4, 5, 6].includes(length)) {
-    return res.status(400).json({ error: 'Word length must be 4, 5, or 6' });
+    return res.status(400).json({ error: 'Word_length_invalid' });
   }
 
   const wordList = englishWords[length];
   if (!wordList || wordList.length === 0) {
-    return res.status(404).json({ error: 'No words found for this length' });
+    return res.status(404).json({ error: 'No_words_found' });
   }
 
   const randomWord = wordList[Math.floor(Math.random() * wordList.length)];
@@ -43,9 +43,9 @@ router.get('/english', (req: Request, res: Response) => {
 });
 
 // GET /api/words/hebrew/validate?word=שלום
-router.get('/hebrew/validate', (req: Request, res: Response) => {
-  const word = req.query.word as string;
-  if (!word) return res.status(400).json({ error: 'נדרשת מילה' });
+router.get('/hebrew/validate', (req, res) => {
+  const { word } = req.query;
+  if (!word) return res.status(400).json({ error: 'Word_required' });
 
   const length = word.length;
   const wordList = hebrewWords[length] || [];
@@ -55,13 +55,15 @@ router.get('/hebrew/validate', (req: Request, res: Response) => {
 });
 
 // GET /api/words/english/validate?word=happy
-router.get('/english/validate', (req: Request, res: Response) => {
-  const word = req.query.word as string;
-  if (!word) return res.status(400).json({ error: 'Word is required' });
+router.get('/english/validate', (req, res) => {
+  const { word } = req.query;
+  if (!word) return res.status(400).json({ error: 'Word_required' });
 
   const length = word.length;
   const wordList = englishWords[length] || [];
-  const isValid = wordList.map((w) => w.toLowerCase()).includes(word.toLowerCase());
+  const isValid = wordList
+    .map((w) => w.toLowerCase())
+    .includes(word.toLowerCase());
 
   res.json({ word, isValid, length });
 });

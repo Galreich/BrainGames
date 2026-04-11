@@ -26,7 +26,7 @@ router.get('/suggestions', authenticateToken, requireAdmin, async (_req: Request
     res.json({ suggestions: result.rows });
   } catch (err) {
     console.error('Admin get suggestions error:', err);
-    res.status(500).json({ error: 'שגיאה בטעינת ההצעות' });
+    res.status(500).json({ error: 'Admin_error_loading_suggestions' });
   }
 });
 

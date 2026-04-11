@@ -16,7 +16,7 @@ router.get('/:userId', authenticateToken, async (req: Request, res: Response) =>
   const { userId } = req.params;
 
   if (parseInt(userId) !== req.user!.userId) {
-    return res.status(403).json({ error: 'אין הרשאה לצפות בנתונים אלו' });
+    return res.status(403).json({ error: 'Unauthorized_progress_access' });
   }
 
   try {

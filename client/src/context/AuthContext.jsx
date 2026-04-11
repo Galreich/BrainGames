@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || 'שגיאה בהתחברות');
+      throw new Error(data.error || 'Login_error');
     }
 
     setToken(data.token);
@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }) => {
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error || 'שגיאה בהרשמה');
+      throw new Error(data.error || 'Register_error');
     }
 
     setToken(data.token);
@@ -81,7 +81,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loading, login, register, logout, updateUser }}>
+    <AuthContext.Provider
+      value={{ user, token, loading, login, register, logout, updateUser }}
+    >
       {children}
     </AuthContext.Provider>
   );
