@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import hebrewWords from '../data/hebrew-words.js';
-import englishWords from '../data/english-words.js';
+import hebrewWords from '../data/hebrew-words';
+import englishWords from '../data/english-words';
 
 const router = express.Router();
 

@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "BrainGames backend server",
   "main": "index.ts",
-  "type": "module",
   "scripts": {
     "build": "tsc",
-    "start": "node --experimental-specifier-resolution=node index.js",
-    "dev": "nodemon --experimental-specifier-resolution=node index.js"
+    "start": "ts-node index.ts",
+    "dev": "nodemon --exec ts-node index.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -28,8 +27,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20.19.39",
     "@types/pg": "^8.20.0",
-    "nodemon": "^3.0.2",
-    "tsx": "^4.7.0",
-    "typescript": "^5.3.3"
+    "nodemon": "^3.1.14",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }

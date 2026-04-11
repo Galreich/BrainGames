@@ -1,8 +1,8 @@
 import express, { Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import { pool } from '../db.js';
-import type { AuthUser } from '../types/express.js';
+import { pool } from '../db';
+import type { AuthUser } from '../types/express';
 
 const router = express.Router();
 
