@@ -1,8 +1,11 @@
-const fs = require('fs');
-const path = require('path');
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const dicPath = path.join(__dirname, '..', 'node_modules', 'dictionary-he', 'index.dic');
-const dicStr = fs.readFileSync(dicPath, 'utf-8');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const dicPath = join(__dirname, '..', 'node_modules', 'dictionary-he', 'index.dic');
+const dicStr = readFileSync(dicPath, 'utf-8');
 
 const hebrewWords = { 4: [], 5: [], 6: [] };
 
@@ -16,4 +19,4 @@ for (const line of dicStr.split('\n').slice(1)) {
 
 hebrewWords[5].push('להיות')
 
-module.exports = hebrewWords;
+export default hebrewWords;

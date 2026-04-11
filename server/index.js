@@ -1,14 +1,14 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const { initDB } = require('./db');
+import 'dotenv/config';
+import express from 'express';
+import cors from 'cors';
+import { initDB } from './db.js';
 
-const authRoutes = require('./routes/auth');
-const progressRoutes = require('./routes/progress');
-const wordsRoutes = require('./routes/words');
-const suggestionsRoutes = require('./routes/suggestions');
-const gameRecordsRoutes = require('./routes/gameRecords');
-const adminRoutes = require('./routes/admin');
+import authRoutes from './routes/auth.js';
+import progressRoutes from './routes/progress.js';
+import wordsRoutes from './routes/words.js';
+import suggestionsRoutes from './routes/suggestions.js';
+import gameRecordsRoutes from './routes/gameRecords.js';
+import adminRoutes from './routes/admin.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;

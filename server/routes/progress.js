@@ -1,6 +1,6 @@
-const express = require('express');
-const { pool } = require('../db');
-const { authenticateToken } = require('./auth');
+import express from 'express';
+import { pool } from '../db.js';
+import { authenticateToken } from './auth.js';
 
 const router = express.Router();
 
@@ -46,4 +46,4 @@ router.get('/:userId', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

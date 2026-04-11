@@ -1,6 +1,6 @@
-const { Pool } = require('pg');
-const bcrypt = require('bcryptjs');
-require('dotenv').config();
+import { Pool } from 'pg';
+import bcrypt from 'bcryptjs';
+import 'dotenv/config';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -35,7 +35,6 @@ const initDB = async () => {
       CREATE TABLE IF NOT EXISTS game_records (
         id SERIAL PRIMARY KEY,
         user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-        username VARCHAR(50) NOT NULL,
         game VARCHAR(50) NOT NULL,
         subject VARCHAR(20) NOT NULL,
         stars INTEGER NOT NULL DEFAULT 0,
@@ -75,4 +74,4 @@ const initDB = async () => {
   }
 };
 
-module.exports = { pool, initDB };
+export { pool, initDB };

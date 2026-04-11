@@ -1,7 +1,7 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { pool } = require('../db');
+import express from 'express';
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { pool } from '../db.js';
 
 const router = express.Router();
 
@@ -98,7 +98,7 @@ router.post('/login', async (req, res) => {
 });
 
 // Middleware to verify JWT
-const authenticateToken = (req, res, next) => {
+export const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
 
@@ -115,7 +115,7 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-const requireAdmin = (req, res, next) => {
+export const requireAdmin = (req, res, next) => {
   if (!req.user || req.user.isAdmin !== true) {
     return res.status(403).json({ error: 'גישה לאדמינים בלבד' });
   }
@@ -137,6 +137,4 @@ router.get('/me', authenticateToken, async (req, res) => {
   }
 });
 
-module.exports = router;
-module.exports.authenticateToken = authenticateToken;
-module.exports.requireAdmin = requireAdmin;
+export default router;
