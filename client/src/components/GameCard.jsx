@@ -1,8 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import { Emojis } from '../utils/Emojis';
 
 const GameCard = ({ title, subtitle, image, description, path, theme, stars, gamesPlayed, starColor }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   return (
     <div className="game-card" data-theme={theme} onClick={() => navigate(path)}>
@@ -21,10 +24,10 @@ const GameCard = ({ title, subtitle, image, description, path, theme, stars, gam
 
         {/* Stars and stats */}
         <div className="card-stats">
-          <span className="games-played">{gamesPlayed} משחקים</span>
+          <span className="games-played">{t('Games_Played', { count: gamesPlayed })}</span>
         </div>
 
-        <button className="card-play-btn">שחק עכשיו! 🎮</button>
+        <button className="card-play-btn">{t('Play_Now')} {Emojis.Gamepad}</button>
       </div>
     </div>
   );

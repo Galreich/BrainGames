@@ -3,12 +3,15 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context';
 import { SuggestionModal } from '.';
 import './HeaderStyle.css';
+import { useTranslation } from 'react-i18next';
+import { Emojis } from '../utils/Emojis';
 
 const Header = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [showSuggestion, setShowSuggestion] = useState(false);
+  const { t } = useTranslation();
 
   const handleLogout = () => {
     logout();
@@ -16,10 +19,10 @@ const Header = () => {
   };
 
   const navLinks = [
-    { path: '/', label: '🏠 בית' },
-    { path: '/hebrew-wordle', label: '🔤 וורדעל עברית' },
-    { path: '/english-wordle', label: '🔡 וורדעל אנגלית' },
-    { path: '/math', label: '🔢 הרפתקת המספרים' },
+    { path: '/', label: `${Emojis.House} ${t('Home')}` },
+    { path: '/hebrew-wordle', label: `${Emojis.LettersHE} ${t('Hebrew_Wordle')}` },
+    { path: '/english-wordle', label: `${Emojis.LettersEN} ${t('English_Wordle')}` },
+    { path: '/math', label: `${Emojis.Numbers} ${t('Math_Adventure')}` },
   ];
 
   return (
@@ -30,21 +33,21 @@ const Header = () => {
         {/* Logo + Stars */}
         <div className="header-left-section">
           <Link to="/" className="header-logo">
-            <span className="logo-emoji">🧠</span>
-            {!user && <span className="logo-text">BrainGames</span>}
+            <span className="logo-emoji">{Emojis.Brain}</span>
+            {!user && <span className="logo-text">{t('Braingames_Title')}</span>}
           </Link>
           {user && (
             <div className="stars-progress-bar">
               <div className="progress-item">
-                <span>⭐</span>
+                <span>{Emojis.Star}</span>
                 <span className="red-star">{user.red_stars || 0}</span>
               </div>
               <div className="progress-item">
-                <span>⭐</span>
+                <span>{Emojis.Star}</span>
                 <span className="blue-star">{user.blue_stars || 0}</span>
               </div>
               <div className="progress-item">
-                <span>⭐</span>
+                <span>{Emojis.Star}</span>
                 <span className="green-star">{user.green_stars || 0}</span>
               </div>
             </div>
@@ -70,22 +73,22 @@ const Header = () => {
         <div className="right-section">
           {user ? (
             <>
-              <span className="user-info">👤 {user.username}</span>
+              <span className="user-info">{Emojis.User} {user.username}</span>
               {user.isAdmin && (
                 <Link to="/admin" className={`nav-link ${location.pathname === '/admin' ? 'active' : ''}`}>
-                  ⚙️ ניהול
+                  {Emojis.Gear} {t('Admin')}
                 </Link>
               )}
               <button className="suggestion-btn" onClick={() => setShowSuggestion(true)}>
-                💡 הצע משחק
+                {Emojis.Bulb} {t('Suggest_a_Game')}
               </button>
               <button className="logout-btn" onClick={handleLogout}>
-                יציאה
+                {t('Logout')}
               </button>
             </>
           ) : (
             <button className="login-btn" onClick={() => navigate('/login')}>
-              התחברות
+              {t('Login')}
             </button>
           )}
         </div>

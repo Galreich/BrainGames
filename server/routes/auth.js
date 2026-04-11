@@ -10,25 +10,25 @@ router.post('/register', async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    return res.status(400).json({ error: 'שם משתמש וסיסמה נדרשים' });
+    return res.status(400).json({ error: 'Username_and_password_required' });
   }
 
   if (username.length < 2 || username.length > 50) {
-    return res.status(400).json({ error: 'שם משתמש חייב להיות בין 2 ל-50 תווים' });
+    return res.status(400).json({ error: 'Username_length_error' });
   }
 
   if (password.length < 6) {
-    return res.status(400).json({ error: 'סיסמה חייבת להיות לפחות 6 תווים' });
+    return res.status(400).json({ error: 'Password_min_length_error' });
   }
 
   if (!/[a-zA-Zא-ת]/.test(password) || !/[0-9]/.test(password)) {
-    return res.status(400).json({ error: 'סיסמה חייבת להכיל לפחות אות אחת ומספר אחד' });
+    return res.status(400).json({ error: 'Password_requirements_error' });
   }
 
   try {
     const existing = await pool.query('SELECT id FROM users WHERE username = $1', [username]);
     if (existing.rows.length > 0) {
-      return res.status(409).json({ error: 'שם המשתמש כבר קיים' });
+      return res.status(409).json({ error: 'Username_exists' });
     }
 
     const saltRounds = 10;
@@ -48,13 +48,13 @@ router.post('/register', async (req, res) => {
     );
 
     res.status(201).json({
-      message: 'נרשמת בהצלחה!',
+      message: 'Register_success',
       token,
       user: { id: user.id, username: user.username, isAdmin: false, red_stars: 0, blue_stars: 0, green_stars: 0 },
     });
   } catch (err) {
     console.error('Register error:', err);
-    res.status(500).json({ error: 'שגיאה בהרשמה, נסה שוב' });
+    res.status(500).json({ error: 'Register_error' });
   }
 });
 
@@ -63,21 +63,21 @@ router.post('/login', async (req, res) => {
   const { username, password } = req.body;
 
   if (!username || !password) {
-    return res.status(400).json({ error: 'שם משתמש וסיסמה נדרשים' });
+    return res.status(400).json({ error: 'Username_and_password_required' });
   }
 
   try {
     const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
 
     if (result.rows.length === 0) {
-      return res.status(401).json({ error: 'שם משתמש או סיסמה שגויים' });
+      return res.status(401).json({ error: 'Invalid_credentials' });
     }
 
     const user = result.rows[0];
     const isMatch = await bcrypt.compare(password, user.password_hash);
 
     if (!isMatch) {
-      return res.status(401).json({ error: 'שם משתמש או סיסמה שגויים' });
+      return res.status(401).json({ error: 'Invalid_credentials' });
     }
 
     const token = jwt.sign(
@@ -87,13 +87,13 @@ router.post('/login', async (req, res) => {
     );
 
     res.json({
-      message: 'התחברת בהצלחה!',
+      message: 'Login_success',
       token,
       user: { id: user.id, username: user.username, isAdmin: user.is_admin === true, red_stars: user.red_stars || 0, blue_stars: user.blue_stars || 0, green_stars: user.green_stars || 0 },
     });
   } catch (err) {
     console.error('Login error:', err);
-    res.status(500).json({ error: 'שגיאה בהתחברות, נסה שוב' });
+    res.status(500).json({ error: 'Login_error' });
   }
 });
 
@@ -103,12 +103,12 @@ const authenticateToken = (req, res, next) => {
   const token = authHeader && authHeader.split(' ')[1];
 
   if (!token) {
-    return res.status(401).json({ error: 'נדרשת התחברות' });
+    return res.status(401).json({ error: 'Login_required' });
   }
 
   jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret', (err, user) => {
     if (err) {
-      return res.status(403).json({ error: 'טוקן לא תקין' });
+      return res.status(403).json({ error: 'Invalid_token' });
     }
     req.user = user;
     next();
@@ -117,7 +117,7 @@ const authenticateToken = (req, res, next) => {
 
 const requireAdmin = (req, res, next) => {
   if (!req.user || req.user.isAdmin !== true) {
-    return res.status(403).json({ error: 'גישה לאדמינים בלבד' });
+    return res.status(403).json({ error: 'Admin_only' });
   }
   next();
 };
@@ -129,11 +129,11 @@ router.get('/me', authenticateToken, async (req, res) => {
       'SELECT id, username, is_admin, red_stars, blue_stars, green_stars FROM users WHERE id = $1',
       [req.user.userId]
     );
-    if (!rows.length) return res.status(404).json({ error: 'משתמש לא נמצא' });
+    if (!rows.length) return res.status(404).json({ error: 'User_not_found' });
     const u = rows[0];
     res.json({ id: u.id, username: u.username, isAdmin: u.is_admin === true, red_stars: u.red_stars || 0, blue_stars: u.blue_stars || 0, green_stars: u.green_stars || 0 });
   } catch {
-    res.status(500).json({ error: 'שגיאה' });
+    res.status(500).json({ error: 'General_error' });
   }
 });
 

@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../context';
 import { Confetti, GameCard } from '../components';
 import './HomeStyle.css';
+import { useTranslation } from 'react-i18next';
+import { Emojis } from '../utils/Emojis';
 
 const Home = () => {
   const { user, token } = useAuth();
+  const { t } = useTranslation();
   const [showWelcome, setShowWelcome] = useState(true);
   const [summary, setSummary] = useState({ math: { stars: 0, games_played: 0 }, hebrew: { stars: 0, games_played: 0 }, english: { stars: 0, games_played: 0 } });
 
@@ -30,30 +33,30 @@ const Home = () => {
         {/* Welcome Banner */}
         {user && showWelcome && (
           <div className="welcome-banner">
-            ברוך הבא, {user.username}! 🎉 בוא נשחק!
+            {t('Welcome_User', { username: user.username })} {Emojis.Party}
           </div>
         )}
 
         {/* Hero Section */}
         <div className="hero-section">
           <h1 className="hero-title">
-             ברוך הבא ל-BrainGames!
+             {t('Welcome_to_BrainGames')}
           </h1>
           <p className="hero-subtitle">
-            למד, שחק ותאסוף כוכבים! 🌟
+            {t('Learn_play_and_collect_stars')} {Emojis.Star}
           </p>
 
           {user && (
             <div className="total-stars-container">
               <div className="total-stars-badge">
-                ⭐ סה"כ כוכבים: <strong>{totalStars}</strong>
+                {Emojis.Star} {t('Total_Stars')} <strong>{totalStars}</strong>
               </div>
             </div>
           )}
 
           {!user && (
             <p className="login-prompt">
-              💡 התחבר כדי לשמור את ההתקדמות שלך!
+              {Emojis.Bulb} {t('Login_to_save_progress')}
             </p>
           )}
         </div>
@@ -61,10 +64,10 @@ const Home = () => {
         {/* Game Cards */}
         <div className="game-grid">
           <GameCard
-            title="הרפתקת המספרים"
-            subtitle="חשבון"
+            title={`${Emojis.Rocket} ${t('Math_Title')}`}
+            subtitle={t('Math')}
             image="/math-game.svg"
-            description="עזור לאסטרונאוט לעוף בחלל! פתור תרגילים ועבור דרך 10 תחנות."
+            description={t('Math_Game_Description')}
             path="/math"
             theme="math"
             stars={summary.math?.stars || 0}
@@ -72,10 +75,10 @@ const Home = () => {
             starColor="#ff6b6b"
           />
           <GameCard
-            title="וורדעל עברית"
-            subtitle="לשון"
+            title={t('Hebrew_Wordle_Title').trim()}
+            subtitle={t('Language')}
             image="/hebrew-wordle.svg"
-            description="נחש את המילה הסודית בעברית! יש לך 6 ניסיונות. מילים בנות 4-6 אותיות."
+            description={t('Hebrew_Wordle_Description')}
             path="/hebrew-wordle"
             theme="hebrew"
             stars={summary.hebrew?.stars || 0}
@@ -83,10 +86,10 @@ const Home = () => {
             starColor="#74b9ff"
           />
           <GameCard
-            title="English Wordle"
-            subtitle="אנגלית"
+            title={t('English_Wordle_Title')}
+            subtitle={t('English')}
             image="/english-wordle.svg"
-            description="נחש את המילה הסודית באנגלית! יש לך 6 ניסיונות. מילים בנות 4-6 אותיות."
+            description={t('English_Wordle_Description')}
             path="/english-wordle"
             theme="english"
             stars={summary.english?.stars || 0}
@@ -96,7 +99,7 @@ const Home = () => {
         </div>
 
         <div className="home-footer">
-          <p>🎓 BrainGames - משחקי מוח לתלמידי בית ספר יסודי</p>
+          <p>{Emojis.Graduation} {t('Footer_Text')}</p>
         </div>
       </div>
     </div>

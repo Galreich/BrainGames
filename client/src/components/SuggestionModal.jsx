@@ -1,19 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context';
 import './SuggestionModalStyle.css';
-
-const SUBJECTS = [
-  { value: '', label: 'כללי (לא קשור לנושא ספציפי)' },
-  { value: 'math', label: '🔴 חשבון' },
-  { value: 'hebrew', label: '🔵 עברית' },
-  { value: 'english', label: '🟡 אנגלית' },
-];
+import { useTranslation } from 'react-i18next';
+import { Emojis } from '../utils/Emojis';
 
 const SuggestionModal = ({ onClose }) => {
   const { token } = useAuth();
+  const { t } = useTranslation();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [subject, setSubject] = useState('');
+
+  const SUBJECTS = [
+    { value: '', label: t('General_Subject') },
+    { value: 'math', label: `${Emojis.RedCircle} ${t('Math_Color')}` },
+    { value: 'hebrew', label: `${Emojis.BlueCircle} ${t('Hebrew_Color')}` },
+    { value: 'english', label: `${Emojis.YellowCircle} ${t('English_Color')}` },
+  ];
+
   const [imageData, setImageData] = useState(null);
   const [imageError, setImageError] = useState('');
   const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
@@ -30,8 +34,8 @@ const SuggestionModal = ({ onClose }) => {
     const file = e.target.files[0];
     setImageError('');
     if (!file) { setImageData(null); return; }
-    if (!file.type.startsWith('image/')) { setImageError('הקובץ חייב להיות תמונה'); return; }
-    if (file.size > 2 * 1024 * 1024) { setImageError('התמונה גדולה מדי (מקסימום 2MB)'); return; }
+    if (!file.type.startsWith('image/')) { setImageError(t('Error_must_be_image')); return; }
+    if (file.size > 2 * 1024 * 1024) { setImageError(t('Error_image_too_large')); return; }
     const reader = new FileReader();
     reader.onload = (ev) => setImageData(ev.target.result);
     reader.readAsDataURL(file);
@@ -40,7 +44,7 @@ const SuggestionModal = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) {
-      setErrorMsg('אנא מלא כותרת ותיאור');
+      setErrorMsg(t('Error_fill_title_and_description'));
       return;
     }
     setStatus('loading');
@@ -59,13 +63,13 @@ const SuggestionModal = ({ onClose }) => {
       const data = await res.json();
 
       if (!res.ok) {
-        setErrorMsg(data.error || 'שגיאה בשליחה');
+        setErrorMsg(data.error || t('Error_sending'));
         setStatus('error');
       } else {
         setStatus('success');
       }
     } catch {
-      setErrorMsg('שגיאת רשת, נסה שוב');
+      setErrorMsg(t('Network_error'));
       setStatus('error');
     }
   };
@@ -74,30 +78,30 @@ const SuggestionModal = ({ onClose }) => {
     <div className="suggestion-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
       <div className="suggestion-modal">
         {/* Close button */}
-        <button onClick={onClose} className="suggestion-close-btn">✕</button>
+        <button onClick={onClose} className="suggestion-close-btn">{Emojis.Cross}</button>
 
         {status === 'success' ? (
           <div className="suggestion-success-container">
-            <div className="suggestion-success-icon">🎉</div>
+            <div className="suggestion-success-icon">{Emojis.Party}</div>
             <h2 className="suggestion-success-title">
-              תודה רבה!
+              {t('Thank_you')}
             </h2>
             <p className="suggestion-success-text">
-              ההצעה שלך נשלחה בהצלחה.<br />אנחנו ניקח אותה בחשבון!
+              {t('Suggestion_sent')}<br />{t('Suggestion_sent_2')}
             </p>
             <button onClick={onClose} className="suggestion-success-btn">
-              סגור
+              {t('Close')}
             </button>
           </div>
         ) : (
           <>
             <div className="suggestion-header">
-              <div className="suggestion-icon">💡</div>
+              <div className="suggestion-icon">{Emojis.Bulb}</div>
               <h2 className="suggestion-title">
-                הצע משחק חדש
+                {t('Suggest_new_game')}
               </h2>
               <p className="suggestion-subtitle">
-                יש לך רעיון? נשמח לשמוע!
+                {t('Got_an_idea')}
               </p>
             </div>
 
@@ -105,7 +109,7 @@ const SuggestionModal = ({ onClose }) => {
               {/* Subject */}
               <div>
                 <label className="suggestion-label">
-                  נושא
+                  {t('Table_Subject')}
                 </label>
                 <select
                   value={subject}
@@ -123,14 +127,14 @@ const SuggestionModal = ({ onClose }) => {
               {/* Title */}
               <div>
                 <label className="suggestion-label">
-                  כותרת המשחק <span style={{ color: '#ff7675' }}>*</span>
+                  {t('Game_Title')} <span style={{ color: '#ff7675' }}>*</span>
                 </label>
                 <input
                   type="text"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   maxLength={100}
-                  placeholder="הכנס פה הצעה למשחק"
+                  placeholder={t('Game_Title_Placeholder')}
                   className="suggestion-input"
                 />
                 <div className="suggestion-char-count">
@@ -141,14 +145,14 @@ const SuggestionModal = ({ onClose }) => {
               {/* Description */}
               <div>
                 <label className="suggestion-label">
-                  תיאור <span style={{ color: '#ff7675' }}>*</span>
+                  {t('Description')} <span style={{ color: '#ff7675' }}>*</span>
                 </label>
                 <textarea
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
                   maxLength={1000}
                   rows={4}
-                  placeholder="תאר את המשחק שאתה מציע - איך הוא עובד, מה לומדים, למה הוא כיפי..."
+                  placeholder={t('Description_Placeholder')}
                   className="suggestion-textarea"
                 />
                 <div className="suggestion-char-count">
@@ -159,21 +163,21 @@ const SuggestionModal = ({ onClose }) => {
               {/* Image upload */}
               <div>
                 <label className="suggestion-label">
-                  תמונה (אופציונלי)
+                  {t('Image_Optional')}
                 </label>
                 <label className="suggestion-file-label">
-                  <span className="suggestion-file-icon">🖼️</span>
-                  <span>{imageData ? 'תמונה נבחרה ✓' : 'לחץ לבחירת תמונה (עד 2MB)'}</span>
+                  <span className="suggestion-file-icon">{Emojis.Frame}</span>
+                  <span>{imageData ? `${t('Image_Selected')} ${Emojis.CheckMark}` : t('Click_to_select_image')}</span>
                   <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
                 </label>
                 {imageData && (
                   <div className="suggestion-image-preview-container">
-                    <img src={imageData} alt="תצוגה מקדימה" className="suggestion-image-preview" />
+                    <img src={imageData} alt={t('Image_Preview')} className="suggestion-image-preview" />
                     <button
                       type="button"
                       onClick={() => setImageData(null)}
                       className="suggestion-image-remove-btn"
-                    >✕</button>
+                    >{Emojis.Cross}</button>
                   </div>
                 )}
                 {imageError && (
@@ -192,7 +196,7 @@ const SuggestionModal = ({ onClose }) => {
                 disabled={status === 'loading'}
                 className={`suggestion-submit-btn ${status === 'loading' ? 'loading' : ''}`}
               >
-                {status === 'loading' ? '⏳ שולח...' : '📨 שלח הצעה'}
+                {status === 'loading' ? `${Emojis.Hourglass} ${t('Sending')}` : `${Emojis.Email} ${t('Send_Suggestion')}`}
               </button>
             </form>
           </>

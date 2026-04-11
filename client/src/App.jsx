@@ -12,6 +12,8 @@ import {
 } from './pages';
 
 import './App.css';
+import i18n from './i18n';
+import { Emojis } from './utils/Emojis';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -25,7 +27,7 @@ class ErrorBoundary extends React.Component {
     if (this.state.error) {
       return (
         <div className="error-boundary-fallback">
-          <h1>❌ שגיאה בטעינה</h1>
+          <h1>{Emojis.CloseCross} {i18n.t('Error_Loading')}</h1>
           <pre>
             {this.state.error.toString()}
             {'\n\n'}

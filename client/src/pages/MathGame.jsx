@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { useProgress, useAuth } from '../context';
 import { StarBurst, BackgroundStar } from '../components';
 import './MathGameStyle.css';
+import { useTranslation } from 'react-i18next';
+import { Emojis } from '../utils/Emojis';
 
 const TOTAL_STATIONS = 10;
 
@@ -67,6 +69,7 @@ const MathGame = () => {
   const navigate = useNavigate();
   const { saveProgress } = useProgress();
   const { token, updateUser } = useAuth();
+  const { t } = useTranslation();
   const [gameState, setGameState] = useState('menu'); // 'menu', 'playing', 'gameover'
   const [station, setStation] = useState(1);
   const [question, setQuestion] = useState(null);
@@ -132,7 +135,7 @@ const MathGame = () => {
         addStarBurst();
       }
       settotalAnswers((prev) => prev + starsForQuestion);
-      showMessage('נכון! 🎉');
+      showMessage(`${t('Correct_Cheer')} ${Emojis.Party}`);
 
       setAnimatingRocket(true);
       setTimeout(() => setAnimatingRocket(false), 800);
@@ -154,7 +157,7 @@ const MathGame = () => {
       }, 1200);
     } else {
       setAnswerStatus('wrong');
-      showMessage('טעות! ממשיכים הלאה 💪');
+      showMessage(`${t('Wrong_Continue')} ${Emojis.Flex}`);
       setTimeout(() => {
         const nextStation = station + 1;
         if (nextStation > TOTAL_STATIONS) {
@@ -189,24 +192,24 @@ const MathGame = () => {
       {message && <div className="math-game-message">{message}</div>}
 
       <div className="math-game-container">
-        <h1 className="game-title">🚀 הרפתקת המספרים</h1>
+        <h1 className="game-title">{Emojis.Rocket} {t('Math_Title')}</h1>
 
         {/* MENU */}
         {gameState === 'menu' && (
           <div className="menu-card">
-            <div className="menu-icon">🚀</div>
+            <div className="menu-icon">{Emojis.Rocket}</div>
             <h2 className="menu-title">
-              הרפתקת המספרים בחלל!
+              {t('Math_Subtitle')}
             </h2>
             <p className="menu-description">
-              🌟 עזור לאסטרונאוט לעבור דרך 10 תחנות בחלל!<br />
-              🔢 פתור תרגילים כדי להתקדם<br />
+              {Emojis.Star} {t('Math_Instructions_1')}<br />
+              {Emojis.Numbers} {t('Math_Instructions_2')}<br />
             </p>
             <div className="difficulty-levels">
               {[
-                { emoji: '⭐', text: 'תחנות 1-3: חיבור וחיסור עד 20' },
-                { emoji: '⭐⭐', text: 'תחנות 4-7: חיבור וחיסור עד 100' },
-                { emoji: '⭐⭐⭐', text: 'תחנות 8-10: כפל ×2, ×3, ×5, ×10' },
+                { emoji: Emojis.Star, text: t('Math_Level_1') },
+                { emoji: Emojis.Star.repeat(2), text: t('Math_Level_2') },
+                { emoji: Emojis.Star.repeat(3), text: t('Math_Level_3') },
               ].map((item) => (
                 <div key={item.emoji} className="level-item">
                   <div className="level-emoji">{item.emoji}</div>
@@ -215,11 +218,11 @@ const MathGame = () => {
               ))}
             </div>
             <button className="start-btn" onClick={startGame}>
-              🚀 צא לדרך!
+              {Emojis.Rocket} {t('Lets_Go')}
             </button>
             <div>
               <button className="play-again-btn secondary" onClick={() => navigate('/')}>
-                🏠 חזור לדף הבית
+                {Emojis.House} {t('Back_to_Home')}
               </button>
             </div>
           </div>
@@ -231,13 +234,13 @@ const MathGame = () => {
             {/* Info Row */}
             <div className="info-row">
               <div className="info-badge station">
-                🚀 תחנה {station}/{TOTAL_STATIONS}
+                {Emojis.Rocket} {t('Station_Count', { station, total: TOTAL_STATIONS })}
               </div>
               <div className="info-badge score">
-                ⭐ {totalAnswers} תשובות נכונות
+                {Emojis.Star} {t('Correct_Answers_Count', { count: totalAnswers })}
               </div>
               <div className="info-badge time">
-                ⏱️ {formatTime(elapsed)}
+                {Emojis.Stopwatch} {t('Time_Elapsed', { time: formatTime(elapsed) })}
               </div>
             </div>
 
@@ -254,7 +257,7 @@ const MathGame = () => {
                       ${i + 1 === TOTAL_STATIONS ? 'finish' : ''}
                     `}
                   >
-                    {i + 1 === TOTAL_STATIONS && '🏁'}
+                    {i + 1 === TOTAL_STATIONS && Emojis.FinishFlag}
                   </div>
                 ))}
               </div>
@@ -264,7 +267,7 @@ const MathGame = () => {
             {/* Progress Bar */}
             <div className="progress-section">
               <div className="progress-labels">
-                <span>התקדמות</span>
+                <span>{t('Progress')}</span>
                 <span>{Math.round(progress)}%</span>
               </div>
               <div className="progress-bar">
@@ -274,12 +277,12 @@ const MathGame = () => {
 
             {/* Question */}
             <div className="question-card">
-              <div className="station-label">תחנה {station} מתוך {TOTAL_STATIONS}</div>
+              <div className="station-label">{t('Station_Out_Of', { station, total: TOTAL_STATIONS })}</div>
               <div className="question-text">{question.text}</div>
               <p className="question-subtext">
-                {station <= 3 ? 'חיבור וחיסור עד 20' :
-                 station <= 7 ? 'חיבור וחיסור עד 100' :
-                 'כפל - כמה זה?'}
+                {station <= 3 ? t('Addition_and_Subtraction_up_to_20') :
+                 station <= 7 ? t('Addition_and_Subtraction_up_to_100') :
+                 t('Multiplication')}
               </p>
             </div>
 
@@ -307,30 +310,30 @@ const MathGame = () => {
         {gameState === 'gameover' && (
           <div className="game-over-card">
             <div className="game-over-icon">
-              {totalAnswers >= Math.ceil(TOTAL_STATIONS / 2) ? '🏆' : '🚀'}
+              {totalAnswers >= Math.ceil(TOTAL_STATIONS / 2) ? Emojis.Trophy : Emojis.Rocket}
             </div>
             <div className="game-over-title">
-              {totalAnswers >= Math.ceil(TOTAL_STATIONS / 2) ? 'מדהים! 🚀' : 'לא הצלחת לעזור לאסטרונאוט... 😢'}
+              {totalAnswers >= Math.ceil(TOTAL_STATIONS / 2) ? `${t('Amazing_Rocket')} ${Emojis.Rocket}` : `${t('Failed_Astronaut')} ${Emojis.Sad}`}
             </div>
             <div className="game-over-stats">
               <div className="stat-item">
                 <div className="stat-value">{formatTime(elapsed)}</div>
-                <div className="stat-label">זמן</div>
+                <div className="stat-label">{t('Time')}</div>
               </div>
               <div className="stat-item">
                 <div className="stat-value">{totalAnswers}</div>
-                <div className="stat-label">תשובות נכונות</div>
+                <div className="stat-label">{t('Correct_Answers')}</div>
               </div>
             </div>
             
             <div>
               <button className="play-again-btn" onClick={startGame}>
-                🚀 שחק שוב!
+                {Emojis.Rocket} {t('Play_Again')}
               </button>
             </div>
             <div>
               <button className="play-again-btn secondary" onClick={() => navigate('/')}>
-                🏠 חזור לדף הבית
+                {Emojis.House} {t('Back_to_Home')}
               </button>
             </div>
           </div>

@@ -10,16 +10,16 @@ router.post('/', authenticateToken, async (req, res) => {
   const { userId, username } = req.user;
 
   if (!title || !title.trim()) {
-    return res.status(400).json({ error: 'כותרת ההצעה נדרשת' });
+    return res.status(400).json({ error: 'Suggestion_title_required' });
   }
   if (!description || !description.trim()) {
-    return res.status(400).json({ error: 'תיאור ההצעה נדרש' });
+    return res.status(400).json({ error: 'Suggestion_description_required' });
   }
   if (title.trim().length > 100) {
-    return res.status(400).json({ error: 'הכותרת ארוכה מדי (מקסימום 100 תווים)' });
+    return res.status(400).json({ error: 'Suggestion_title_too_long' });
   }
   if (description.trim().length > 1000) {
-    return res.status(400).json({ error: 'התיאור ארוך מדי (מקסימום 1000 תווים)' });
+    return res.status(400).json({ error: 'Suggestion_description_too_long' });
   }
 
   try {
@@ -31,12 +31,12 @@ router.post('/', authenticateToken, async (req, res) => {
     );
 
     res.status(201).json({
-      message: 'ההצעה נשלחה בהצלחה! תודה רבה 🙏',
+      message: 'Suggestion_success_message',
       suggestion: result.rows[0],
     });
   } catch (err) {
     console.error('Suggestion error:', err);
-    res.status(500).json({ error: 'שגיאה בשליחת ההצעה, נסה שוב' });
+    res.status(500).json({ error: 'Suggestion_error' });
   }
 });
 
@@ -50,7 +50,7 @@ router.get('/', authenticateToken, async (req, res) => {
     res.json({ suggestions: result.rows });
   } catch (err) {
     console.error('Get suggestions error:', err);
-    res.status(500).json({ error: 'שגיאה בטעינת ההצעות' });
+    res.status(500).json({ error: 'Error_loading_suggestions_server' });
   }
 });
 

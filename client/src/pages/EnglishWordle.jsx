@@ -3,22 +3,10 @@ import { useProgress, useAuth } from '../context';
 import { Tile } from '../components';
 import { useNavigate } from 'react-router-dom';
 import './EnglishWordleStyle.css';
-
-// QWERTY keyboard layout
-const KEYBOARD_ROWS = [
-  ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-  ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-  ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫'],
-];
+import { useTranslation } from 'react-i18next';
+import { Emojis } from '../utils/Emojis';
 
 const WORD_LENGTHS = [4, 5, 6];
-
-// Fallback word lists
-const FALLBACK_WORDS = {
-  4: ['cats', 'dogs', 'runs', 'hats', 'suns', 'cars', 'tree', 'book', 'fish', 'bird'],
-  5: ['happy', 'sunny', 'dance', 'music', 'water', 'earth', 'apple', 'candy', 'funny', 'horse'],
-  6: ['school', 'friend', 'garden', 'orange', 'purple', 'rabbit', 'simple', 'summer', 'winter', 'yellow'],
-};
 
 const MAX_ATTEMPTS = 6;
 
@@ -26,6 +14,14 @@ const EnglishWordle = () => {
   const navigate = useNavigate();
   const { saveProgress } = useProgress();
   const { token, updateUser } = useAuth();
+  const { t } = useTranslation();
+
+  const KEYBOARD_ROWS = [
+    t('Keyboard_Row_1_EN', { returnObjects: true }),
+    t('Keyboard_Row_2_EN', { returnObjects: true }),
+    t('Keyboard_Row_3_EN', { returnObjects: true }),
+  ];
+
   const [wordLength, setWordLength] = useState(5);
   const [targetWord, setTargetWord] = useState('');
   const [guesses, setGuesses] = useState(Array(MAX_ATTEMPTS).fill(''));
@@ -53,11 +49,11 @@ const EnglishWordle = () => {
         const data = await response.json();
         setTargetWord(data.word.toUpperCase());
       } else {
-        const words = FALLBACK_WORDS[len];
+        const words = t(`Fallback_Words_EN_${len}`, { returnObjects: true });
         setTargetWord(words[Math.floor(Math.random() * words.length)].toUpperCase());
       }
     } catch (err) {
-      const words = FALLBACK_WORDS[len];
+      const words = t(`Fallback_Words_EN_${len}`, { returnObjects: true });
       setTargetWord(words[Math.floor(Math.random() * words.length)].toUpperCase());
     } finally {
       setLoading(false);
@@ -110,7 +106,7 @@ const EnglishWordle = () => {
 
   const submitGuess = useCallback(async () => {
     if (currentGuess.length !== wordLength) {
-      showMessage(`Word must be ${wordLength} letters!`);
+      showMessage(t('Word_length_must_be_EN', { length: wordLength }));
       setShakingRow(currentRow);
       setTimeout(() => setShakingRow(-1), 600);
       return;
@@ -124,7 +120,7 @@ const EnglishWordle = () => {
       if (res.ok) {
         const data = await res.json();
         if (!data.isValid) {
-          showMessage('Not in word list 📖');
+          showMessage(`${t('Word_not_in_list_EN')} ${Emojis.Book}`);
           setShakingRow(currentRow);
           setTimeout(() => setShakingRow(-1), 600);
           return;
@@ -172,14 +168,14 @@ const EnglishWordle = () => {
       setStarsEarned(stars);
       setTimeout(() => {
         setGameStatus('won');
-        showMessage('Amazing! You won! 🎉', 5000);
+        showMessage(`${t('Amazing_You_won')} ${Emojis.Party}`, 5000);
         saveProgress('english', stars);
         if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'english-wordle', subject: 'english', stars, score: currentRow + 1 }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
       }, wordLength * 300 + 400);
     } else if (nextRow >= MAX_ATTEMPTS) {
       setTimeout(() => {
         setGameStatus('lost');
-        showMessage(`The word was: ${targetWord}`, 6000);
+        showMessage(t('The_word_was_Prefix_EN') + " " + targetWord, 6000);
         saveProgress('english', 0);
         if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'english-wordle', subject: 'english', stars: 0, score: MAX_ATTEMPTS }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
       }, wordLength * 300 + 400);
@@ -192,7 +188,7 @@ const EnglishWordle = () => {
   const handleKeyPress = useCallback((key) => {
     if (gameStatus !== 'playing') return;
 
-    if (key === '⌫' || key === 'Backspace') {
+    if (key === Emojis.Backspace || key === 'Backspace') {
       setCurrentGuess((prev) => prev.slice(0, -1));
     } else if (key === 'ENTER' || key === 'Enter') {
       submitGuess();
@@ -223,8 +219,8 @@ const EnglishWordle = () => {
     return (
       <div className="wordle-page english">
         <div className="wordle-loading">
-          <div className="spinner">⏳</div>
-          <div>Loading word...</div>
+          <div className="spinner">{Emojis.Hourglass}</div>
+          <div>{t('Loading_word_EN')}</div>
         </div>
       </div>
     );
@@ -237,8 +233,8 @@ const EnglishWordle = () => {
       <div className="wordle-container">
         {/* Header */}
         <div className="wordle-header">
-          <h1 className="wordle-title">Wordle English</h1>
-          <p className="wordle-subtitle">Guess the secret word!</p>
+          <h1 className="wordle-title">{t('English_Wordle_Title')}</h1>
+          <p className="wordle-subtitle">{t('Guess_the_secret_word_EN')}</p>
         </div>
 
         {/* Word Length Selector */}
@@ -249,7 +245,7 @@ const EnglishWordle = () => {
               className={`length-btn ${wordLength === len ? 'active' : ''}`}
               onClick={() => handleWordLengthChange(len)}
             >
-              {len} letters
+              {t('Letters_Count_EN', { count: len })}
             </button>
           ))}
         </div>
@@ -289,25 +285,25 @@ const EnglishWordle = () => {
           <div className="game-over-panel">
             {gameStatus === 'won' ? (
               <>
-                <div className="game-over-title">🎉 Amazing!</div>
+                <div className="game-over-title">{Emojis.Party} {t('Amazing_Title')}</div>
                 <p className="game-over-text">
-                  You guessed it in {currentRow + 1} {currentRow + 1 === 1 ? 'try' : 'tries'}!
+                  {t('Guessed_in_tries_EN', { count: currentRow + 1 })}
                 </p>
                 <p className="game-over-subtext">
-                  The word was: <strong className="correct-word">{targetWord}</strong>
+                  {t('The_word_was_Prefix_EN')} <strong className="correct-word">{targetWord}</strong>
                 </p>
               </>
             ) : (
               <>
-                <div className="game-over-title">😞 Try Again!</div>
+                <div className="game-over-title">{Emojis.Sad} {t('Try_Again_Title_EN')}</div>
                 <p className="game-over-text">
-                  The word was: <strong className="failed-word">{targetWord}</strong>
+                  {t('The_word_was_Prefix_EN')} <strong className="failed-word">{targetWord}</strong>
                 </p>
               </>
             )}
             <div className="game-over-buttons">
-              <button className="new-game-btn" onClick={() => startNewGame()}>New Game 🔄</button>
-              <button className="new-game-btn secondary" onClick={() => navigate('/')}>🏠 Go Home</button>
+              <button className="new-game-btn" onClick={() => startNewGame()}>{t('New_Game_EN')} {Emojis.Refresh}</button>
+              <button className="new-game-btn secondary" onClick={() => navigate('/')}>{Emojis.House} {t('Back_to_Home_EN')}</button>
             </div>
           </div>
         )}
@@ -317,7 +313,7 @@ const EnglishWordle = () => {
           {KEYBOARD_ROWS.map((row, rowIdx) => (
             <div key={rowIdx} className="keyboard-row">
               {row.map((key) => {
-                const isSpecial = key === '⌫' || key === 'ENTER';
+                const isSpecial = key === Emojis.Backspace || key === 'ENTER';
                 const status = keyboardStatus[key];
                 return (
                   <button
@@ -337,12 +333,12 @@ const EnglishWordle = () => {
         {/* Instructions */}
         {gameStatus === 'playing' && (
           <div className="instructions-panel">
-            <h3 className="instructions-title">How to play:</h3>
+            <h3 className="instructions-title">{t('How_to_play_EN')}</h3>
             <div className="instructions-list">
               {[
-                { type: 'correct', text: 'Letter is in the correct spot' },
-                { type: 'present', text: 'Letter is in the word but wrong spot' },
-                { type: 'absent', text: 'Letter is not in the word' },
+                { type: 'correct', text: t('Letter_in_correct_spot_EN') },
+                { type: 'present', text: t('Letter_in_wrong_spot_EN') },
+                { type: 'absent', text: t('Letter_not_in_word_EN') },
               ].map((item) => (
                 <div key={item.type} className="instruction-item">
                   <div className={`instruction-tile ${item.type}`} />

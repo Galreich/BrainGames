@@ -3,23 +3,10 @@ import { useProgress, useAuth } from '../context';
 import { Tile } from '../components';
 import { useNavigate } from 'react-router-dom';
 import './HebrewWordleStyle.css';
-
-// Hebrew keyboard layout
-const KEYBOARD_ROWS = [
-  ['פ', 'ו', 'ט', 'א', 'ר', 'ק'],
-  ['ל', 'ח', 'י', 'כ', 'ע', 'נ', 'מ', 'צ'],
-  ['ת', 'ש', 'ד', 'ג', 'ז', 'ס', 'ב', 'ה'],
-  ['ן', 'ף', 'ך', 'ם', 'ץ', '⌫', 'אישור'],
-];
+import { useTranslation } from 'react-i18next';
+import { Emojis } from '../utils/Emojis';
 
 const WORD_LENGTHS = [4, 5, 6];
-
-// Fallback word lists for offline/demo mode
-const FALLBACK_WORDS = {
-  4: ['שלום', 'ילדה', 'כיתה', 'מורה', 'חברה', 'אהבה', 'כדור', 'שמחה', 'לילה', 'תפוח'],
-  5: ['ילדים', 'חברים', 'ציפור', 'לימוד', 'שיעור', 'חשבון', 'משפחה', 'ספריה', 'תותים', 'שמחים'],
-  6: ['מחברות', 'ספריות', 'חגיגות', 'פרפרים', 'חתולות', 'שעונים', 'מנורות', 'כדורים', 'מזלגות', 'שמחות'],
-};
 
 const MAX_ATTEMPTS = 6;
 
@@ -52,6 +39,21 @@ const HebrewWordle = () => {
   const navigate = useNavigate();
   const { saveProgress } = useProgress();
   const { token, updateUser } = useAuth();
+  const { t } = useTranslation();
+
+  const KEYBOARD_ROWS = [
+    t('Keyboard_Row_1_HE', { returnObjects: true }),
+    t('Keyboard_Row_2_HE', { returnObjects: true }),
+    t('Keyboard_Row_3_HE', { returnObjects: true }),
+    t('Keyboard_Row_4_HE', { returnObjects: true }),
+  ];
+
+  const fallbackWordsHe = {
+    4: t('Fallback_Words_HE_4', { returnObjects: true }),
+    5: t('Fallback_Words_HE_5', { returnObjects: true }),
+    6: t('Fallback_Words_HE_6', { returnObjects: true }),
+  };
+
   const [wordLength, setWordLength] = useState(5);
   const [targetWord, setTargetWord] = useState('');
   const [guesses, setGuesses] = useState(Array(MAX_ATTEMPTS).fill(''));
@@ -80,11 +82,11 @@ const HebrewWordle = () => {
         setTargetWord(data.word);
       } else {
         // Fallback
-        const words = FALLBACK_WORDS[len];
+        const words = fallbackWordsHe[len];
         setTargetWord(words[Math.floor(Math.random() * words.length)]);
       }
     } catch (err) {
-      const words = FALLBACK_WORDS[len];
+      const words = fallbackWordsHe[len];
       setTargetWord(words[Math.floor(Math.random() * words.length)]);
     } finally {
       setLoading(false);
@@ -139,7 +141,7 @@ const HebrewWordle = () => {
 
   const submitGuess = useCallback(async () => {
     if (currentGuess.length !== wordLength) {
-      showMessage(`המילה חייבת להיות בת ${wordLength} אותיות`);
+      showMessage(t('Word_length_must_be', { length: wordLength }));
       setShakingRow(currentRow);
       setTimeout(() => setShakingRow(-1), 600);
       return;
@@ -153,7 +155,7 @@ const HebrewWordle = () => {
       if (res.ok) {
         const data = await res.json();
         if (!data.isValid) {
-          showMessage('המילה לא נמצאת ברשימה 📖');
+          showMessage(`${t('Word_not_in_list')} ${Emojis.Book}`);
           setShakingRow(currentRow);
           setTimeout(() => setShakingRow(-1), 600);
           return;
@@ -203,14 +205,14 @@ const HebrewWordle = () => {
       setStarsEarned(stars);
       setTimeout(() => {
         setGameStatus('won');
-        showMessage('כל הכבוד! ניצחת! 🎉', 5000);
+        showMessage(`${t('Well_done_You_won')} ${Emojis.Party}`, 5000);
         saveProgress('hebrew', stars);
         if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'hebrew-wordle', subject: 'hebrew', stars, score: currentRow + 1 }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
       }, wordLength * 300 + 400);
     } else if (nextRow >= MAX_ATTEMPTS) {
       setTimeout(() => {
         setGameStatus('lost');
-        showMessage(`המילה הייתה: ${targetWord}`, 6000);
+        showMessage(t('The_word_was', { word: targetWord }), 6000);
         saveProgress('hebrew', 0);
         if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'hebrew-wordle', subject: 'hebrew', stars: 0, score: MAX_ATTEMPTS }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
       }, wordLength * 300 + 400);
@@ -223,13 +225,13 @@ const HebrewWordle = () => {
   const handleKeyPress = useCallback((key) => {
     if (gameStatus !== 'playing') return;
 
-    if (key === '⌫' || key === 'Backspace') {
+    if (key === Emojis.Backspace || key === 'Backspace') {
       setCurrentGuess((prev) => prev.slice(0, -1));
-    } else if (key === 'אישור' || key === 'Enter') {
+    } else if (key === t('Enter_Symbol_HE') || key === 'Enter') {
       submitGuess();
     } else if (currentGuess.length < wordLength) {
       // Hebrew letter
-      const hebrewLetters = 'אבגדהוזחטיכלמנסעפצקרשתףךןםץ';
+      const hebrewLetters = t('Hebrew_Letters_String');
       if (hebrewLetters.includes(key)) {
         setCurrentGuess((prev) => prev + key);
       }
@@ -239,10 +241,10 @@ const HebrewWordle = () => {
   // Physical keyboard support (Hebrew layout keys)
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if (e.key === 'Backspace') handleKeyPress('⌫');
-      else if (e.key === 'Enter') handleKeyPress('אישור');
+      if (e.key === 'Backspace') handleKeyPress(Emojis.Backspace);
+      else if (e.key === 'Enter') handleKeyPress(t('Enter_Symbol_HE'));
       else {
-        const hebrewLetters = 'אבגדהוזחטיכלמנסעפצקרשתףךןםץ';
+        const hebrewLetters = t('Hebrew_Letters_String');
         if (hebrewLetters.includes(e.key)) {
           handleKeyPress(e.key);
         }
@@ -261,8 +263,8 @@ const HebrewWordle = () => {
     return (
       <div className="wordle-page hebrew">
         <div className="wordle-loading">
-          <div className="spinner">⏳</div>
-          <div>טוען מילה...</div>
+          <div className="spinner">{Emojis.Hourglass}</div>
+          <div>{t('Loading_word')}</div>
         </div>
       </div>
     );
@@ -275,8 +277,8 @@ const HebrewWordle = () => {
       <div className="wordle-container">
         {/* Header */}
         <div className="wordle-header">
-          <h1 className="wordle-title"> וורדעל עברית</h1>
-          <p className="wordle-subtitle">נחש את המילה הסודית!</p>
+          <h1 className="wordle-title">{t('Hebrew_Wordle_Title')}</h1>
+          <p className="wordle-subtitle">{t('Guess_the_secret_word')}</p>
         </div>
 
         {/* Word Length Selector */}
@@ -287,7 +289,7 @@ const HebrewWordle = () => {
               className={`length-btn ${wordLength === len ? 'active' : ''}`}
               onClick={() => handleWordLengthChange(len)}
             >
-              {len} אותיות
+              {t('Letters_Count', { count: len })}
             </button>
           ))}
         </div>
@@ -327,28 +329,28 @@ const HebrewWordle = () => {
           <div className="game-over-panel">
             {gameStatus === 'won' ? (
               <>
-                <div className="game-over-title">🎉 כל הכבוד!</div>
+                <div className="game-over-title">{Emojis.Party} {t('Well_done_Title')}</div>
                 <p className="game-over-text">
-                  ניחשת נכון תוך {currentRow + 1} ניסיונות!
+                  {t('Guessed_in_tries', { count: currentRow + 1 })}
                 </p>
                 <p className="game-over-subtext">
-                  המילה הייתה: <strong className="correct-word">{targetWord}</strong>
+                  {t('The_word_was', { word: '' })} <strong className="correct-word">{targetWord}</strong>
                 </p>
               </>
             ) : (
               <>
-                <div className="game-over-title">😞 נסה שוב!</div>
+                <div className="game-over-title">{Emojis.Sad} {t('Try_Again_Title')}</div>
                 <p className="game-over-text">
-                  המילה הייתה: <strong className="failed-word">{targetWord}</strong>
+                  {t('The_word_was', { word: '' })} <strong className="failed-word">{targetWord}</strong>
                 </p>
               </>
             )}
             <div className="game-over-buttons">
               <button className="new-game-btn" onClick={() => startNewGame()}>
-                משחק חדש 🔄
+                {t('New_Game')} {Emojis.Refresh}
               </button>
               <button className="new-game-btn secondary" onClick={() => navigate('/')}>
-                🏠 חזור לדף הבית
+                {Emojis.House} {t('Back_to_Home')}
               </button>
             </div>
           </div>
@@ -359,7 +361,7 @@ const HebrewWordle = () => {
           {KEYBOARD_ROWS.map((row, rowIdx) => (
             <div key={rowIdx} className="keyboard-row">
               {row.map((key) => {
-                const isSpecial = key === '⌫' || key === 'אישור';
+                const isSpecial = key === Emojis.Backspace || key === t('Enter_Symbol_HE');
                 const status = keyboardStatus[key];
                 return (
                   <button
@@ -379,12 +381,12 @@ const HebrewWordle = () => {
         {/* Instructions */}
         {gameStatus === 'playing' && (
           <div className="instructions-panel">
-            <h3 className="instructions-title">איך משחקים:</h3>
+            <h3 className="instructions-title">{t('How_to_play')}</h3>
             <div className="instructions-list">
               {[
-                { type: 'correct', text: 'האות במקום הנכון' },
-                { type: 'present', text: 'האות קיימת אך במקום הלא נכון' },
-                { type: 'absent', text: 'האות לא קיימת במילה' },
+                { type: 'correct', text: t('Letter_in_correct_spot') },
+                { type: 'present', text: t('Letter_in_wrong_spot') },
+                { type: 'absent', text: t('Letter_not_in_word') },
               ].map((item) => (
                 <div key={item.type} className="instruction-item">
                   <div className={`instruction-tile ${item.type}`} />

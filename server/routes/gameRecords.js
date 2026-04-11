@@ -10,13 +10,13 @@ router.post('/', authenticateToken, async (req, res) => {
   const { userId, username } = req.user;
 
   if (!game || !subject || stars === undefined) {
-    return res.status(400).json({ error: 'game, subject ו-stars נדרשים' });
+    return res.status(400).json({ error: 'Missing_game_records_fields' });
   }
   if (!['math', 'hebrew', 'english'].includes(subject)) {
-    return res.status(400).json({ error: 'subject לא תקין' });
+    return res.status(400).json({ error: 'Invalid_subject' });
   }
   if (typeof stars !== 'number' || stars < 0 || stars > 3) {
-    return res.status(400).json({ error: 'stars חייב להיות בין 0 ל-3' });
+    return res.status(400).json({ error: 'Invalid_stars' });
   }
 
   try {
@@ -44,14 +44,14 @@ router.post('/', authenticateToken, async (req, res) => {
     );
 
     res.status(201).json({
-      message: 'תוצאה נשמרה',
+      message: 'Record_saved',
       red_stars: rows[0].red_stars,
       blue_stars: rows[0].blue_stars,
       green_stars: rows[0].green_stars,
     });
   } catch (err) {
     console.error('Game record error:', err);
-    res.status(500).json({ error: 'שגיאה בשמירת התוצאה' });
+    res.status(500).json({ error: 'Error_saving_record' });
   }
 });
 
