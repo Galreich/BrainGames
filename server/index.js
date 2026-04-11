@@ -1,23 +1,29 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const { initDB } = require('./db');
+import dotenv from 'dotenv';
+dotenv.config();
+import express from 'express';
+import cors from 'cors';
+import { initDB } from './db';
 
-const authRoutes = require('./routes/auth');
-const progressRoutes = require('./routes/progress');
-const wordsRoutes = require('./routes/words');
-const suggestionsRoutes = require('./routes/suggestions');
-const gameRecordsRoutes = require('./routes/gameRecords');
-const adminRoutes = require('./routes/admin');
+import {
+  authRoutes,
+  progressRoutes,
+  wordsRoutes,
+  suggestionsRoutes,
+  gameRecordsRoutes,
+  adminRoutes,
+} from './routes';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' ? false : ['http://localhost:3000'],
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === 'production' ? false : ['http://localhost:3000'],
+    credentials: true,
+  }),
+);
 app.use(express.json({ limit: '5mb' }));
 app.use(express.urlencoded({ extended: true, limit: '5mb' }));
 

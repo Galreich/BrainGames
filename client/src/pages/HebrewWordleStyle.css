@@ -1,0 +1,401 @@
+/* Reusing animations from EnglishWordleStyle.css */
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-5px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes flip {
+  0% {
+    transform: rotateX(0deg);
+    background-color: #fff;
+    border-color: #999;
+  }
+  49% {
+    transform: rotateX(90deg);
+    background-color: #fff;
+    border-color: #999;
+  }
+  50% {
+    transform: rotateX(90deg);
+  } /* Color change happens here */
+  100% {
+    transform: rotateX(0deg);
+  }
+}
+
+/* General Page Styles */
+.wordle-page.hebrew {
+  background: linear-gradient(135deg, #1e3799 0%, #0a3d62 100%);
+  direction: rtl;
+}
+
+/* Length Selector Button */
+.hebrew .length-btn.active {
+  background: #74b9ff;
+  color: #1e3799;
+}
+
+/* Board */
+.hebrew .wordle-board {
+  backdrop-filter: blur(10px);
+}
+
+/* Keyboard */
+.hebrew .keyboard-row {
+  gap: 6px;
+}
+
+.hebrew .key {
+  width: 40px;
+  font-size: 1rem;
+  direction: ltr; /* For individual keys */
+}
+
+.hebrew .key.special {
+  padding: 14px 12px;
+  width: auto;
+  min-width: 65px;
+  font-size: 0.75rem;
+}
+
+/* Game Over Panel */
+.hebrew .game-over-panel .correct-word {
+  color: #74b9ff;
+}
+
+.hebrew .new-game-btn {
+  background: linear-gradient(135deg, #74b9ff, #0984e3);
+  box-shadow: 0 6px 20px rgba(9, 132, 227, 0.4);
+}
+.hebrew .new-game-btn:hover {
+  box-shadow: 0 8px 25px rgba(9, 132, 227, 0.5);
+}
+
+/* Instructions */
+.hebrew .instructions-panel {
+  direction: rtl;
+}
+
+/*
+  The following styles are copied from EnglishWordleStyle.css
+  as they are shared between both Wordle games.
+  In a larger project, this could be a shared `Wordle.css` file.
+*/
+
+.wordle-page {
+  min-height: calc(100vh - 56px);
+  padding: 20px;
+}
+
+.wordle-container {
+  max-width: 500px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.wordle-header {
+  text-align: center;
+}
+
+.wordle-title {
+  color: #fff;
+  font-size: 2rem;
+  text-align: center;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.wordle-subtitle {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1rem;
+  text-align: center;
+}
+
+.length-selector {
+  display: flex;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  padding: 6px;
+}
+
+.length-btn {
+  padding: 8px 20px;
+  border-radius: 50px;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.wordle-board {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+}
+
+.row {
+  display: flex;
+  gap: 6px;
+}
+.row.shake {
+  animation: shake 0.5s ease;
+}
+
+.wordle-message {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 14px 28px;
+  border-radius: 50px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  z-index: 100;
+  animation: fadeIn 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.key {
+  padding: 14px 0;
+  border-radius: 8px;
+  border: none;
+  background: #e8eaed;
+  color: #333;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+.key:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+.key.correct {
+  background: #6aaa64;
+  color: #fff;
+}
+.key.present {
+  background: #c9b458;
+  color: #fff;
+}
+.key.absent {
+  background: #787c7e;
+  color: #fff;
+}
+
+.wordle-loading {
+  color: #fff;
+  font-size: 1.5rem;
+  text-align: center;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.spinner {
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  font-size: 3rem;
+}
+
+/* Tile styles are identical and can be shared */
+.tile {
+  width: 56px;
+  height: 56px;
+  border: 2px solid #d3d6da;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 900;
+  background: #fff;
+  color: #333;
+  transition: all 0.1s;
+  user-select: none;
+}
+.tile.has-letter {
+  border-color: #999;
+  transform: scale(1.05);
+}
+.tile.is-revealing {
+  animation: flip 0.6s ease forwards;
+  animation-delay: calc(var(--reveal-index) * 300ms);
+}
+.tile.correct {
+  background-color: #6aaa64;
+  border-color: #6aaa64;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(106, 170, 100, 0.5);
+}
+.tile.present {
+  background-color: #c9b458;
+  border-color: #c9b458;
+  color: #fff;
+}
+.tile.absent {
+  background-color: #787c7e;
+  border-color: #787c7e;
+  color: #fff;
+}
+
+/* Game Over styles are identical and can be shared */
+.game-over-panel {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 24px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.game-over-title {
+  color: #fff;
+  font-size: 1.8rem;
+  font-weight: 900;
+}
+.game-over-text {
+  color: rgba(255, 255, 255, 0.9);
+}
+.game-over-subtext {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+.failed-word {
+  color: #ff7675;
+  font-size: 1.3rem;
+}
+.game-over-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+.new-game-btn {
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 36px;
+  font-size: 1.2rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.new-game-btn:hover {
+  transform: translateY(-2px);
+}
+.new-game-btn.secondary {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  box-shadow: none;
+}
+.new-game-btn.secondary:hover {
+  background: rgba(255, 255, 255, 0.25);
+  transform: none;
+  box-shadow: none;
+}
+
+/* Instruction styles are identical and can be shared */
+.instructions-panel {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+  width: 100%;
+}
+.instructions-title {
+  color: #fff;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+.instructions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.instruction-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.instruction-tile {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.instruction-tile.correct {
+  background: #6aaa64;
+}
+.instruction-tile.present {
+  background: #c9b458;
+}
+.instruction-tile.absent {
+  background: #787c7e;
+}
+.instruction-text {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.9rem;
+}

@@ -1,12 +1,13 @@
 // English word lists organized by word length
 // All words are appropriate for elementary school students
-const fs = require('fs');
-const wordListPath = require('word-list').default || require('word-list');
+import fs from 'fs';
+import wordList from 'word-list';
+const wordListPath = wordList.default || wordList;
 const wordArray = fs.readFileSync(wordListPath, 'utf8').split('\n');
 const englishWords = {
   4: [],
   5: [],
-  6: []
+  6: [],
 };
 for (const word of wordArray) {
   const trimmed = word.trim();
@@ -21,4 +22,4 @@ for (const word of wordArray) {
   }
 }
 
-module.exports = englishWords;
+export default englishWords;

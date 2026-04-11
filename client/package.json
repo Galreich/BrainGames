@@ -4,8 +4,10 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "i18next": "^26.0.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-i18next": "^17.0.2",
     "react-router-dom": "^6.21.0"
   },
   "devDependencies": {

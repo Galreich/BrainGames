@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
-import { useAuth } from './AuthContext';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
+import { useAuth } from './AuthContext'; // Direct import to avoid circular dependency
 
 const ProgressContext = createContext(null);
 
@@ -42,7 +48,10 @@ export const ProgressProvider = ({ children }) => {
       if (response.ok) {
         const data = await response.json();
         setProgress(data.progress);
-        localStorage.setItem('braingames_progress_local', JSON.stringify(data.progress));
+        localStorage.setItem(
+          'braingames_progress_local',
+          JSON.stringify(data.progress),
+        );
       }
     } catch (err) {
       console.error('Failed to load progress:', err);
@@ -51,43 +60,64 @@ export const ProgressProvider = ({ children }) => {
     }
   };
 
-  const saveProgress = useCallback(async (subject, starsEarned) => {
-    // Update local state immediately
-    setProgress((prev) => {
-      const updated = {
-        ...prev,
-        [subject]: {
-          stars: (prev[subject]?.stars || 0) + starsEarned,
-          gamesPlayed: (prev[subject]?.gamesPlayed || 0) + 1,
-        },
-      };
-      localStorage.setItem('braingames_progress_local', JSON.stringify(updated));
-      return updated;
-    });
-
-    // Save to server if logged in
-    if (user && token) {
-      try {
-        await fetch('/api/progress/save', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
+  const saveProgress = useCallback(
+    async (subject, starsEarned) => {
+      // Update local state immediately
+      setProgress((prev) => {
+        const updated = {
+          ...prev,
+          [subject]: {
+            stars: (prev[subject]?.stars || 0) + starsEarned,
+            gamesPlayed: (prev[subject]?.gamesPlayed || 0) + 1,
           },
-          body: JSON.stringify({ subject, stars: starsEarned, gamesPlayed: 1 }),
-        });
-      } catch (err) {
-        console.error('Failed to save progress to server:', err);
+        };
+        localStorage.setItem(
+          'braingames_progress_local',
+          JSON.stringify(updated),
+        );
+        return updated;
+      });
+
+      // Save to server if logged in
+      if (user && token) {
+        try {
+          await fetch('/api/progress/save', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+              subject,
+              stars: starsEarned,
+              gamesPlayed: 1,
+            }),
+          });
+        } catch (err) {
+          console.error('Failed to save progress to server:', err);
+        }
       }
-    }
-  }, [user, token]);
+    },
+    [user, token],
+  );
 
   const getTotalStars = useCallback(() => {
-    return Object.values(progress).reduce((total, p) => total + (p?.stars || 0), 0);
+    return Object.values(progress).reduce(
+      (total, p) => total + (p?.stars || 0),
+      0,
+    );
   }, [progress]);
 
   return (
-    <ProgressContext.Provider value={{ progress, loading, saveProgress, getTotalStars, loadProgressFromServer }}>
+    <ProgressContext.Provider
+      value={{
+        progress,
+        loading,
+        saveProgress,
+        getTotalStars,
+        loadProgressFromServer,
+      }}
+    >
       {children}
     </ProgressContext.Provider>
   );

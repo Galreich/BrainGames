@@ -1,6 +1,6 @@
-const express = require('express');
-const { pool } = require('../db');
-const { authenticateToken } = require('./auth');
+import express from 'express';
+import { pool } from '../db';
+import { authenticateToken } from './auth';
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.get('/:userId', authenticateToken, async (req, res) => {
   const { userId } = req.params;
 
   if (parseInt(userId) !== req.user.userId) {
-    return res.status(403).json({ error: 'אין הרשאה לצפות בנתונים אלו' });
+    return res.status(403).json({ error: 'Unauthorized_progress_access' });
   }
 
   try {
@@ -21,7 +21,7 @@ router.get('/:userId', authenticateToken, async (req, res) => {
        FROM game_records
        WHERE user_id = $1
        GROUP BY subject`,
-      [userId]
+      [userId],
     );
 
     const progress = {};
@@ -42,8 +42,8 @@ router.get('/:userId', authenticateToken, async (req, res) => {
     res.json({ progress });
   } catch (err) {
     console.error('Get progress error:', err);
-    res.status(500).json({ error: 'שגיאה בטעינת ההתקדמות' });
+    res.status(500).json({ error: 'Error_loading_progress' });
   }
 });
 
-module.exports = router;
+export default router;
