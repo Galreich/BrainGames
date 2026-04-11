@@ -28,7 +28,7 @@ const MathGameMenu = ({ startGame, navigate }) => {
         ))}
       </div>
       <button className='start-btn' onClick={startGame}>
-        {Emojis.Rocket} {t('Lets_Go')}
+        {t('Lets_Go')}
       </button>
       <div>
         <button

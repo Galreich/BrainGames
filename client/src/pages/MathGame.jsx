@@ -174,8 +174,17 @@ const MathGame = () => {
                   score: finalCorrect,
                 }),
               })
-                .then((r) => r.ok ? r.json() : null)
-                .then((d) => { if (d) { updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars }); saveProgress(); } })
+                .then((r) => (r.ok ? r.json() : null))
+                .then((d) => {
+                  if (d) {
+                    updateUser({
+                      red_stars: d.red_stars,
+                      blue_stars: d.blue_stars,
+                      green_stars: d.green_stars,
+                    });
+                    saveProgress();
+                  }
+                })
                 .catch(() => {});
           } else {
             setStation(nextStation);
@@ -205,8 +214,17 @@ const MathGame = () => {
                   score: totalAnswers,
                 }),
               })
-                .then((r) => r.ok ? r.json() : null)
-                .then((d) => { if (d) { updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars }); saveProgress(); } })
+                .then((r) => (r.ok ? r.json() : null))
+                .then((d) => {
+                  if (d) {
+                    updateUser({
+                      red_stars: d.red_stars,
+                      blue_stars: d.blue_stars,
+                      green_stars: d.green_stars,
+                    });
+                    saveProgress();
+                  }
+                })
                 .catch(() => {});
           } else {
             setStation(nextStation);
@@ -250,9 +268,7 @@ const MathGame = () => {
       {message && <div className='math-game-message'>{message}</div>}
 
       <div className='math-game-container'>
-        <h1 className='game-title'>
-          {Emojis.Rocket} {t('Math_Title')}
-        </h1>
+        <h1 className='game-title'>{t('Math_Title')}</h1>
 
         {/* MENU */}
         {gameState === 'menu' && (

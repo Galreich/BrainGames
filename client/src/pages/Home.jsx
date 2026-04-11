@@ -10,12 +10,11 @@ const Home = () => {
   const { t } = useTranslation();
   const [showWelcome, setShowWelcome] = useState(true);
 
-  const [summary, setSummary] = useState({ 
-    'math-puzzle': { stars: 0, games_played: 0 }, 
-    'hebrew-wordle': { stars: 0, games_played: 0 }, 
-    'english-wordle': { stars: 0, games_played: 0 } 
+  const [summary, setSummary] = useState({
+    'math-puzzle': { stars: 0, games_played: 0 },
+    'hebrew-wordle': { stars: 0, games_played: 0 },
+    'english-wordle': { stars: 0, games_played: 0 },
   });
-
 
   useEffect(() => {
     const timer = setTimeout(() => setShowWelcome(false), 4000);
@@ -71,7 +70,7 @@ const Home = () => {
         {/* Game Cards */}
         <div className='game-grid'>
           <GameCard
-            title={`${Emojis.Rocket} ${t('Math_Title')}`}
+            title={t('Math_Title')}
             subtitle={t('Math')}
             image='/math-game.svg'
             description={t('Math_Game_Description')}
