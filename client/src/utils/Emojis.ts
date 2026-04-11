@@ -33,4 +33,5 @@ export const Emojis = {
   Sad: '😢',
   Book: '📖',
   CheckMark: '✓',
+  Document: '📄',
 };

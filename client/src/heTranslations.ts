@@ -183,7 +183,7 @@ export const heTranslations = {
   Math_Level_1: 'תחנות 1-3: חיבור וחיסור עד 20',
   Math_Level_2: 'תחנות 4-7: חיבור וחיסור עד 100',
   Math_Level_3: 'תחנות 8-10: כפל ×2, ×3, ×5, ×10',
-  Math_Subject: 'מתמטיקה',
+  Math_Subject: 'חשבון',
   Math_Subtitle: 'הרפתקת המספרים בחלל!',
   Math_Title: 'הרפתקת המספרים',
   Missing_game_records_fields: 'game, subject ו-stars נדרשים',

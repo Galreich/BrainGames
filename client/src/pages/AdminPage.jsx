@@ -12,12 +12,13 @@ const AdminPage = () => {
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [popupDesc, setPopupDesc] = useState(null);
 
   const SUBJECT_LABELS = {
-    math: `${Emojis.Numbers} ${t('Math_Subject')}`,
-    hebrew: `${Emojis.LettersHE} ${t('Hebrew_Subject')}`,
-    english: `${Emojis.LettersEN} ${t('English_Subject')}`,
-    other: `${Emojis.Bulb} ${t('Other_Subject')}`,
+    math: t('Math_Subject'),
+    hebrew: t('Hebrew_Subject'),
+    english: t('English_Subject'),
+    other: t('Other_Subject'),
   };
 
   useEffect(() => {
@@ -29,6 +30,7 @@ const AdminPage = () => {
       try {
         const res = await fetch('/api/admin/suggestions', {
           headers: { Authorization: `Bearer ${token}` },
+          cache: 'no-store',
         });
         const data = await res.json();
         if (!res.ok) throw new Error(data.error || 'Error_loading_suggestions');
@@ -44,6 +46,11 @@ const AdminPage = () => {
       }
     };
     fetchSuggestions();
+
+    const handleSuggestionAdded = () => fetchSuggestions();
+    window.addEventListener('suggestionAdded', handleSuggestionAdded);
+    return () =>
+      window.removeEventListener('suggestionAdded', handleSuggestionAdded);
   }, [user, token, navigate]);
 
   if (!user || !user.is_admin) return null;
@@ -72,9 +79,9 @@ const AdminPage = () => {
                 <th className='admin-th'>{t('Table_User')}</th>
                 <th className='admin-th'>{t('Table_Subject')}</th>
                 <th className='admin-th'>{t('Table_Title')}</th>
-                <th className='admin-th'>{t('Table_Description')}</th>
                 <th className='admin-th'>{t('Table_Image')}</th>
                 <th className='admin-th'>{t('Table_Date')}</th>
+                <th className='admin-th'>{t('Table_Description')}</th>
               </tr>
             </thead>
             <tbody>
@@ -84,12 +91,11 @@ const AdminPage = () => {
                     {Emojis.User} {s.username}
                   </td>
                   <td className='admin-td'>
-                    <span className={`admin-badge ${s.subject}`}>
-                      {SUBJECT_LABELS[s.subject] || s.subject || '—'}
+                    <span className={`admin-badge ${s.subject || 'general'}`}>
+                      {s.subject ? SUBJECT_LABELS[s.subject] || s.subject : '—'}
                     </span>
                   </td>
                   <td className='admin-td admin-fw-700'>{s.title}</td>
-                  <td className='admin-td admin-desc-col'>{s.description}</td>
                   <td className='admin-td'>
                     {s.image_data ? (
                       <a href={s.image_data} target='_blank' rel='noreferrer'>
@@ -113,12 +119,38 @@ const AdminPage = () => {
                       },
                     )}
                   </td>
+                  <td
+                    className='admin-td admin-desc-col'
+                    onClick={() => setPopupDesc(s.description)}
+                    title={t('Table_Description')}
+                  >
+                    <div className='admin-desc-icon'>{Emojis.Document}</div>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         )}
       </div>
+
+      {/* Description Popup Modal */}
+      {popupDesc && (
+        <div className='admin-popup-overlay' onClick={() => setPopupDesc(null)}>
+          <div
+            className='admin-popup-content'
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className='admin-popup-close'
+              onClick={() => setPopupDesc(null)}
+            >
+              {Emojis.Cross}
+            </button>
+            <h3 className='admin-popup-title'>{t('Table_Description')}</h3>
+            <p className='admin-popup-text'>{popupDesc}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

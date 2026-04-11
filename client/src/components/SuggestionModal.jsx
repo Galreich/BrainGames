@@ -5,11 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
 import { SuggestionSuccess, SuggestionImageUpload } from '.';
 
-type SuggestionModalProps = {
-  onClose: () => void;
-};
-
-const SuggestionModal = ({ onClose }: SuggestionModalProps) => {
+const SuggestionModal = ({ onClose }) => {
   const { token } = useAuth();
   const { t } = useTranslation();
   const [title, setTitle] = useState('');
@@ -20,26 +16,25 @@ const SuggestionModal = ({ onClose }: SuggestionModalProps) => {
     { value: '', label: t('General_Subject') },
     { value: 'math', label: `${Emojis.RedCircle} ${t('Math_Color')}` },
     { value: 'hebrew', label: `${Emojis.BlueCircle} ${t('Hebrew_Color')}` },
-    { value: 'english', label: `${Emojis.GreenCircle} ${t('English_Color')}` },
+    { value: 'english', label: `${Emojis.YellowCircle} ${t('English_Color')}` },
   ];
 
-  const [imageData, setImageData] = useState<string | null>(null);
+  const [imageData, setImageData] = useState(null);
   const [imageError, setImageError] = useState('');
-  const [status, setStatus] = useState<
-    'idle' | 'loading' | 'success' | 'error'
-  >('idle');
+  const [status, setStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'error'
   const [errorMsg, setErrorMsg] = useState('');
 
+  // Close on Escape key
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
+    const handleKey = (e) => {
       if (e.key === 'Escape') onClose();
     };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose]);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
     setImageError('');
     if (!file) {
       setImageData(null);
@@ -54,11 +49,11 @@ const SuggestionModal = ({ onClose }: SuggestionModalProps) => {
       return;
     }
     const reader = new FileReader();
-    reader.onload = (ev) => setImageData(ev.target?.result as string);
+    reader.onload = (ev) => setImageData(ev.target.result);
     reader.readAsDataURL(file);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim() || !description.trim()) {
       setErrorMsg(t('Error_fill_title_and_description'));
@@ -141,11 +136,11 @@ const SuggestionModal = ({ onClose }: SuggestionModalProps) => {
                   type='text'
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  maxLength={20}
+                  maxLength={100}
                   placeholder={t('Game_Title_Placeholder')}
                   className='suggestion-input'
                 />
-                <div className='suggestion-char-count'>{title.length}/20</div>
+                <div className='suggestion-char-count'>{title.length}/100</div>
               </div>
 
               {/* Description */}

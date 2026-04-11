@@ -4,7 +4,11 @@ import { authenticateToken } from './auth';
 
 const router = express.Router();
 
-interface SuggestionReturnRow { id: number; title: string; created_at: Date; }
+interface SuggestionReturnRow {
+  id: number;
+  title: string;
+  created_at: Date;
+}
 interface SuggestionListRow {
   id: number;
   username: string;
@@ -30,7 +34,7 @@ router.post('/', authenticateToken, async (req: Request, res: Response) => {
   if (!description || !description.trim()) {
     return res.status(400).json({ error: 'Suggestion_description_required' });
   }
-  if (title.trim().length > 100) {
+  if (title.trim().length > 20) {
     return res.status(400).json({ error: 'Suggestion_title_too_long' });
   }
   if (description.trim().length > 1000) {
@@ -42,7 +46,13 @@ router.post('/', authenticateToken, async (req: Request, res: Response) => {
       `INSERT INTO suggestions (user_id, title, description, subject, image_data)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING id, title, created_at`,
-      [userId, title.trim(), description.trim(), subject || null, imageData || null]
+      [
+        userId,
+        title.trim(),
+        description.trim(),
+        subject || null,
+        imageData || null,
+      ],
     );
 
     res.status(201).json({
@@ -62,7 +72,7 @@ router.get('/', authenticateToken, async (_req: Request, res: Response) => {
       `SELECT s.id, u.username, s.title, s.description, s.subject, s.created_at
        FROM suggestions s
        JOIN users u ON u.id = s.user_id
-       ORDER BY s.created_at DESC LIMIT 50`
+       ORDER BY s.created_at DESC LIMIT 50`,
     );
     res.json({ suggestions: result.rows });
   } catch (err) {
