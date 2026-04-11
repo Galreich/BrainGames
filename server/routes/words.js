@@ -70,7 +70,9 @@ router.get('/english/validate', (req, res) => {
 
   const length = word.length;
   const wordList = englishWords[length] || [];
-  const isValid = wordList.map((w) => w.toLowerCase()).includes(word.toLowerCase());
+  const isValid = wordList
+    .map((w) => w.toLowerCase())
+    .includes(word.toLowerCase());
 
   res.json({ word, isValid, length });
 });

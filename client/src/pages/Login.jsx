@@ -65,56 +65,78 @@ const Login = () => {
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
+    <div className='login-page'>
+      <div className='login-card'>
         {/* Logo */}
-        <div className="login-logo-area">
-          <span className="login-emoji">{Emojis.Brain}</span>
-          <div className="login-title">{t('Braingames_Title')}</div>
-          <div className="login-sub">
+        <div className='login-logo-area'>
+          <span className='login-emoji'>{Emojis.Brain}</span>
+          <div className='login-title'>{t('Braingames_Title')}</div>
+          <div className='login-sub'>
             {isLogin ? t('Login_to_your_account') : t('Create_a_new_account')}
           </div>
         </div>
 
         {/* Tabs */}
-        <div className="login-tabs">
-          <button className={`login-tab ${isLogin ? 'active' : ''}`} onClick={() => { setIsLogin(true); setError(''); setSuccess(''); }}>
+        <div className='login-tabs'>
+          <button
+            className={`login-tab ${isLogin ? 'active' : ''}`}
+            onClick={() => {
+              setIsLogin(true);
+              setError('');
+              setSuccess('');
+            }}
+          >
             {t('Login_Tab')}
           </button>
-          <button className={`login-tab ${!isLogin ? 'active' : ''}`} onClick={() => { setIsLogin(false); setError(''); setSuccess(''); }}>
+          <button
+            className={`login-tab ${!isLogin ? 'active' : ''}`}
+            onClick={() => {
+              setIsLogin(false);
+              setError('');
+              setSuccess('');
+            }}
+          >
             {t('Register_Tab')}
           </button>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit}>
-          {error && <div className="login-error">{Emojis.Warning} {error}</div>}
-          {success && <div className="login-success">{Emojis.Check} {success}</div>}
+          {error && (
+            <div className='login-error'>
+              {Emojis.Warning} {error}
+            </div>
+          )}
+          {success && (
+            <div className='login-success'>
+              {Emojis.Check} {success}
+            </div>
+          )}
 
-          <div className="login-form-group">
-            <label className="login-label" htmlFor="username">
+          <div className='login-form-group'>
+            <label className='login-label' htmlFor='username'>
               {Emojis.User} {t('Username')}
             </label>
             <input
-              id="username"
-              type="text"
+              id='username'
+              type='text'
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               placeholder={t('Enter_username')}
               className={`login-input ${!!error && !username ? 'error' : ''}`}
-              autoComplete="username"
+              autoComplete='username'
               maxLength={50}
               disabled={loading}
             />
           </div>
 
-          <div className="login-form-group">
-            <label className="login-label" htmlFor="password">
+          <div className='login-form-group'>
+            <label className='login-label' htmlFor='password'>
               {Emojis.Lock} {t('Password')}
             </label>
             <input
-              id="password"
-              type="password"
+              id='password'
+              type='password'
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder={isLogin ? t('Enter_password') : t('Choose_password')}
@@ -124,13 +146,21 @@ const Login = () => {
             />
           </div>
 
-          <button type="submit" className={`login-submit-btn ${loading ? 'loading' : ''}`} disabled={loading}>
-            {loading ? `${Emojis.Hourglass} ${t('Please_wait')}` : isLogin ? `${Emojis.Unlock} ${t('Login_Button')}` : `${Emojis.Rocket} ${t('Register_Button')}`}
+          <button
+            type='submit'
+            className={`login-submit-btn ${loading ? 'loading' : ''}`}
+            disabled={loading}
+          >
+            {loading
+              ? `${Emojis.Hourglass} ${t('Please_wait')}`
+              : isLogin
+                ? `${Emojis.Unlock} ${t('Login_Button')}`
+                : `${Emojis.Rocket} ${t('Register_Button')}`}
           </button>
 
           <button
-            type="button"
-            className="login-guest-btn"
+            type='button'
+            className='login-guest-btn'
             onClick={() => navigate('/')}
           >
             {t('Continue_without_login')} {Emojis.ArrowRight}
@@ -138,11 +168,15 @@ const Login = () => {
         </form>
 
         {/* Tips */}
-        <div className="login-tips">
-          <div className="login-tips-title">{Emojis.Bulb} {t('Why_register')}</div>
-          <div className="login-tips-text">
-            {Emojis.Check} {t('Save_your_progress')}<br />
-            {Emojis.Check} {t('Track_your_stars')}<br />
+        <div className='login-tips'>
+          <div className='login-tips-title'>
+            {Emojis.Bulb} {t('Why_register')}
+          </div>
+          <div className='login-tips-text'>
+            {Emojis.Check} {t('Save_your_progress')}
+            <br />
+            {Emojis.Check} {t('Track_your_stars')}
+            <br />
             {Emojis.Check} {t('Continue_where_you_left_off')}
           </div>
         </div>

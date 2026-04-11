@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const HeaderNav = ({ navLinks, currentPath }) => {
   return (
-    <nav className="header-nav">
+    <nav className='header-nav'>
       {navLinks.map((link) => (
         <Link
           key={link.path}

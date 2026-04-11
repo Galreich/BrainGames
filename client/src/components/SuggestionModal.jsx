@@ -26,7 +26,9 @@ const SuggestionModal = ({ onClose }) => {
 
   // Close on Escape key
   useEffect(() => {
-    const handleKey = (e) => { if (e.key === 'Escape') onClose(); };
+    const handleKey = (e) => {
+      if (e.key === 'Escape') onClose();
+    };
     window.addEventListener('keydown', handleKey);
     return () => window.removeEventListener('keydown', handleKey);
   }, [onClose]);
@@ -34,9 +36,18 @@ const SuggestionModal = ({ onClose }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     setImageError('');
-    if (!file) { setImageData(null); return; }
-    if (!file.type.startsWith('image/')) { setImageError(t('Error_must_be_image')); return; }
-    if (file.size > 2 * 1024 * 1024) { setImageError(t('Error_image_too_large')); return; }
+    if (!file) {
+      setImageData(null);
+      return;
+    }
+    if (!file.type.startsWith('image/')) {
+      setImageError(t('Error_must_be_image'));
+      return;
+    }
+    if (file.size > 2 * 1024 * 1024) {
+      setImageError(t('Error_image_too_large'));
+      return;
+    }
     const reader = new FileReader();
     reader.onload = (ev) => setImageData(ev.target.result);
     reader.readAsDataURL(file);
@@ -56,7 +67,7 @@ const SuggestionModal = ({ onClose }) => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ title, description, subject, imageData }),
       });
@@ -76,35 +87,36 @@ const SuggestionModal = ({ onClose }) => {
   };
 
   return (
-    <div className="suggestion-overlay" onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}>
-      <div className="suggestion-modal">
+    <div
+      className='suggestion-overlay'
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
+    >
+      <div className='suggestion-modal'>
         {/* Close button */}
-        <button onClick={onClose} className="suggestion-close-btn">{Emojis.Cross}</button>
+        <button onClick={onClose} className='suggestion-close-btn'>
+          {Emojis.Cross}
+        </button>
 
         {status === 'success' ? (
           <SuggestionSuccess onClose={onClose} />
         ) : (
           <>
-            <div className="suggestion-header">
-              <div className="suggestion-icon">{Emojis.Bulb}</div>
-              <h2 className="suggestion-title">
-                {t('Suggest_new_game')}
-              </h2>
-              <p className="suggestion-subtitle">
-                {t('Got_an_idea')}
-              </p>
+            <div className='suggestion-header'>
+              <div className='suggestion-icon'>{Emojis.Bulb}</div>
+              <h2 className='suggestion-title'>{t('Suggest_new_game')}</h2>
+              <p className='suggestion-subtitle'>{t('Got_an_idea')}</p>
             </div>
 
-            <form onSubmit={handleSubmit} className="suggestion-form">
+            <form onSubmit={handleSubmit} className='suggestion-form'>
               {/* Subject */}
               <div>
-                <label className="suggestion-label">
-                  {t('Table_Subject')}
-                </label>
+                <label className='suggestion-label'>{t('Table_Subject')}</label>
                 <select
                   value={subject}
                   onChange={(e) => setSubject(e.target.value)}
-                  className="suggestion-select"
+                  className='suggestion-select'
                 >
                   {SUBJECTS.map((s) => (
                     <option key={s.value} value={s.value}>
@@ -116,25 +128,23 @@ const SuggestionModal = ({ onClose }) => {
 
               {/* Title */}
               <div>
-                <label className="suggestion-label">
+                <label className='suggestion-label'>
                   {t('Game_Title')} <span style={{ color: '#ff7675' }}>*</span>
                 </label>
                 <input
-                  type="text"
+                  type='text'
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                   maxLength={100}
                   placeholder={t('Game_Title_Placeholder')}
-                  className="suggestion-input"
+                  className='suggestion-input'
                 />
-                <div className="suggestion-char-count">
-                  {title.length}/100
-                </div>
+                <div className='suggestion-char-count'>{title.length}/100</div>
               </div>
 
               {/* Description */}
               <div>
-                <label className="suggestion-label">
+                <label className='suggestion-label'>
                   {t('Description')} <span style={{ color: '#ff7675' }}>*</span>
                 </label>
                 <textarea
@@ -143,33 +153,33 @@ const SuggestionModal = ({ onClose }) => {
                   maxLength={1000}
                   rows={4}
                   placeholder={t('Description_Placeholder')}
-                  className="suggestion-textarea"
+                  className='suggestion-textarea'
                 />
-                <div className="suggestion-char-count">
+                <div className='suggestion-char-count'>
                   {description.length}/1000
                 </div>
               </div>
 
               {/* Image upload */}
-              <SuggestionImageUpload 
-                imageData={imageData} 
-                imageError={imageError} 
-                onImageChange={handleImageChange} 
-                onRemoveImage={() => setImageData(null)} 
+              <SuggestionImageUpload
+                imageData={imageData}
+                imageError={imageError}
+                onImageChange={handleImageChange}
+                onRemoveImage={() => setImageData(null)}
               />
 
               {errorMsg && (
-                <div className="suggestion-error-msg">
-                  {errorMsg}
-                </div>
+                <div className='suggestion-error-msg'>{errorMsg}</div>
               )}
 
               <button
-                type="submit"
+                type='submit'
                 disabled={status === 'loading'}
                 className={`suggestion-submit-btn ${status === 'loading' ? 'loading' : ''}`}
               >
-                {status === 'loading' ? `${Emojis.Hourglass} ${t('Sending')}` : `${Emojis.Email} ${t('Send_Suggestion')}`}
+                {status === 'loading'
+                  ? `${Emojis.Hourglass} ${t('Sending')}`
+                  : `${Emojis.Email} ${t('Send_Suggestion')}`}
               </button>
             </form>
           </>

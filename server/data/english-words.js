@@ -7,7 +7,7 @@ const wordArray = fs.readFileSync(wordListPath, 'utf8').split('\n');
 const englishWords = {
   4: [],
   5: [],
-  6: []
+  6: [],
 };
 for (const word of wordArray) {
   const trimmed = word.trim();

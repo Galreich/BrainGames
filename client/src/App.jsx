@@ -8,7 +8,7 @@ import {
   EnglishWordle,
   MathGame,
   Login,
-  AdminPage
+  AdminPage,
 } from './pages';
 
 import './App.css';
@@ -26,8 +26,10 @@ class ErrorBoundary extends React.Component {
   render() {
     if (this.state.error) {
       return (
-        <div className="error-boundary-fallback">
-          <h1>{Emojis.CloseCross} {i18n.t('Error_Loading')}</h1>
+        <div className='error-boundary-fallback'>
+          <h1>
+            {Emojis.CloseCross} {i18n.t('Error_Loading')}
+          </h1>
           <pre>
             {this.state.error.toString()}
             {'\n\n'}
@@ -46,16 +48,16 @@ const App = () => {
       <AuthProvider>
         <ProgressProvider>
           <Router>
-            <div className="app-container">
+            <div className='app-container'>
               <Header />
-              <main className="app-main">
+              <main className='app-main'>
                 <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/hebrew-wordle" element={<HebrewWordle />} />
-                  <Route path="/english-wordle" element={<EnglishWordle />} />
-                  <Route path="/math" element={<MathGame />} />
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/admin" element={<AdminPage />} />
+                  <Route path='/' element={<Home />} />
+                  <Route path='/hebrew-wordle' element={<HebrewWordle />} />
+                  <Route path='/english-wordle' element={<EnglishWordle />} />
+                  <Route path='/math' element={<MathGame />} />
+                  <Route path='/login' element={<Login />} />
+                  <Route path='/admin' element={<AdminPage />} />
                 </Routes>
               </main>
             </div>

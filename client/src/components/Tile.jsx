@@ -6,7 +6,10 @@ const Tile = ({ letter, status, isRevealing, revealIndex }) => {
   useEffect(() => {
     if (isRevealing) {
       // Animation is handled by CSS, but we need to set state for colors
-      const timer = setTimeout(() => setRevealed(true), revealIndex * 300 + 300);
+      const timer = setTimeout(
+        () => setRevealed(true),
+        revealIndex * 300 + 300,
+      );
       return () => clearTimeout(timer);
     } else if (status && status !== 'empty') {
       setRevealed(true);
@@ -19,10 +22,16 @@ const Tile = ({ letter, status, isRevealing, revealIndex }) => {
     'tile',
     status && (isRevealing || revealed) ? status : '',
     letter && !status ? 'has-letter' : '',
-    isRevealing ? 'is-revealing' : ''
-  ].filter(Boolean).join(' ');
+    isRevealing ? 'is-revealing' : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
-  return <div className={classes} style={{'--reveal-index': revealIndex}}>{letter}</div>;
+  return (
+    <div className={classes} style={{ '--reveal-index': revealIndex }}>
+      {letter}
+    </div>
+  );
 };
 
 export default Tile;

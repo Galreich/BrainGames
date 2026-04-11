@@ -27,7 +27,14 @@ router.post('/', authenticateToken, async (req, res) => {
       `INSERT INTO suggestions (user_id, username, title, description, subject, image_data)
        VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING id, title, created_at`,
-      [userId, username, title.trim(), description.trim(), subject || null, imageData || null]
+      [
+        userId,
+        username,
+        title.trim(),
+        description.trim(),
+        subject || null,
+        imageData || null,
+      ],
     );
 
     res.status(201).json({
@@ -45,7 +52,7 @@ router.get('/', authenticateToken, async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT id, username, title, description, subject, created_at
-       FROM suggestions ORDER BY created_at DESC LIMIT 50`
+       FROM suggestions ORDER BY created_at DESC LIMIT 50`,
     );
     res.json({ suggestions: result.rows });
   } catch (err) {

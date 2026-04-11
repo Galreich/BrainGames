@@ -21,7 +21,7 @@ router.get('/:userId', authenticateToken, async (req, res) => {
        FROM game_records
        WHERE user_id = $1
        GROUP BY subject`,
-      [userId]
+      [userId],
     );
 
     const progress = {};

@@ -8,7 +8,7 @@ const BackgroundStar = ({ index }) => {
     '--star-opacity': 0.4 + (index % 5) * 0.1,
     '--animation-duration': `${1 + (index % 3)}s`,
   };
-  return <div className="background-star" style={style} />;
+  return <div className='background-star' style={style} />;
 };
 
 export default BackgroundStar;

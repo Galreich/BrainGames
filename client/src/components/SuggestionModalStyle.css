@@ -1,59 +1,214 @@
 .suggestion-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.65);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 2000; padding: 20px; backdrop-filter: blur(4px); box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  box-sizing: border-box;
 }
 
 .suggestion-modal {
   background: linear-gradient(145deg, #1a1a2e, #16213e);
-  border-radius: 24px; padding: 32px; width: 100%; max-width: 560px;
-  max-height: 90vh; overflow-y: auto; border: 1px solid rgba(255,255,255,0.12);
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5); direction: rtl; position: relative;
+  border-radius: 24px;
+  padding: 32px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  direction: rtl;
+  position: relative;
 }
 
 .suggestion-close-btn {
-  position: absolute; top: 16px; left: 16px; background: rgba(255,255,255,0.1);
-  border: none; border-radius: 50%; width: 36px; height: 36px; color: #fff;
-  font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.suggestion-success-container { text-align: center; padding: 20px 0; }
-.suggestion-success-icon { font-size: 4rem; margin-bottom: 16px; }
-.suggestion-success-title { color: #fff; font-size: 1.6rem; font-weight: 900; margin-bottom: 10px; }
-.suggestion-success-text { color: rgba(255,255,255,0.8); margin-bottom: 24px; line-height: 1.6; }
-.suggestion-success-btn { background: linear-gradient(135deg, #f9ca24, #f0932b); color: #1a1a2e; border: none; border-radius: 50px; padding: 12px 32px; font-size: 1rem; font-weight: 900; cursor: pointer; }
-
-.suggestion-header { text-align: center; margin-bottom: 24px; }
-.suggestion-icon { font-size: 2.5rem; margin-bottom: 8px; }
-.suggestion-title { color: #fff; font-size: 1.5rem; font-weight: 900; margin: 0; }
-.suggestion-subtitle { color: rgba(255,255,255,0.6); margin-top: 6px; font-size: 0.9rem; }
-
-.suggestion-form { display: flex; flex-direction: column; gap: 16px; }
-.suggestion-label { color: rgba(255,255,255,0.8); font-size: 0.9rem; font-weight: 700; display: block; margin-bottom: 6px; }
-
-.suggestion-select, .suggestion-input, .suggestion-textarea {
-  width: 100%; padding: 12px 14px; box-sizing: border-box; background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.2); border-radius: 12px; color: #fff; font-size: 1rem;
-  outline: none; direction: rtl; font-family: inherit; line-height: 1.5;
+.suggestion-success-container {
+  text-align: center;
+  padding: 20px 0;
 }
-.suggestion-select { cursor: pointer; }
-.suggestion-select option { background: #1a1a2e; }
-.suggestion-textarea { resize: vertical; }
-.suggestion-char-count { color: rgba(255,255,255,0.4); font-size: 0.75rem; margin-top: 4px; text-align: left; }
+.suggestion-success-icon {
+  font-size: 4rem;
+  margin-bottom: 16px;
+}
+.suggestion-success-title {
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin-bottom: 10px;
+}
+.suggestion-success-text {
+  color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+.suggestion-success-btn {
+  background: linear-gradient(135deg, #f9ca24, #f0932b);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 32px;
+  font-size: 1rem;
+  font-weight: 900;
+  cursor: pointer;
+}
 
-.suggestion-file-label { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; background: rgba(255,255,255,0.06); border: 1px dashed rgba(255,255,255,0.25); border-radius: 12px; color: rgba(255,255,255,0.7); font-size: 0.9rem; }
-.suggestion-file-icon { font-size: 1.4rem; }
-.suggestion-image-preview-container { margin-top: 8px; position: relative; display: inline-block; }
-.suggestion-image-preview { max-height: 120px; max-width: 100%; border-radius: 10px; border: 1px solid rgba(255,255,255,0.15); }
-.suggestion-image-remove-btn { position: absolute; top: -8px; right: -8px; background: #ff7675; border: none; border-radius: 50%; width: 22px; height: 22px; color: #fff; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.suggestion-image-error { color: #ff7675; font-size: 0.8rem; margin-top: 4px; }
+.suggestion-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+.suggestion-icon {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+}
+.suggestion-title {
+  color: #fff;
+  font-size: 1.5rem;
+  font-weight: 900;
+  margin: 0;
+}
+.suggestion-subtitle {
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 6px;
+  font-size: 0.9rem;
+}
 
-.suggestion-error-msg { background: rgba(255,118,118,0.15); border: 1px solid rgba(255,118,118,0.4); border-radius: 10px; padding: 10px 14px; color: #ff7675; font-size: 0.9rem; text-align: center; }
+.suggestion-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.suggestion-label {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+  font-weight: 700;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.suggestion-select,
+.suggestion-input,
+.suggestion-textarea {
+  width: 100%;
+  padding: 12px 14px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  direction: rtl;
+  font-family: inherit;
+  line-height: 1.5;
+}
+.suggestion-select {
+  cursor: pointer;
+}
+.suggestion-select option {
+  background: #1a1a2e;
+}
+.suggestion-textarea {
+  resize: vertical;
+}
+.suggestion-char-count {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 0.75rem;
+  margin-top: 4px;
+  text-align: left;
+}
+
+.suggestion-file-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+}
+.suggestion-file-icon {
+  font-size: 1.4rem;
+}
+.suggestion-image-preview-container {
+  margin-top: 8px;
+  position: relative;
+  display: inline-block;
+}
+.suggestion-image-preview {
+  max-height: 120px;
+  max-width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.suggestion-image-remove-btn {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff7675;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  color: #fff;
+  font-size: 0.75rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.suggestion-image-error {
+  color: #ff7675;
+  font-size: 0.8rem;
+  margin-top: 4px;
+}
+
+.suggestion-error-msg {
+  background: rgba(255, 118, 118, 0.15);
+  border: 1px solid rgba(255, 118, 118, 0.4);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: #ff7675;
+  font-size: 0.9rem;
+  text-align: center;
+}
 
 .suggestion-submit-btn {
-  background: linear-gradient(135deg, #f9ca24, #f0932b); color: #1a1a2e; border: none; border-radius: 50px;
-  padding: 14px; font-size: 1.1rem; font-weight: 900; cursor: pointer; transition: all 0.2s; margin-top: 4px;
+  background: linear-gradient(135deg, #f9ca24, #f0932b);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 50px;
+  padding: 14px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 4px;
 }
 .suggestion-submit-btn.loading {
-  background: rgba(255,255,255,0.2); color: rgba(255,255,255,0.6); cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: not-allowed;
 }

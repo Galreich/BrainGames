@@ -33,5 +33,5 @@ export const Emojis = {
   Flex: '💪',
   Sad: '😢',
   Book: '📖',
-  CheckMark: '✓'
+  CheckMark: '✓',
 };

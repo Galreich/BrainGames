@@ -6,7 +6,11 @@ const StarBurst = ({ x, y, id }) => {
     '--burst-x': `${x}px`,
     '--burst-y': `${y}px`,
   };
-  return <div className="star-burst" style={style}>{Emojis.Star}</div>;
+  return (
+    <div className='star-burst' style={style}>
+      {Emojis.Star}
+    </div>
+  );
 };
 
 export default StarBurst;
