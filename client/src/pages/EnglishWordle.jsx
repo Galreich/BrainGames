@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useProgress, useAuth } from '../context';
 import { Tile } from '../components';
 import { useNavigate } from 'react-router-dom';
@@ -16,11 +16,11 @@ const EnglishWordle = () => {
   const { token, updateUser } = useAuth();
   const { t } = useTranslation();
 
-  const KEYBOARD_ROWS = [
+  const KEYBOARD_ROWS = useMemo(() => [
     t('Keyboard_Row_1_EN', { returnObjects: true }),
     t('Keyboard_Row_2_EN', { returnObjects: true }),
     t('Keyboard_Row_3_EN', { returnObjects: true }),
-  ];
+  ], [t]);
 
   const [wordLength, setWordLength] = useState(5);
   const [targetWord, setTargetWord] = useState('');
@@ -35,13 +35,12 @@ const EnglishWordle = () => {
   const [revealingRow, setRevealingRow] = useState(-1);
   const [shakingRow, setShakingRow] = useState(-1);
   const [message, setMessage] = useState('');
-  const [starsEarned, setStarsEarned] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const showMessage = (msg, duration = 2500) => {
+  const showMessage = useCallback((msg, duration = 2500) => {
     setMessage(msg);
     setTimeout(() => setMessage(''), duration);
-  };
+  }, []);
 
   const fetchWord = useCallback(async (len) => {
     setLoading(true);
@@ -64,7 +63,7 @@ const EnglishWordle = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t]);
 
   const startNewGame = useCallback(
     async (len) => {
@@ -78,7 +77,6 @@ const EnglishWordle = () => {
       setRevealingRow(-1);
       setShakingRow(-1);
       setMessage('');
-      setStarsEarned(0);
       await fetchWord(length);
     },
     [wordLength, fetchWord],
@@ -175,8 +173,6 @@ const EnglishWordle = () => {
 
     if (won) {
       const stars = 1;
-
-      setStarsEarned(stars);
       setTimeout(() => {
         setGameStatus('won');
         showMessage(`${t('Amazing_You_won')} ${Emojis.Party}`, 5000);
@@ -218,7 +214,10 @@ const EnglishWordle = () => {
     currentRow,
     keyboardStatus,
     saveProgress,
+    showMessage,
+    t,
     token,
+    updateUser,
   ]);
 
   const handleKeyPress = useCallback(

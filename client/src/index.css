@@ -40,7 +40,6 @@ h6 {
 button {
   cursor: pointer;
   font-family: inherit;
-  font-weight: 700;
   border: none;
   outline: none;
   transition: all 0.2s ease;

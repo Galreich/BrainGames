@@ -8,13 +8,26 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Load saved auth from localStorage
     const savedToken = localStorage.getItem('braingames_token');
     const savedUser = localStorage.getItem('braingames_user');
     if (savedToken && savedUser) {
       try {
         setToken(savedToken);
         setUser(JSON.parse(savedUser));
+        // Refresh star counts from DB
+        fetch('/api/auth/me', {
+          headers: { Authorization: `Bearer ${savedToken}` },
+        })
+          .then((r) => r.ok ? r.json() : null)
+          .then((data) => {
+            if (data) {
+              setUser(data);
+              localStorage.setItem('braingames_user', JSON.stringify(data));
+            }
+          })
+          .catch(() => {})
+          .finally(() => setLoading(false));
+        return;
       } catch (e) {
         localStorage.removeItem('braingames_token');
         localStorage.removeItem('braingames_user');

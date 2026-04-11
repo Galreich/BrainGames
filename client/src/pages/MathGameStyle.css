@@ -171,7 +171,7 @@
   border-radius: 20px;
   padding: 6px 14px;
   color: #fff;
-  font-weight: 700;
+  ;
   font-size: 0.9rem;
   display: flex;
   align-items: center;
@@ -296,7 +296,7 @@
 .question-text {
   color: #fff;
   font-size: 2.8rem;
-  font-weight: 900;
+  font-weight: bold;
   margin-bottom: 8px;
   direction: ltr;
   text-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
@@ -321,7 +321,7 @@
   padding: 18px;
   color: #fff;
   font-size: 1.6rem;
-  font-weight: 900;
+  font-weight: bold;
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -358,7 +358,7 @@
   color: #fff;
   padding: 12px 26px;
   border-radius: 50px;
-  font-weight: 800;
+  font-weight: bold;
   font-size: 1.1rem;
   z-index: 100;
   animation: fadeIn 0.3s ease;
@@ -408,7 +408,7 @@
 
 .stat-value {
   font-size: 1.6rem;
-  font-weight: 900;
+  font-weight: bold;
 }
 
 .stat-label {

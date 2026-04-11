@@ -193,7 +193,7 @@
   color: #fff;
   padding: 14px 28px;
   border-radius: 50px;
-  font-weight: 800;
+  font-weight: bold;
   font-size: 1.1rem;
   z-index: 100;
   animation: fadeIn 0.3s ease;
@@ -220,7 +220,7 @@
   border: none;
   background: #e8eaed;
   color: #333;
-  font-weight: 800;
+  font-weight: bold;
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -269,7 +269,7 @@
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
-  font-weight: 900;
+  font-weight: bold;
   background: #fff;
   color: #333;
   transition: all 0.1s;
@@ -315,7 +315,7 @@
 .game-over-title {
   color: #fff;
   font-size: 1.8rem;
-  font-weight: 900;
+  font-weight: bold;
 }
 .game-over-text {
   color: rgba(255, 255, 255, 0.9);
@@ -340,7 +340,7 @@
   border-radius: 50px;
   padding: 14px 36px;
   font-size: 1.2rem;
-  font-weight: 900;
+  font-weight: bold;
   cursor: pointer;
   transition: all 0.2s;
 }
@@ -373,6 +373,7 @@
 .instructions-list {
   display: flex;
   flex-direction: column;
+  font-weight: normal;
   gap: 8px;
 }
 .instruction-item {
@@ -398,4 +399,5 @@
 .instruction-text {
   color: rgba(255, 255, 255, 0.85);
   font-size: 0.9rem;
+  font-weight: bold;
 }
