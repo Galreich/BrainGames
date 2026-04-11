@@ -1,6 +1,8 @@
-const { Pool } = require('pg');
-const bcrypt = require('bcryptjs');
-require('dotenv').config();
+import pg from 'pg';
+const { Pool } = pg;
+import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -75,4 +77,4 @@ const initDB = async () => {
   }
 };
 
-module.exports = { pool, initDB };
+export { pool, initDB };

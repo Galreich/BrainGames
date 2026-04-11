@@ -1,6 +1,5 @@
-const express = require('express');
-const hebrewWords = require('../data/hebrew-words');
-const englishWords = require('../data/english-words');
+import express from 'express';
+import { hebrewWords, englishWords } from '../data';
 
 const router = express.Router();
 
@@ -76,4 +75,4 @@ router.get('/english/validate', (req, res) => {
   res.json({ word, isValid, length });
 });
 
-module.exports = router;
+export default router;

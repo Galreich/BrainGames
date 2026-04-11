@@ -2,10 +2,11 @@
   "name": "braingames-server",
   "version": "1.0.0",
   "description": "BrainGames backend server",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node --experimental-specifier-resolution=node index.js",
+    "dev": "nodemon --experimental-specifier-resolution=node index.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

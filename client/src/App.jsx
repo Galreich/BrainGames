@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ProgressProvider } from './context/ProgressContext';
 import Header from './components/Header';
-import Home from './pages/Home';
-import HebrewWordle from './pages/HebrewWordle';
-import EnglishWordle from './pages/EnglishWordle';
-import MathGame from './pages/MathGame';
-import Login from './pages/Login';
-import AdminPage from './pages/AdminPage';
+import {
+  Home,
+  HebrewWordle,
+  EnglishWordle,
+  MathGame,
+  Login,
+  AdminPage
+} from './pages';
 
 import './App.css';
 
