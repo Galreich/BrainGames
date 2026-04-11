@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context';
-import { SuggestionModal } from '.';
+import { SuggestionModal, StarsProgressBar, HeaderNav, HeaderUserActions } from '.';
 import './HeaderStyle.css';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
@@ -36,62 +36,22 @@ const Header = () => {
             <span className="logo-emoji">{Emojis.Brain}</span>
             {!user && <span className="logo-text">{t('Braingames_Title')}</span>}
           </Link>
-          {user && (
-            <div className="stars-progress-bar">
-              <div className="progress-item">
-                <span>{Emojis.Star}</span>
-                <span className="red-star">{user.red_stars || 0}</span>
-              </div>
-              <div className="progress-item">
-                <span>{Emojis.Star}</span>
-                <span className="blue-star">{user.blue_stars || 0}</span>
-              </div>
-              <div className="progress-item">
-                <span>{Emojis.Star}</span>
-                <span className="green-star">{user.green_stars || 0}</span>
-              </div>
-            </div>
-          )}
+          <StarsProgressBar user={user} />
         </div>
 
         {/* Navigation */}
-        <nav className="header-nav">
-          {navLinks.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
+        <HeaderNav navLinks={navLinks} currentPath={location.pathname} />
 
         <div className="header-divider" />
 
         {/* Right Section */}
-        <div className="right-section">
-          {user ? (
-            <>
-              <span className="user-info">{Emojis.User} {user.username}</span>
-              {user.isAdmin && (
-                <Link to="/admin" className={`nav-link ${location.pathname === '/admin' ? 'active' : ''}`}>
-                  {Emojis.Gear} {t('Admin')}
-                </Link>
-              )}
-              <button className="suggestion-btn" onClick={() => setShowSuggestion(true)}>
-                {Emojis.Bulb} {t('Suggest_a_Game')}
-              </button>
-              <button className="logout-btn" onClick={handleLogout}>
-                {t('Logout')}
-              </button>
-            </>
-          ) : (
-            <button className="login-btn" onClick={() => navigate('/login')}>
-              {t('Login')}
-            </button>
-          )}
-        </div>
+        <HeaderUserActions 
+          user={user} 
+          currentPath={location.pathname} 
+          onLogout={handleLogout} 
+          onShowSuggestion={() => setShowSuggestion(true)} 
+          onLoginClick={() => navigate('/login')} 
+        />
       </div>
     </header>
     </>

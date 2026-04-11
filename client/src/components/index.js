@@ -6,3 +6,8 @@ export { default as StarBurst } from './StarBurst';
 export { default as BackgroundStar } from './BackgroundStar';
 export { default as Tile } from './Tile';
 export { default as StarDisplay } from './StarDisplay';
+export { default as StarsProgressBar } from './StarsProgressBar';
+export { default as HeaderNav } from './HeaderNav';
+export { default as HeaderUserActions } from './HeaderUserActions';
+export { default as SuggestionSuccess } from './SuggestionSuccess';
+export { default as SuggestionImageUpload } from './SuggestionImageUpload';

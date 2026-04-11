@@ -10,31 +10,6 @@ const WORD_LENGTHS = [4, 5, 6];
 
 const MAX_ATTEMPTS = 6;
 
-const Tile = ({ letter, status, isRevealing, revealIndex }) => {
-  const [revealed, setRevealed] = useState(false);
-
-  useEffect(() => {
-    if (isRevealing) {
-      // Animation is handled by CSS, but we need to set state for colors
-      const timer = setTimeout(() => setRevealed(true), revealIndex * 300 + 300);
-      return () => clearTimeout(timer);
-    } else if (status && status !== 'empty') {
-      setRevealed(true);
-    } else {
-      setRevealed(false);
-    }
-  }, [isRevealing, status, revealIndex, setRevealed]);
-
-  const classes = [
-    'tile',
-    status && (isRevealing || revealed) ? status : '',
-    letter && !status ? 'has-letter' : '',
-    isRevealing ? 'is-revealing' : ''
-  ].filter(Boolean).join(' ');
-
-  return <div className={classes} style={{'--reveal-index': revealIndex}}>{letter}</div>;
-};
-
 const HebrewWordle = () => {
   const navigate = useNavigate();
   const { saveProgress } = useProgress();
@@ -57,7 +32,9 @@ const HebrewWordle = () => {
   const [wordLength, setWordLength] = useState(5);
   const [targetWord, setTargetWord] = useState('');
   const [guesses, setGuesses] = useState(Array(MAX_ATTEMPTS).fill(''));
-  const [guessResults, setGuessResults] = useState(Array(MAX_ATTEMPTS).fill(null));
+  const [guessResults, setGuessResults] = useState(
+    Array(MAX_ATTEMPTS).fill(null),
+  );
   const [currentGuess, setCurrentGuess] = useState('');
   const [currentRow, setCurrentRow] = useState(0);
   const [gameStatus, setGameStatus] = useState('playing'); // 'playing', 'won', 'lost'
@@ -93,20 +70,23 @@ const HebrewWordle = () => {
     }
   }, []);
 
-  const startNewGame = useCallback(async (len) => {
-    const length = len || wordLength;
-    setGuesses(Array(MAX_ATTEMPTS).fill(''));
-    setGuessResults(Array(MAX_ATTEMPTS).fill(null));
-    setCurrentGuess('');
-    setCurrentRow(0);
-    setGameStatus('playing');
-    setKeyboardStatus({});
-    setRevealingRow(-1);
-    setShakingRow(-1);
-    setMessage('');
-    setStarsEarned(0);
-    await fetchWord(length);
-  }, [wordLength, fetchWord]);
+  const startNewGame = useCallback(
+    async (len) => {
+      const length = len || wordLength;
+      setGuesses(Array(MAX_ATTEMPTS).fill(''));
+      setGuessResults(Array(MAX_ATTEMPTS).fill(null));
+      setCurrentGuess('');
+      setCurrentRow(0);
+      setGameStatus('playing');
+      setKeyboardStatus({});
+      setRevealingRow(-1);
+      setShakingRow(-1);
+      setMessage('');
+      setStarsEarned(0);
+      await fetchWord(length);
+    },
+    [wordLength, fetchWord],
+  );
 
   useEffect(() => {
     startNewGame(5);
@@ -151,7 +131,9 @@ const HebrewWordle = () => {
 
     // Validate word exists in the list
     try {
-      const res = await fetch(`/api/words/hebrew/validate?word=${encodeURIComponent(currentGuess)}`);
+      const res = await fetch(
+        `/api/words/hebrew/validate?word=${encodeURIComponent(currentGuess)}`,
+      );
       if (res.ok) {
         const data = await res.json();
         if (!data.isValid) {
@@ -203,40 +185,104 @@ const HebrewWordle = () => {
       const stars = 1;
 
       setStarsEarned(stars);
-      setTimeout(() => {
-        setGameStatus('won');
-        showMessage(`${t('Well_done_You_won')} ${Emojis.Party}`, 5000);
-        saveProgress('hebrew', stars);
-        if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'hebrew-wordle', subject: 'hebrew', stars, score: currentRow + 1 }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
-      }, wordLength * 300 + 400);
+      setTimeout(
+        () => {
+          setGameStatus('won');
+          showMessage(`${t('Well_done_You_won')} ${Emojis.Party}`, 5000);
+          saveProgress('hebrew', stars);
+          if (token)
+            fetch('/api/game-records', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                game: 'hebrew-wordle',
+                subject: 'hebrew',
+                stars,
+                score: currentRow + 1,
+              }),
+            })
+              .then((r) => r.json())
+              .then((d) =>
+                updateUser({
+                  red_stars: d.red_stars,
+                  blue_stars: d.blue_stars,
+                  green_stars: d.green_stars,
+                }),
+              )
+              .catch(() => {});
+        },
+        wordLength * 300 + 400,
+      );
     } else if (nextRow >= MAX_ATTEMPTS) {
-      setTimeout(() => {
-        setGameStatus('lost');
-        showMessage(t('The_word_was', { word: targetWord }), 6000);
-        saveProgress('hebrew', 0);
-        if (token) fetch('/api/game-records', { method: 'POST', headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` }, body: JSON.stringify({ game: 'hebrew-wordle', subject: 'hebrew', stars: 0, score: MAX_ATTEMPTS }) }).then(r => r.json()).then(d => updateUser({ red_stars: d.red_stars, blue_stars: d.blue_stars, green_stars: d.green_stars })).catch(() => {});
-      }, wordLength * 300 + 400);
+      setTimeout(
+        () => {
+          setGameStatus('lost');
+          showMessage(t('The_word_was', { word: targetWord }), 6000);
+          saveProgress('hebrew', 0);
+          if (token)
+            fetch('/api/game-records', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({
+                game: 'hebrew-wordle',
+                subject: 'hebrew',
+                stars: 0,
+                score: MAX_ATTEMPTS,
+              }),
+            })
+              .then((r) => r.json())
+              .then((d) =>
+                updateUser({
+                  red_stars: d.red_stars,
+                  blue_stars: d.blue_stars,
+                  green_stars: d.green_stars,
+                }),
+              )
+              .catch(() => {});
+        },
+        wordLength * 300 + 400,
+      );
     } else {
       setCurrentRow(nextRow);
       setCurrentGuess('');
     }
-  }, [currentGuess, wordLength, gameStatus, targetWord, guesses, guessResults, currentRow, keyboardStatus, saveProgress, token]);
+  }, [
+    currentGuess,
+    wordLength,
+    gameStatus,
+    targetWord,
+    guesses,
+    guessResults,
+    currentRow,
+    keyboardStatus,
+    saveProgress,
+    token,
+  ]);
 
-  const handleKeyPress = useCallback((key) => {
-    if (gameStatus !== 'playing') return;
+  const handleKeyPress = useCallback(
+    (key) => {
+      if (gameStatus !== 'playing') return;
 
-    if (key === Emojis.Backspace || key === 'Backspace') {
-      setCurrentGuess((prev) => prev.slice(0, -1));
-    } else if (key === t('Enter_Symbol_HE') || key === 'Enter') {
-      submitGuess();
-    } else if (currentGuess.length < wordLength) {
-      // Hebrew letter
-      const hebrewLetters = t('Hebrew_Letters_String');
-      if (hebrewLetters.includes(key)) {
-        setCurrentGuess((prev) => prev + key);
+      if (key === Emojis.Backspace || key === 'Backspace') {
+        setCurrentGuess((prev) => prev.slice(0, -1));
+      } else if (key === t('Enter_Symbol_HE') || key === 'Enter') {
+        submitGuess();
+      } else if (currentGuess.length < wordLength) {
+        // Hebrew letter
+        const hebrewLetters = t('Hebrew_Letters_String');
+        if (hebrewLetters.includes(key)) {
+          setCurrentGuess((prev) => prev + key);
+        }
       }
-    }
-  }, [gameStatus, currentGuess, wordLength, submitGuess]);
+    },
+    [gameStatus, currentGuess, wordLength, submitGuess],
+  );
 
   // Physical keyboard support (Hebrew layout keys)
   useEffect(() => {
@@ -261,9 +307,9 @@ const HebrewWordle = () => {
 
   if (loading) {
     return (
-      <div className="wordle-page hebrew">
-        <div className="wordle-loading">
-          <div className="spinner">{Emojis.Hourglass}</div>
+      <div className='wordle-page hebrew'>
+        <div className='wordle-loading'>
+          <div className='spinner'>{Emojis.Hourglass}</div>
           <div>{t('Loading_word')}</div>
         </div>
       </div>
@@ -271,18 +317,18 @@ const HebrewWordle = () => {
   }
 
   return (
-    <div className="wordle-page hebrew">
-      {message && <div className="wordle-message">{message}</div>}
+    <div className='wordle-page hebrew'>
+      {message && <div className='wordle-message'>{message}</div>}
 
-      <div className="wordle-container">
+      <div className='wordle-container'>
         {/* Header */}
-        <div className="wordle-header">
-          <h1 className="wordle-title">{t('Hebrew_Wordle_Title')}</h1>
-          <p className="wordle-subtitle">{t('Guess_the_secret_word')}</p>
+        <div className='wordle-header'>
+          <h1 className='wordle-title'>{t('Hebrew_Wordle_Title')}</h1>
+          <p className='wordle-subtitle'>{t('Guess_the_secret_word')}</p>
         </div>
 
         {/* Word Length Selector */}
-        <div className="length-selector">
+        <div className='length-selector'>
           {WORD_LENGTHS.map((len) => (
             <button
               key={len}
@@ -295,9 +341,10 @@ const HebrewWordle = () => {
         </div>
 
         {/* Game Board */}
-        <div className="wordle-board">
+        <div className='wordle-board'>
           {Array.from({ length: MAX_ATTEMPTS }, (_, rowIdx) => {
-            const guess = rowIdx === currentRow ? currentGuess : guesses[rowIdx];
+            const guess =
+              rowIdx === currentRow ? currentGuess : guesses[rowIdx];
             const result = guessResults[rowIdx];
             const isShaking = shakingRow === rowIdx;
             const isRevealing = revealingRow === rowIdx;
@@ -326,30 +373,39 @@ const HebrewWordle = () => {
 
         {/* Game Over Panel */}
         {gameStatus !== 'playing' && (
-          <div className="game-over-panel">
+          <div className='game-over-panel'>
             {gameStatus === 'won' ? (
               <>
-                <div className="game-over-title">{Emojis.Party} {t('Well_done_Title')}</div>
-                <p className="game-over-text">
+                <div className='game-over-title'>
+                  {Emojis.Party} {t('Well_done_Title')}
+                </div>
+                <p className='game-over-text'>
                   {t('Guessed_in_tries', { count: currentRow + 1 })}
                 </p>
-                <p className="game-over-subtext">
-                  {t('The_word_was', { word: '' })} <strong className="correct-word">{targetWord}</strong>
+                <p className='game-over-subtext'>
+                  {t('The_word_was', { word: '' })}{' '}
+                  <strong className='correct-word'>{targetWord}</strong>
                 </p>
               </>
             ) : (
               <>
-                <div className="game-over-title">{Emojis.Sad} {t('Try_Again_Title')}</div>
-                <p className="game-over-text">
-                  {t('The_word_was', { word: '' })} <strong className="failed-word">{targetWord}</strong>
+                <div className='game-over-title'>
+                  {Emojis.Sad} {t('Try_Again_Title')}
+                </div>
+                <p className='game-over-text'>
+                  {t('The_word_was', { word: '' })}{' '}
+                  <strong className='failed-word'>{targetWord}</strong>
                 </p>
               </>
             )}
-            <div className="game-over-buttons">
-              <button className="new-game-btn" onClick={() => startNewGame()}>
+            <div className='game-over-buttons'>
+              <button className='new-game-btn' onClick={() => startNewGame()}>
                 {t('New_Game')} {Emojis.Refresh}
               </button>
-              <button className="new-game-btn secondary" onClick={() => navigate('/')}>
+              <button
+                className='new-game-btn secondary'
+                onClick={() => navigate('/')}
+              >
                 {Emojis.House} {t('Back_to_Home')}
               </button>
             </div>
@@ -357,11 +413,12 @@ const HebrewWordle = () => {
         )}
 
         {/* Keyboard */}
-        <div className="keyboard">
+        <div className='keyboard'>
           {KEYBOARD_ROWS.map((row, rowIdx) => (
-            <div key={rowIdx} className="keyboard-row">
+            <div key={rowIdx} className='keyboard-row'>
               {row.map((key) => {
-                const isSpecial = key === Emojis.Backspace || key === t('Enter_Symbol_HE');
+                const isSpecial =
+                  key === Emojis.Backspace || key === t('Enter_Symbol_HE');
                 const status = keyboardStatus[key];
                 return (
                   <button
@@ -380,17 +437,17 @@ const HebrewWordle = () => {
 
         {/* Instructions */}
         {gameStatus === 'playing' && (
-          <div className="instructions-panel">
-            <h3 className="instructions-title">{t('How_to_play')}</h3>
-            <div className="instructions-list">
+          <div className='instructions-panel'>
+            <h3 className='instructions-title'>{t('How_to_play')}</h3>
+            <div className='instructions-list'>
               {[
                 { type: 'correct', text: t('Letter_in_correct_spot') },
                 { type: 'present', text: t('Letter_in_wrong_spot') },
                 { type: 'absent', text: t('Letter_not_in_word') },
               ].map((item) => (
-                <div key={item.type} className="instruction-item">
+                <div key={item.type} className='instruction-item'>
                   <div className={`instruction-tile ${item.type}`} />
-                  <span className="instruction-text">{item.text}</span>
+                  <span className='instruction-text'>{item.text}</span>
                 </div>
               ))}
             </div>

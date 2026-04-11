@@ -3,6 +3,7 @@ import { useAuth } from '../context';
 import './SuggestionModalStyle.css';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
+import { SuggestionSuccess, SuggestionImageUpload } from '.';
 
 const SuggestionModal = ({ onClose }) => {
   const { token } = useAuth();
@@ -81,18 +82,7 @@ const SuggestionModal = ({ onClose }) => {
         <button onClick={onClose} className="suggestion-close-btn">{Emojis.Cross}</button>
 
         {status === 'success' ? (
-          <div className="suggestion-success-container">
-            <div className="suggestion-success-icon">{Emojis.Party}</div>
-            <h2 className="suggestion-success-title">
-              {t('Thank_you')}
-            </h2>
-            <p className="suggestion-success-text">
-              {t('Suggestion_sent')}<br />{t('Suggestion_sent_2')}
-            </p>
-            <button onClick={onClose} className="suggestion-success-btn">
-              {t('Close')}
-            </button>
-          </div>
+          <SuggestionSuccess onClose={onClose} />
         ) : (
           <>
             <div className="suggestion-header">
@@ -161,29 +151,12 @@ const SuggestionModal = ({ onClose }) => {
               </div>
 
               {/* Image upload */}
-              <div>
-                <label className="suggestion-label">
-                  {t('Image_Optional')}
-                </label>
-                <label className="suggestion-file-label">
-                  <span className="suggestion-file-icon">{Emojis.Frame}</span>
-                  <span>{imageData ? `${t('Image_Selected')} ${Emojis.CheckMark}` : t('Click_to_select_image')}</span>
-                  <input type="file" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
-                </label>
-                {imageData && (
-                  <div className="suggestion-image-preview-container">
-                    <img src={imageData} alt={t('Image_Preview')} className="suggestion-image-preview" />
-                    <button
-                      type="button"
-                      onClick={() => setImageData(null)}
-                      className="suggestion-image-remove-btn"
-                    >{Emojis.Cross}</button>
-                  </div>
-                )}
-                {imageError && (
-                  <div className="suggestion-image-error">{imageError}</div>
-                )}
-              </div>
+              <SuggestionImageUpload 
+                imageData={imageData} 
+                imageError={imageError} 
+                onImageChange={handleImageChange} 
+                onRemoveImage={() => setImageData(null)} 
+              />
 
               {errorMsg && (
                 <div className="suggestion-error-msg">
