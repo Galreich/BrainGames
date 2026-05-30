@@ -12,7 +12,7 @@ BrainGames is a full-stack Hebrew/English educational gaming website for element
 
 ## Tech Stack
 
-- **Frontend:** React 18, TypeScript, Vite, React Router, MUI (Material UI), i18next
+- **Frontend:** React 18, TypeScript, Vite, React Router, i18next
 - **Backend:** Node.js + Express + TypeScript
 - **Database:** PostgreSQL
 - **Deployment:** Vercel (serverless functions + static frontend)
