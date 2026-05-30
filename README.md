@@ -2,6 +2,8 @@
 
 BrainGames is a full-stack Hebrew/English educational gaming website for elementary school students in Israel.
 
+**Play now:** https://braingames-client.vercel.app
+
 ## Games
 
 - **🔤 Hebrew Wordle** - Guess secret Hebrew words (4-6 letters) with on-screen & physical Hebrew keyboard
@@ -10,15 +12,19 @@ BrainGames is a full-stack Hebrew/English educational gaming website for element
 
 ## Tech Stack
 
-- **Frontend:** React 18, Vite, React Router, Context API
-- **Backend:** Node.js + Express
+- **Frontend:** React 18, TypeScript, Vite, React Router, MUI (Material UI), i18next
+- **Backend:** Node.js + Express + TypeScript
 - **Database:** PostgreSQL
+- **Deployment:** Vercel (serverless functions + static frontend)
 
 ## Project Structure
 
 ```
 BrainGames/
-├── client/               # React frontend (Vite)
+├── api/                  # Vercel serverless function entry point
+│   └── index.ts
+├── vercel.json           # Vercel deployment config
+├── client/               # React frontend (Vite + TypeScript)
 │   ├── index.html
 │   ├── vite.config.js
 │   ├── public/
@@ -26,38 +32,61 @@ BrainGames/
 │   │   ├── hebrew-wordle.svg
 │   │   └── english-wordle.svg
 │   ├── src/
-│   │   ├── App.jsx
-│   │   ├── index.jsx
+│   │   ├── App.tsx
+│   │   ├── App.css
+│   │   ├── index.tsx
 │   │   ├── index.css
+│   │   ├── i18n.ts
+│   │   ├── heTranslations.ts
+│   │   ├── utils/
+│   │   │   ├── api.ts
+│   │   │   └── Emojis.ts
 │   │   ├── components/
-│   │   │   ├── Header.jsx
-│   │   │   ├── StarDisplay.jsx
-│   │   │   └── SuggestionModal.jsx
+│   │   │   ├── Header.tsx
+│   │   │   ├── HeaderNav.tsx
+│   │   │   ├── HeaderUserActions.tsx
+│   │   │   ├── StarDisplay.tsx
+│   │   │   ├── StarsProgressBar.tsx
+│   │   │   ├── GameCard.tsx
+│   │   │   ├── Tile.tsx
+│   │   │   ├── SuggestionModal.tsx
+│   │   │   ├── SuggestionImageUpload.tsx
+│   │   │   ├── SuggestionSuccess.tsx
+│   │   │   ├── BackgroundStar.tsx
+│   │   │   ├── Confetti.tsx
+│   │   │   └── StarBurst.tsx
 │   │   ├── pages/
-│   │   │   ├── Home.jsx
-│   │   │   ├── HebrewWordle.jsx
-│   │   │   ├── EnglishWordle.jsx
-│   │   │   ├── MathGame.jsx
-│   │   │   ├── Login.jsx
-│   │   │   └── AdminPage.jsx
+│   │   │   ├── Home.tsx
+│   │   │   ├── Wordle.tsx
+│   │   │   ├── MathGame.tsx
+│   │   │   ├── MathGameMenu.tsx
+│   │   │   ├── MathGamePlaying.tsx
+│   │   │   ├── MathGameOver.tsx
+│   │   │   ├── Login.tsx
+│   │   │   ├── AdminPage.tsx
+│   │   │   └── Instructions.tsx
 │   │   └── context/
-│   │       ├── AuthContext.jsx
-│   │       └── ProgressContext.jsx
+│   │       ├── AuthContext.tsx
+│   │       └── ProgressContext.tsx
 │   └── package.json
 │
-└── server/               # Express backend
-    ├── index.js
-    ├── db.js
+└── server/               # Express backend (TypeScript)
+    ├── index.ts
+    ├── db.ts
+    ├── tsconfig.json
+    ├── types/
+    │   ├── express.d.ts
+    │   └── word-list.d.ts
     ├── routes/
-    │   ├── auth.js
-    │   ├── progress.js
-    │   ├── words.js
-    │   ├── suggestions.js
-    │   ├── gameRecords.js
-    │   └── admin.js
+    │   ├── auth.ts
+    │   ├── progress.ts
+    │   ├── words.ts
+    │   ├── suggestions.ts
+    │   ├── gameRecords.ts
+    │   └── admin.ts
     ├── data/
-    │   ├── hebrew-words.js
-    │   └── english-words.js
+    │   ├── hebrew-words.ts
+    │   └── english-words.ts
     └── package.json
 ```
 
@@ -84,14 +113,22 @@ CREATE DATABASE braingames;
 
 The tables are created automatically when the server starts.
 
-### 3. Set up the server
+### 3. Install all dependencies
 
 ```bash
-cd server
-npm install
+npm run install:all
 ```
 
-Create a `.env` file:
+Or manually:
+
+```bash
+cd server && npm install
+cd ../client && npm install
+```
+
+### 4. Set up the server
+
+Create a `.env` file in the `server/` directory:
 
 ```env
 PORT=5000
@@ -103,20 +140,20 @@ NODE_ENV=development
 Start the server:
 
 ```bash
-npm run dev    # development (with nodemon)
+cd server
+npm run dev    # development (with nodemon + ts-node)
 # or
-npm start      # production
+npm start      # production (ts-node)
 ```
 
-### 4. Set up the client
+### 5. Set up the client
 
 ```bash
 cd client
-npm install
 npm start
 ```
 
-The React app runs on http://localhost:3000 and proxies API calls to http://localhost:5000.
+The React app runs on http://localhost:5173 (Vite default) and proxies API calls to the server.
 
 ## API Endpoints
 
@@ -158,26 +195,30 @@ Stars are earned based on:
 ## Features
 
 - Full RTL support for Hebrew
+- Hebrew/English internationalization (i18next)
 - Physical & on-screen Hebrew keyboard for Hebrew Wordle
 - Physical & on-screen QWERTY keyboard for English Wordle
+- Unified Wordle component supporting both languages
 - Color-coded feedback (green/yellow/gray tiles)
-- Animated rocket path in Math game
+- Animated rocket path in Math game with menu and game-over screens
 - User authentication with progress tracking
 - Colored star system (red/blue/green per game)
-- Game suggestion system for users
+- Game suggestion system with image upload
 - Admin panel for managing users and content
+- Confetti and star burst animations
 - SVG illustrations on game cards
 - Responsive design for mobile and desktop
-- Child-friendly colorful UI
+- Child-friendly colorful UI (Material UI)
 
-## Building for Production
+## Deployment
+
+The project is configured for deployment on Vercel:
 
 ```bash
 # Build the React app
 cd client
 npm run build
-
-# The build output is in client/dist/
-# Serve it with the Express server by adding:
-# app.use(express.static(path.join(__dirname, '../client/dist')));
+# Output is in client/dist/
 ```
+
+The `vercel.json` configures the serverless API function (`api/index.ts`) and rewrites for SPA routing.
