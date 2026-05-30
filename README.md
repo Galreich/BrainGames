@@ -210,6 +210,35 @@ Stars are earned based on:
 - Responsive design for mobile and desktop
 - Child-friendly colorful UI (Material UI)
 
+## Testing
+
+The server includes a comprehensive test suite with 48 integration tests using Jest and Supertest.
+
+Run the tests:
+
+```bash
+cd server
+npm test
+```
+
+Test results are saved under `server/tests/test-results.txt`.
+
+| Category                  | Tests |
+| ------------------------- | ----- |
+| הרשמה למערכת (Registration)        | 7     |
+| התחברות למערכת (Login)             | 5     |
+| אבטחת משתמשים (User Security)     | 2     |
+| הרשאות וגישה (Authorization)      | 4     |
+| הרשאות מנהל (Admin Permissions)   | 2     |
+| משחק מילים בעברית (Hebrew Wordle)  | 4     |
+| משחק מילים באנגלית (English Wordle) | 5     |
+| משחק מתמטיקה (Math Game)          | 3     |
+| שמירת תוצאות משחק (Game Records)   | 6     |
+| התקדמות משתמש (User Progress)     | 2     |
+| סיכום תוצאות (Summary)            | 2     |
+| הצעות משתמשים (Suggestions)       | 6     |
+| **סה"כ**                          | **48** |
+
 ## Deployment
 
 The project is configured for deployment on Vercel:
