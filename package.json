@@ -1,0 +1,12 @@
+{
+  "name": "braingames",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev:server": "cd server && npm run dev",
+    "dev:client": "cd client && npm start",
+    "build": "cd client && npm run build",
+    "install:all": "cd server && npm install && cd ../client && npm install",
+    "vercel-build": "cd client && npm install && npm run build"
+  }
+}

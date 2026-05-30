@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { apiUrl } from '../utils/api';
 
 export type AuthUser = {
   id: number;
@@ -34,7 +35,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setToken(savedToken);
         setUser(JSON.parse(savedUser));
         // Refresh star counts from DB
-        fetch('/api/auth/me', {
+        fetch(apiUrl('/api/auth/me'), {
           headers: { Authorization: `Bearer ${savedToken}` },
         })
           .then((r) => r.ok ? r.json() : null)
@@ -56,7 +57,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = async (username: string, password: string) => {
-    const response = await fetch('/api/auth/login', {
+    const response = await fetch(apiUrl('/api/auth/login'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),
@@ -77,7 +78,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   const register = async (username: string, password: string) => {
-    const response = await fetch('/api/auth/register', {
+    const response = await fetch(apiUrl('/api/auth/register'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, password }),

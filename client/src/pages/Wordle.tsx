@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import './WordleStyle.css';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
+import { apiUrl } from '../utils/api';
 import Instructions from './Instructions';
 
 const WORD_LENGTHS = [4, 5, 6];
@@ -65,7 +66,7 @@ const Wordle = ({ language }: WordleProps) => {
     async (len: number) => {
       setLoading(true);
       try {
-        const response = await fetch(`/api/words/${language}?length=${len}`);
+        const response = await fetch(apiUrl(`/api/words/${language}?length=${len}`));
         if (response.ok) {
           const data = await response.json();
           setTargetWord(isHebrew ? data.word : data.word.toUpperCase());
@@ -151,7 +152,7 @@ const Wordle = ({ language }: WordleProps) => {
 
     try {
       const res = await fetch(
-        `/api/words/${language}/validate?word=${encodeURIComponent(currentGuess)}`,
+        apiUrl(`/api/words/${language}/validate?word=${encodeURIComponent(currentGuess)}`),
       );
       if (res.ok) {
         const data = await res.json();
@@ -204,7 +205,7 @@ const Wordle = ({ language }: WordleProps) => {
           else showMessage(`${t('The_word_was', { word: targetWord })}`, 6000);
 
           if (token) {
-            fetch('/api/game-records', {
+            fetch(apiUrl('/api/game-records'), {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

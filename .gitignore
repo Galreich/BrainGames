@@ -9,6 +9,9 @@ node_modules/
 # Build output
 client/dist/
 
+# Vercel
+.vercel/
+
 # Vite
 client/.vite/
 

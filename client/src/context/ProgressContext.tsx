@@ -6,6 +6,7 @@ import React, {
   useCallback,
 } from 'react';
 import { useAuth } from './AuthContext';
+import { apiUrl } from '../utils/api';
 
 type GameProgress = { stars: number; gamesPlayed: number };
 
@@ -59,7 +60,7 @@ export const ProgressProvider = ({ children }: { children: React.ReactNode }) =>
     if (!user || !token) return;
     setLoading(true);
     try {
-      const response = await fetch(`/api/progress/${user.id}`, {
+      const response = await fetch(apiUrl(`/api/progress/${user.id}`), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.ok) {

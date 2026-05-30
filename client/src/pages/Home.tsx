@@ -4,6 +4,7 @@ import { Confetti, GameCard } from '../components';
 import './HomeStyle.css';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
+import { apiUrl } from '../utils/api';
 
 const Home = () => {
   const { user, token } = useAuth();
@@ -23,7 +24,7 @@ const Home = () => {
 
   useEffect(() => {
     if (!token) return;
-    fetch('/api/game-records/summary', {
+    fetch(apiUrl('/api/game-records/summary'), {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((r) => r.json())

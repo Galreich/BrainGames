@@ -4,6 +4,7 @@ import { useAuth } from '../context';
 import './AdminPageStyle.css';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
+import { apiUrl } from '../utils/api';
 
 type Suggestion = {
   id: number;
@@ -38,7 +39,7 @@ const AdminPage = () => {
     }
     const fetchSuggestions = async () => {
       try {
-        const res = await fetch('/api/admin/suggestions', {
+        const res = await fetch(apiUrl('/api/admin/suggestions'), {
           headers: { Authorization: `Bearer ${token}` },
           cache: 'no-store',
         });

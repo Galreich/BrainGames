@@ -5,6 +5,7 @@ import { StarBurst, BackgroundStar } from '../components';
 import './MathGameStyle.css';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
+import { apiUrl } from '../utils/api';
 import MathGameMenu from './MathGameMenu';
 import MathGamePlaying from './MathGamePlaying';
 import MathGameOver from './MathGameOver';
@@ -166,7 +167,7 @@ const MathGame = () => {
               finalCorrect >= Math.ceil(TOTAL_STATIONS / 2) ? 1 : 0;
             setGameState('gameover');
             if (token)
-              fetch('/api/game-records', {
+              fetch(apiUrl('/api/game-records'), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -206,7 +207,7 @@ const MathGame = () => {
               totalAnswers >= Math.ceil(TOTAL_STATIONS / 2) ? 1 : 0;
             setGameState('gameover');
             if (token)
-              fetch('/api/game-records', {
+              fetch(apiUrl('/api/game-records'), {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

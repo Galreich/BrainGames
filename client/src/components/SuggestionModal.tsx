@@ -3,6 +3,7 @@ import { useAuth } from '../context';
 import './SuggestionModalStyle.css';
 import { useTranslation } from 'react-i18next';
 import { Emojis } from '../utils/Emojis';
+import { apiUrl } from '../utils/api';
 import { SuggestionSuccess, SuggestionImageUpload } from '.';
 
 type SuggestionModalProps = {
@@ -68,7 +69,7 @@ const SuggestionModal = ({ onClose }: SuggestionModalProps) => {
     setErrorMsg('');
 
     try {
-      const res = await fetch('/api/suggestions', {
+      const res = await fetch(apiUrl('/api/suggestions'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -3,7 +3,7 @@ import bcrypt from 'bcryptjs';
 import 'dotenv/config';
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: process.env.POSTGRES_URL || process.env.DATABASE_URL,
   ssl:
     process.env.NODE_ENV === 'production'
       ? { rejectUnauthorized: false }
@@ -16,7 +16,9 @@ pool.on('connect', () => {
 
 pool.on('error', (err: Error) => {
   console.error('Unexpected error on idle client', err);
-  process.exit(-1);
+  if (!process.env.VERCEL) {
+    process.exit(-1);
+  }
 });
 
 const initDB = async (): Promise<void> => {
