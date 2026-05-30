@@ -20,7 +20,7 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV === 'production'
-        ? process.env.ALLOWED_ORIGIN || 'https://braingames-eosin.vercel.app'
+        ? process.env.ALLOWED_ORIGIN || 'https://braingames-client.vercel.app'
         : ['http://localhost:3000'],
     credentials: true,
   }),
