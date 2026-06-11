@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "buildCommand": "",
+  "installCommand": "npm install",
+  "functions": {
+    "api/index.ts": {
+      "includeFiles": "**/*.ts,node_modules/word-list/**,node_modules/dictionary-he/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api" }
+  ]
+}
