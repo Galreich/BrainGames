@@ -1,15 +1,14 @@
 {
   "version": 2,
-  "installCommand": "cd server && npm install && cd ../client && npm install",
-  "buildCommand": "cd client && npm run build && cd ../server && npm run build",
-  "outputDirectory": "client/dist",
+  "installCommand": "cd server && npm install",
+  "buildCommand": "echo skip",
+  "outputDirectory": "public",
   "functions": {
     "api/index.ts": {
       "includeFiles": "server/**,server/node_modules/word-list/**,server/node_modules/dictionary-he/**"
     }
   },
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api" },
-    { "source": "/((?!api/).*)", "destination": "/index.html" }
+    { "source": "/api/(.*)", "destination": "/api" }
   ]
 }
