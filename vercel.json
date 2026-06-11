@@ -1,7 +1,7 @@
 {
   "version": 2,
   "installCommand": "cd server && npm install && cd ../client && npm install",
-  "buildCommand": "cd client && npm run build",
+  "buildCommand": "cd client && npm run build && cd ../server && npm run build",
   "outputDirectory": "client/dist",
   "functions": {
     "api/index.ts": {
