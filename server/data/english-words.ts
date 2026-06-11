@@ -1,10 +1,10 @@
 import { readFileSync } from 'fs';
-import { dirname, join } from 'path';
+import { join } from 'path';
 
 const englishWords: Record<number, string[]> = { 4: [], 5: [], 6: [] };
 
 try {
-  const wordListPath = join(dirname(require.resolve('word-list/package.json')), 'words.txt');
+  const wordListPath = join(__dirname, '..', 'node_modules', 'word-list', 'words.txt');
   const wordArray = readFileSync(wordListPath, 'utf8').split('\n');
 
   for (const word of wordArray) {
