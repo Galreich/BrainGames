@@ -12,6 +12,7 @@ router.get('/hebrew', (req: Request, res: Response) => {
     return res.status(400).json({ error: 'Word_length_invalid' });
   }
 
+  console.log(hebrewWords[length]);
   const wordList = hebrewWords[length];
   if (!wordList || wordList.length === 0) {
     return res.status(404).json({ error: 'No_words_found' });

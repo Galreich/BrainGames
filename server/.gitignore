@@ -32,3 +32,4 @@ coverage/
 
 .history/
 .vercel
+.env*

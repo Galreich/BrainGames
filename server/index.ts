@@ -15,13 +15,43 @@ import {
 const app = express();
 const PORT = process.env.PORT || 5000;
 
+const defaultProdOrigins = [
+  'https://braingames-client.vercel.app',
+  'https://braingames-eosin.vercel.app',
+];
+
+function getAllowedOrigins(): string[] {
+  const envOrigins = (process.env.ALLOWED_ORIGIN || '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  if (process.env.NODE_ENV !== 'production') {
+    return ['http://localhost:3000', ...envOrigins];
+  }
+
+  return Array.from(new Set([...defaultProdOrigins, ...envOrigins]));
+}
+
+const allowedOrigins = getAllowedOrigins();
+
 // Middleware
 app.use(
   cors({
-    origin:
-      process.env.NODE_ENV === 'production'
-        ? process.env.ALLOWED_ORIGIN || 'https://braingames-client.vercel.app'
-        : ['http://localhost:3000'],
+    origin: (origin, callback) => {
+      // Allow non-browser and same-origin requests that do not send an Origin header.
+      if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error('Not allowed by CORS'));
+    },
     credentials: true,
   }),
 );

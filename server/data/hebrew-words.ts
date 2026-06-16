@@ -4,7 +4,7 @@ import { dirname, join } from 'path';
 const hebrewWords: Record<number, string[]> = { 4: [], 5: [], 6: [] };
 
 try {
-  const dicPath = join(dirname(require.resolve('dictionary-he/package.json')), 'index.dic');
+  const dicPath = join(dirname(require.resolve('dictionary-he')), 'index.dic');
   const dicStr = readFileSync(dicPath, 'utf-8');
 
   for (const line of dicStr.split('\n').slice(1)) {
