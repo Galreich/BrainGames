@@ -22,15 +22,9 @@
   font-size: 0.95rem;
 }
 
-.admin-table-wrapper {
-  width: 100%;
-  overflow-x: auto;
-}
-
 .admin-table {
   width: 100%;
   max-width: 1000px;
-  min-width: 600px;
   margin: 0 auto;
   border-collapse: separate;
   border-spacing: 0 8px;
@@ -187,20 +181,4 @@
 .admin-no-image {
   color: rgba(255, 255, 255, 0.25);
   font-size: 0.8rem;
-}
-
-@media (max-width: 600px) {
-  .admin-page {
-    padding: 24px 12px;
-  }
-  .admin-title {
-    font-size: 1.5rem;
-  }
-  .admin-popup-overlay {
-    padding: 16px;
-  }
-  .admin-popup-content {
-    padding: 20px;
-    min-width: 0;
-  }
 }

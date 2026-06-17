@@ -212,16 +212,3 @@
   color: rgba(255, 255, 255, 0.6);
   cursor: not-allowed;
 }
-
-@media (max-width: 420px) {
-  .suggestion-overlay {
-    padding: 12px;
-  }
-  .suggestion-modal {
-    padding: 22px 18px;
-    border-radius: 18px;
-  }
-  .suggestion-title {
-    font-size: 1.3rem;
-  }
-}
