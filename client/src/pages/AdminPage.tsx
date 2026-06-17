@@ -83,63 +83,69 @@ const AdminPage = () => {
         )}
 
         {!loading && !error && suggestions.length > 0 && (
-          <table className='admin-table'>
-            <thead>
-              <tr>
-                <th className='admin-th'>{t('Table_User')}</th>
-                <th className='admin-th'>{t('Table_Subject')}</th>
-                <th className='admin-th'>{t('Table_Title')}</th>
-                <th className='admin-th'>{t('Table_Image')}</th>
-                <th className='admin-th'>{t('Table_Date')}</th>
-                <th className='admin-th'>{t('Description')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {suggestions.map((s) => (
-                <tr key={s.id} className='admin-tr'>
-                  <td className='admin-td'>
-                    {Emojis.User} {s.username}
-                  </td>
-                  <td className='admin-td'>
-                    <span className={`admin-badge ${s.subject || 'general'}`}>
-                      {s.subject ? SUBJECT_LABELS[s.subject] || s.subject : '—'}
-                    </span>
-                  </td>
-                  <td className='admin-td admin-fw-700'>{s.title}</td>
-                  <td className='admin-td'>
-                    {s.image_data ? (
-                      <a href={s.image_data} target='_blank' rel='noreferrer'>
-                        <img
-                          src={s.image_data}
-                          alt={t('Image_Preview')}
-                          className='admin-image-preview'
-                        />
-                      </a>
-                    ) : (
-                      <span className='admin-no-image'>—</span>
-                    )}
-                  </td>
-                  <td className='admin-td admin-date-col'>
-                    {new Date(s.created_at).toLocaleDateString(
-                      t('Date_Locale'),
-                      {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric',
-                      },
-                    )}
-                  </td>
-                  <td
-                    className='admin-td admin-desc-col'
-                    onClick={() => setPopupDesc(s.description)}
-                    title={t('Description')}
-                  >
-                    <div className='admin-desc-icon'>{Emojis.Document}</div>
-                  </td>
+          <div className='admin-table-wrapper'>
+            <table className='admin-table'>
+              <thead>
+                <tr>
+                  <th className='admin-th'>{t('Table_User')}</th>
+                  <th className='admin-th'>{t('Table_Subject')}</th>
+                  <th className='admin-th'>{t('Table_Title')}</th>
+                  <th className='admin-th'>{t('Table_Image')}</th>
+                  <th className='admin-th'>{t('Table_Date')}</th>
+                  <th className='admin-th'>{t('Description')}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {suggestions.map((s) => (
+                  <tr key={s.id} className='admin-tr'>
+                    <td className='admin-td'>
+                      {Emojis.User} {s.username}
+                    </td>
+                    <td className='admin-td'>
+                      <span
+                        className={`admin-badge ${s.subject || 'general'}`}
+                      >
+                        {s.subject
+                          ? SUBJECT_LABELS[s.subject] || s.subject
+                          : '—'}
+                      </span>
+                    </td>
+                    <td className='admin-td admin-fw-700'>{s.title}</td>
+                    <td className='admin-td'>
+                      {s.image_data ? (
+                        <a href={s.image_data} target='_blank' rel='noreferrer'>
+                          <img
+                            src={s.image_data}
+                            alt={t('Image_Preview')}
+                            className='admin-image-preview'
+                          />
+                        </a>
+                      ) : (
+                        <span className='admin-no-image'>—</span>
+                      )}
+                    </td>
+                    <td className='admin-td admin-date-col'>
+                      {new Date(s.created_at).toLocaleDateString(
+                        t('Date_Locale'),
+                        {
+                          year: 'numeric',
+                          month: 'short',
+                          day: 'numeric',
+                        },
+                      )}
+                    </td>
+                    <td
+                      className='admin-td admin-desc-col'
+                      onClick={() => setPopupDesc(s.description)}
+                      title={t('Description')}
+                    >
+                      <div className='admin-desc-icon'>{Emojis.Document}</div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
 

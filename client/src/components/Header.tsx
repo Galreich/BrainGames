@@ -16,12 +16,16 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showSuggestion, setShowSuggestion] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const { t } = useTranslation();
 
   const handleLogout = () => {
+    setMenuOpen(false);
     logout();
     navigate('/');
   };
+
+  const closeMenu = () => setMenuOpen(false);
 
   const navLinks = [
     { path: '/', label: `${Emojis.House} ${t('Home')}` },
@@ -45,7 +49,7 @@ const Header = () => {
         <div className='header-container'>
           {/* Logo + Stars */}
           <div className='header-left-section'>
-            <Link to='/' className='header-logo'>
+            <Link to='/' className='header-logo' onClick={closeMenu}>
               <span className='logo-emoji'>{Emojis.Brain}</span>
               {!user && (
                 <span className='logo-text'>{t('Braingames_Title')}</span>
@@ -54,30 +58,47 @@ const Header = () => {
             <StarsProgressBar user={user} />
           </div>
 
-          {/* Username */}
-          {user && (
-            <span className='user-info'>
-              {Emojis.User} {user.username}
-            </span>
-          )}
+          {/* Mobile menu toggle */}
+          <button
+            className={`mobile-menu-toggle ${menuOpen ? 'open' : ''}`}
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label={t('Menu')}
+            aria-expanded={menuOpen}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
 
-          {/* Separator */}
-          <div className='header-divider' />
+          <div
+            className={`header-menu ${menuOpen ? 'open' : ''}`}
+            onClick={closeMenu}
+          >
+            {/* Username */}
+            {user && (
+              <span className='user-info'>
+                {Emojis.User} {user.username}
+              </span>
+            )}
 
-          {/* Navigation */}
-          <HeaderNav navLinks={navLinks} currentPath={location.pathname} />
+            {/* Separator */}
+            <div className='header-divider' />
 
-          {/* Separator */}
-          <div className='header-divider' />
+            {/* Navigation */}
+            <HeaderNav navLinks={navLinks} currentPath={location.pathname} />
 
-          {/* Right actions */}
-          <HeaderUserActions
-            user={user}
-            currentPath={location.pathname}
-            onLogout={handleLogout}
-            onShowSuggestion={() => setShowSuggestion(true)}
-            onLoginClick={() => navigate('/login')}
-          />
+            {/* Separator */}
+            <div className='header-divider' />
+
+            {/* Right actions */}
+            <HeaderUserActions
+              user={user}
+              currentPath={location.pathname}
+              onLogout={handleLogout}
+              onShowSuggestion={() => setShowSuggestion(true)}
+              onLoginClick={() => navigate('/login')}
+            />
+          </div>
         </div>
       </header>
     </>

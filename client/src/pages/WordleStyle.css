@@ -135,6 +135,7 @@
 .row {
   display: flex;
   gap: 6px;
+  justify-content: center;
 }
 .row.shake {
   animation: shake 0.5s ease;
@@ -217,8 +218,10 @@
 
 /* Tile styles are identical and can be shared */
 .tile {
-  width: 56px;
-  height: 56px;
+  flex: 1 1 0;
+  max-width: 56px;
+  aspect-ratio: 1;
+  min-width: 0;
   border: 2px solid #d3d6da;
   border-radius: 8px;
   display: flex;
@@ -433,6 +436,7 @@
 .row {
   display: flex;
   gap: 6px;
+  justify-content: center;
 }
 .row.shake {
   animation: shake 0.5s ease;
@@ -476,7 +480,9 @@
 
 .key {
   padding: 14px 0;
-  width: 38px;
+  flex: 1 1 0;
+  max-width: 42px;
+  min-width: 0;
   border-radius: 8px;
   border: none;
   background: #e8eaed;
@@ -486,16 +492,19 @@
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  white-space: nowrap;
 }
 .key:disabled {
   cursor: not-allowed;
   opacity: 0.8;
 }
 .key.special {
-  width: auto;
-  min-width: 65px;
+  flex: 1.7 1 0;
+  max-width: 70px;
+  min-width: 0;
   font-size: 0.75rem;
-  padding: 14px 12px;
+  padding: 14px 4px;
 }
 .key.correct {
   background: #6aaa64;
@@ -593,8 +602,10 @@
 
 /* Tile styles */
 .tile {
-  width: 56px;
-  height: 56px;
+  flex: 1 1 0;
+  max-width: 56px;
+  aspect-ratio: 1;
+  min-width: 0;
   border: 2px solid #d3d6da;
   border-radius: 8px;
   display: flex;
@@ -633,4 +644,38 @@
   background-color: #787c7e;
   border-color: #787c7e;
   color: #fff;
+}
+
+@media (max-width: 420px) {
+  .wordle-page {
+    padding: 12px;
+  }
+  .wordle-title {
+    font-size: 1.5rem;
+  }
+  .wordle-board {
+    padding: 10px;
+    gap: 5px;
+  }
+  .row {
+    gap: 4px;
+  }
+  .tile {
+    font-size: 1.3rem;
+  }
+  .keyboard-row {
+    gap: 3px;
+  }
+  .key {
+    font-size: 0.8rem;
+    padding: 12px 0;
+  }
+  .key.special {
+    font-size: 0.62rem;
+    padding: 12px 2px;
+  }
+  .length-btn {
+    padding: 8px 14px;
+    font-size: 0.9rem;
+  }
 }
