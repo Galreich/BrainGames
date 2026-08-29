@@ -45,6 +45,7 @@ select {
 .app-header .logo-text {
   color: #ffffff !important;
   background: none !important;
+  background-clip: border-box !important;
   -webkit-text-fill-color: initial !important;
   -webkit-background-clip: border-box !important;
 }
